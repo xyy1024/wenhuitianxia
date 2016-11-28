@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<title><{:C('title')}>|基本信息修改</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" href="__PUB__css/app.v2.css" type="text/css" />
+<link rel="stylesheet" href="__PUB__js/calendar/bootstrap_calendar.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__js/datepicker/datepicker.css" type="text/css" cache="false" />
+<style>
+.ts_span {
+	color: #FF0000;
+	font-size: 13px;
+	font-weight: bold;
+	margin-left: 8px;
+}
+</style>
+<link rel="stylesheet" href="__ROOTPUB__kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="__ROOTPUB__kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="__ROOTPUB__kindeditor/lang/zh_CN.js"></script>
+<script>
+KindEditor.ready(function(K) {
+	var editor = K.create('textarea[id="cfg_9"]', {
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true,
+		items : ['source','|','fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+				'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+				'insertunorderedlist', '|', 'link']
+	});
+});
+</script>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页 </a></li>
+							<li class="active">基本信息</li>
+						</ul>
+						<div class="row">
+							<div class="col-sm-6"></div>
+							<div class="col-sm-6"></div>
+						</div>
+						<section class="panel panel-default">
+							<header class="panel-heading font-bold"> 基本信息修改
+								<eq name="Think.cookie.ADMIN_KEY" value="1"><span style="float:right;"><a href="<{:U('do_config')}>" class="configadd">添加系统基本信息 </a></span></eq>
+							</header>
+							<form action="" method="post" name="form1">
+							<div class="table-responsive">
+									<table class="table table-striped b-t b-light text-sm">
+										<tbody>
+											<tr>
+												<?php
+													if(cookie('ADMIN_KEY') == 1){
+														$width_1 = 14;
+														$width_2 = 66;
+														$width_3 = 10;
+														$width_4 = 10;
+													}else{
+														$width_1 = 14;
+														$width_2 = 85;
+													}
+												?>
+												<th width="<{$width_1}>%" style="text-align:center;">参数说明</th>
+												<th width="<{$width_2}>%" style="text-align:center;">参数值</th>
+												<eq name="Think.cookie.ADMIN_KEY" value="1">
+												<th width="<{$width_3}>%" style="text-align:center;">变量名</th>
+												<th width="<{$width_4}>%" style="text-align:center;">排序</th>
+												</eq>
+											</tr>
+											<volist name="lists" id="datalist">
+												<tr>
+													<td style="text-align:right;"><{$datalist.name}>：</td>
+													<td>
+														<if condition="$datalist['type'] eq 'string'">
+															<input name="cfg[][cfg_<{$datalist['id']}>]" type="text" id="cfg_<{$datalist['id']}>"  value="<{$datalist['content']}>" class="form-control" />
+														<elseif condition="$datalist['type'] eq 'number'"/>
+															<input name="cfg[][cfg_<{$datalist['id']}>]" type="text" id="cfg_<{$datalist['id']}>"  value="<{$datalist['content']}>" class="form-control" style="width:30%" />
+														<elseif condition="$datalist['type'] eq 'bstring'"/>
+															<textarea  class="form-control" rows="2" name="cfg[][cfg_<{$datalist['id']}>]" id="cfg_<{$datalist['id']}>"><{$datalist['content']}></textarea>
+														<elseif condition="$datalist['type'] eq bool"/>
+															<input type='radio' class='np' name="cfg[][cfg_<{$datalist['id']}>]" value='Y'  
+															<if condition="$datalist['content'] eq 'Y'"> checked </if>
+															>是&nbsp; <input type='radio' class='np' name="cfg[][cfg_<{$datalist['id']}>]" value='N'  
+															<if condition="$datalist['content'] eq 'N'"> checked </if>
+															>否&nbsp;
+														</if>
+													</td>
+													<eq name="Think.cookie.ADMIN_KEY" value="1">
+													<td><{$datalist.cfg}></td>
+													<td><input type="text" name="sort_<{$datalist['id']}>" value="<{$datalist['sort']}>" class="form-control" /></td>
+													</eq>
+												</tr>
+											</volist>
+											<tr>
+												<td></td>
+												<td colspan="3"><button class="btn btn-large btn-info" type="submit">提交</button></td>
+											</tr>
+										</tbody>
+									</table>
+							</div>
+							</form>
+						</section>
+					</section>
+				</section>
+			</section>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/app.v2.js"></script> 
+<!-- fuelux --><script src="__PUB__js/fuelux/fuelux.js" cache="false"></script> 
+<!-- datepicker --><script src="__PUB__js/datepicker/bootstrap-datepicker.js" cache="false"></script> 
+<!-- slider --><script src="__PUB__js/slider/bootstrap-slider.js" cache="false"></script> 
+<!-- file input --> <script src="__PUB__js/file-input/bootstrap-filestyle.min.js" cache="false"></script> 
+<!-- combodate --><script src="__PUB__js/libs/moment.min.js" cache="false"></script> 
+<script src="__PUB__js/combodate/combodate.js" cache="false"></script> 
+<!-- select2 --><script src="__PUB__js/select2/select2.min.js" cache="false"></script> 
+<!-- wysiwyg --><script src="__PUB__js/wysiwyg/jquery.hotkeys.js" cache="false"></script> 
+<script src="__PUB__js/wysiwyg/bootstrap-wysiwyg.js" cache="false"></script> 
+<script src="__PUB__js/wysiwyg/demo.js" cache="false"></script> 
+<!-- markdown --><script src="__PUB__js/markdown/epiceditor.min.js" cache="false"></script> 
+<script src="__PUB__js/markdown/demo.js" cache="false"></script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<script type="text/javascript" src="__PUB__js/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUB__js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUB__js/common.js"></script>
+<script>
+/* 修改信息属性 */
+function chang_status(id,value,table,f)
+{
+    var newvalue=0;
+    if(value == 1)
+        newvalue=0;
+    else
+        newvalue=1;
+    var submitData = {
+        id:id,
+        f:f,
+        status:newvalue,
+        table:table
+    };
+    $.post("<{:U('editattr')}>",submitData,
+        function(data) {
+            if (data.success == true) {
+                //alert(data.msg);
+                setTimeout('window.location.href=location.href',10);
+                return;
+            }
+            else {
+                alert(data.msg);
+                return;
+            }
+        }
+    ,'json');
+    
+}
+</script>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder ">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页 </a></li>
+							<li class="active">用户管理</li>
+							<li class="active">查看详情</li>
+						</ul>
+						<section  class="panel panel-default">
+							<header class="panel-heading"> </header>
+							<div class="row text-sm wrapper">
+								<div class="col-sm-4 m-b-xs text-center-xs"> </div>
+								<div class="col-sm-4 m-b-xs text-center">	
+								     <div class="btn-group"><a href="<{:U('index',array('id'=>I('u_id')))}>" class="btn btn-sm btn-default active" > <i class="fa fa-undo"></i>返回</a></div>
+								</div>
+								<div class="col-sm-4 m-b-xs text-center">
+								</div>
+								<div class="col-sm-4 text-center-xs text-right">	
+								</div>
+							</div>
+							</div>
+							
+								<div class="col-sm-4 m-b-xs text-center-xs"><strong>用户基本信息</strong></div>
+								<div class="well m-t">
+									<div class="row">
+										<div class="col-xs-6"> 
+											<p><strong>手机号：</strong><{$data.mobile}></p>
+											<p><strong>用户昵称：</strong><{$data.name}></p>
+											<p><strong>所属地区：</strong><{$data.ar_name}></p>
+											<p style="display:none;"><strong>具体位置：</strong><{$data.addr}></p>
+										</div>
+										<neq name="data.Img" value=""><div style="float: right;margin-right: 50px;"><img width="120px" height="125px" src="<{$data.Img}>"/></div></neq>
+									</div>
+								</div>
+							<div class="table-responsive">
+								<div class="col-sm-4 m-b-xs text-center-xs"><strong>用户收藏</strong></div>
+								<div class="col-sm-12 m-b-xs text-center-xs text-right">
+									<input type="button" name="but2" value="查看更多收藏" onclick='window.location.href="<{:U(merlist,array(u_id=>$data[id]))}>"'>
+								</div>
+								<table width="1147" class="table table-striped b-t b-light text-sm" style="margin-bottom:10;">
+									<thead>
+										<tr>
+											<th class="hidden-xs-2">序号</th>
+											<th class="hidden-xs-4">收藏商户名称</th>
+											<th class="hidden-xs-6">商户所属行业</th>
+										
+										</tr>
+									</thead>
+									<?php 
+										$empty = '<tr><td colspan="3">暂无相关信息！</td></tr>';
+										$num = 1;
+									?>
+									<volist name="m_arr" id="vo" key="k" empty="$empty">
+										<tr >
+											<td ><{$num}></td>
+											<td ><{$vo.name}></td>
+											<td >
+												<?php
+													$ind_arr = array_filter(explode(',',$vo['ins_id']));
+													$num++;
+												?>
+												<volist name="ins_arr" id="v" key="k">
+													<?php if(in_array($k, $ind_arr)){?><{$v}>，<?php }?>
+												</volist>
+											</td>
+										</tr>
+									</volist>
+										</tbody>
+									
+								</table>
+								<div class="col-sm-12 m-b-xs text-center-xs"><strong>用户优惠券</strong></div>
+								<div class="col-sm-8 m-b-xs text-center-xs">
+									共领取优惠券：<{$carr.count}>张&nbsp;&nbsp;&nbsp;&nbsp;已使用优惠券：<{$carr.y_num}>张&nbsp;&nbsp;&nbsp;&nbsp;未使用优惠券：<{$carr.w_num}>张&nbsp;&nbsp;&nbsp;&nbsp;消费金额：<{$carr.use_price}>元
+								</div>
+								<div class="col-sm-4 m-b-xs text-center-xs text-right">
+									<input type="button" name="but2" value="查看更多优惠券"  onclick='window.location.href="<{:U(chitlist,array(u_id=>$data[id]))}>"'>
+								</div>
+								<table width="1147" class="table table-striped b-t b-light text-sm" style="margin-bottom:10;">
+									<thead>
+										<tr>
+											<th class="hidden-xs-1">序号</th>
+											<th class="hidden-xs-2">优惠券串码</th>
+											<th class="hidden-xs-4">优惠券名称</th>
+											<th class="hidden-xs-2">优惠金额</th>
+											<th class="hidden-xs-1">使用状态</th>
+											<th class="hidden-xs-2">使用时间</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php $empty = '<tr><td colspan="6">暂无相关信息！</td></tr>';?>
+										<volist name="c_arr" id="v" empty="$empty">
+											<tr>
+												<td><{$i}></td>
+												<td><{$v.number}></td>
+												<td><{$v.c_title}></td>
+												<td><{$v.price}></td>
+												<td>
+													<if condition="$v.end_time lt time()" >
+														已过期
+													<else />
+														<eq name="v.is_use" value="2"><font color="red">已使用</font><else />未使用</eq>
+													</if>
+												</td>
+												<td><neq name="v.use_time" value="0"><{$v.use_time|date="Y-m-d",###}></neq>
+												</td>
+											</tr>
+										</volist>
+									</tbody>
+								</table>
+							</div>
+							
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<div class="modal fade" id="modalsc">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">温馨提示</h4>
+			</div>
+			<div class="modal-body">
+				<h4 class="modal-title">请问您确定删除吗？</h4>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" data-dismiss="modal">确定</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+			</div>
+		</div>
+		<!-- /.modal-content --> </div>
+	<!-- /.modal-dialog --> </div>
+<link rel="stylesheet" href="__PUB__css/font.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__js/nestable/nestable.css" type="text/css" cache="false" />
+<script src="__PUB__js/app.v2.js"></script> <!-- Bootstrap --> <!-- App --> <script src="__PUB__js/sortable/jquery.sortable.js" cache="false"></script><script src="__PUB__js/nestable/jquery.nestable.js" cache="false"></script><script src="__PUB__js/nestable/demo.js" cache="false"></script>
+</body>
+</html>

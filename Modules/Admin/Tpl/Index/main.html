@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<title><{:C('title')}></title>
+<include file="Common:head" />
+<script type="text/javascript" src="__PUB__js/jquery-1.9.1.min.js"></script>
+<script>
+function chang_status(id)
+{
+    var submitData = {
+      	id:id,
+    };
+    $.post("<{:U('Article/Shenhe')}>",submitData,function(data){
+        if (data.success == true) {
+          // alert(data.msg);
+          // setTimeout('window.location.href=location.href',1000);
+			if(data.val == 1){
+				ppclass='fa fa-check';
+			}else{
+				ppclass='fa fa-times';
+			}
+          	setTimeout('window.location.href=location.href',100);
+          	//$('i[var="'+id+'"]').attr('class',ppclass);
+          	return;
+        }else {
+          	alert('修改失败！');
+        }
+  	},'json');
+}
+</script>
+<script type="text/javascript" src="/Public/Admin/js/layer2/layer.js"></script>
+	<script>
+		function layeropen(id,tid){
+
+			layer.open({
+				type: 2,
+				title: '查看文章内容',
+				shadeClose: true,
+				shade: 0.8,
+				area: ['80%', '90%'],
+				content: '<{:U('look','','')}>/id/'+id+'/tid/'+tid, //iframe的url
+			});
+		}
+	</script>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder">
+						<!-- <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U(ACTION_NAME)}>"><i class="fa fa-home"></i> 首页</a></li>
+							
+						</ul> -->
+						<div class="m-b-md">
+                        	<br><br><br><br><br><br><br><br><br><br><br><br>
+							<h3 class=" " style="text-align:center;"><eq name="Think.cookie.ADMIN_POWER" value="1">欢迎超级管理员<?php echo cookie('ADMIN_NAME');?>用户登录<else />欢迎<{$Think.cookie.AREA_NAME}>地区,<?php echo cookie('ADMIN_NAME');?>用户登录!</eq> <i class="fa fa-smile-o text-success" data-percent="100" data-line-width="4" data-track-Color="#fff" data-scale-Color="false" data-size="50" data-line-cap='butt' data-animate="2000" data-target="#bugs" data-update="3000"></i></h3>
+						</div>
+						<!-- <div class="m-b-md">
+							<h3 class=" "><eq name="Think.cookie.ADMIN_POWER" value="1">欢迎超级管理员<?php echo cookie('ADMIN_NAME');?>用户登录<else />欢迎<{$Think.cookie.AREA_NAME}>地区,<?php echo cookie('ADMIN_NAME');?>用户登录!</eq> <i class="fa fa-smile-o text-success" data-percent="100" data-line-width="4" data-track-Color="#fff" data-scale-Color="false" data-size="50" data-line-cap='butt' data-animate="2000" data-target="#bugs" data-update="3000"></i></h3>
+						</div>
+						<section class="panel panel-default">
+							<div class="row m-l-none m-r-none bg-light lter">
+								<div class="col-sm-6 col-md-4 padder-v b-r b-light"> <span class="fa-stack fa-2x pull-left m-r-sm"> <i class="fa fa-circle fa-stack-2x text-info"></i> <i class="fa fa-th-list icon fa-stack-1x text-white"></i> </span> <a class="clear" href="<notempty name="cateinfo.id"><{:U('Article/index',array('tid'=>$cateinfo['id']))}><else />javascript:void(0);</notempty>"> <span class="h3 block m-t-xs"><strong><notempty name="cateinfo.id"><{$cateinfo.catname}><else />　</notempty></strong></span> <small class="text-muted text-uc">近期访问栏目</small> </a> </div>
+								<div class="col-sm-6 col-md-4 padder-v b-r b-light lt"> <span class="fa-stack fa-2x pull-left m-r-sm"> <i class="fa fa-circle fa-stack-2x text-warning"></i> <i class="fa fa-list-alt fa-stack-1x text-white"></i></span> <a class="clear" href="javascript:void(0);"> <span class="h3 block m-t-xs"><strong id="bugs"><{$row}>条</strong></span> <small class="text-muted text-uc">文章总数</small> </a> </div>
+								<div class="col-sm-6 col-md-4 padder-v b-r b-light"> <span class="fa-stack fa-2x pull-left m-r-sm"> <i class="fa fa-circle fa-stack-2x text-danger"></i> <i class="fa fa-volume-off fa-stack-1x text-white"></i> </span> <a class="clear" href="javascript:void(0);"> <span class="h3 block m-t-xs"><strong id="firers"><eq name="shenhe" value="3"><{$rowwei}><else /><{$rel_num|default=0}></eq>条</strong></span> <small class="text-muted text-uc"><eq name="shenhe" value="3">未发布<else />已发布文章数</eq></small> </a> </div>
+							</div>
+						</section>
+						<eq name="shenhe" value="3">
+						<div class="row">
+							<div class="col-md-12">
+								<ul class="list-group gutter list-group-lg list-group-sp sortable">
+									<volist name='Articlewei' id="vo" offset="0" length='8' empty="暂无数据">
+										<li class="list-group-item box-shadow" style="overflow:hidden;">
+											<i title="点击审核文章" onclick="javascript:if(confirm('确定要审核通过该信息吗？')){chang_status(<{$vo.id}>)};" class="fa <eq name="vo.isshow" value="1">fa-check<else />fa-times</eq> icon-muted" var="<{$vo.id}>" style="float:right;cursor:pointer"></i>
+											<span class="pull-left m-r-sm"> <i class="fa fa-caret-right fa-fw text"></i></span><div class="clear" id="todo-2" style="float:left">
+											<a style="color:#717171;" href="javascript:layeropen(<{$vo.id}>,<{$vo.tid}>);">
+											<{$i}>.<{$vo.title}></a>
+
+										</div>
+										</li>
+									</volist>
+								</ul>
+							</div>
+						</div> -->
+						<div> </div>
+						</eq>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/app.v2.js"></script>
+</body>
+</html>

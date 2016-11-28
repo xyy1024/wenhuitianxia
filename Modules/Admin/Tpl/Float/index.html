@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<script>
+function chang_status(id)
+{
+    var submitData = {
+      	id:id,
+    };
+    $.post("<{:U('Float/Shenhe')}>",submitData,function(data){
+        if (data.success == true) {
+          // alert(data.msg);
+          // setTimeout('window.location.href=location.href',1000);
+			if(data.val == 1){
+				ppclass='fa fa-check';
+			}else{
+				ppclass='fa fa-times';
+			}
+          	$('i[var="'+id+'"]').attr('class',ppclass);
+          	return;
+        }else {
+          	alert('修改失败！');
+        }
+  	},'json');
+}
+</script>
+<style>
+.zd {
+	color:red;
+}
+</style>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder ">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">漂浮管理</li>
+							
+						</ul>
+						<section class="panel panel-default">
+							<header class="panel-heading"> </header>
+							<div class="row text-sm wrapper">
+								<div class="col-sm-4 m-b-xs text-center-xs">
+									
+								</div>
+								<div class="col-sm-4 m-b-xs text-center">
+									<div class="btn-group"> <a href="<{:U('add')}>" class="btn btn-sm btn-default active" > <i class="fa fa-plus"></i>新增漂浮</a> <a  class="btn btn-sm btn-default" href="<{:U('index',array('tid'=>I('tid'),'stp'=>'all'))}>" ><i class="fa fa-th"> 显示全部</i> </a> <a href="javascript:dodel();" class="btn btn-sm btn-default" > <i class="fa fa-trash-o"></i> 删除勾选 </a> </div>
+								</div>
+								<form action="<{:U('index')}>" method="post">
+								<div class="col-sm-4 text-center-xs text-right">
+										
+									
+									
+								</div>
+								</form>
+							</div>
+						
+							<div class="table-responsive">
+								<table class="table table-striped b-t b-light text-sm" style="margin-bottom:0;">
+									<thead>
+										<tr>
+											<th class="col-sm-1"><input type="checkbox"></th>
+											<th class="col-sm-3" class="hidden-xs" data-toggle="class">漂浮类型</th>
+											<th class="col-sm-3" class="hidden-xs">链接</th>
+											<th class="col-sm-2" class="hidden-xs">开启状态</th>
+											<th class="col-sm-3">操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<volist name="res" id="vo">
+											<tr>
+												<td><input type="checkbox" name="check[]" value="<{$vo.id}>"></td>
+												<td><if condition="$vo['type'] eq 0">全屏漂浮<elseif condition="$vo['type'] eq 1" />左侧漂浮<else/>右侧漂浮</if></td>
+												
+												<td class="hidden-xs"><{$vo.url}></td>
+												  <td class="hidden-xs"><i onclick="javascript:if(confirm('确定要修改状态吗？')){chang_status(<{$vo.id}>)};" class="fa <eq name="vo.isshow" value="1">fa-check<else />fa-times</eq>" var="<{$vo.id}>" style="cursor:pointer"></i></td>
+												<td><a href="<{:U('edit',array('tid'=>$vo['tid'],'id'=>$vo['id'],'p'=>I('p')))}>"><!--<i class="fa fa-pencil  fa-fw m-r-xs"></i>-->修改</a><a href="javascript:if(confirm('确定要删除该信息吗？')){window.location.href='<{:U('delete',array('tid'=>$vo['tid'],'id'=>$vo['id'],'p'=>I('p')))}>'}" data-toggle="modal"> <!--<i class="fa fa-trash-o"></i>-->删除</a></td>
+											</tr>
+										</volist>
+									</tbody>
+								</table>
+							</div>
+							<footer class="panel-footer">
+								<div class="row">
+									<div class="col-sm-3 hidden-xs"> </div>
+									<div class="col-sm-6 text-center">
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$totalRows}> 条</a></li>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<{$page}>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$nowPage}>/<{$totalPages}> 页</a></li>
+										</ul>
+									</div>
+									<div class="col-sm-3 text-right text-center-xs">
+										<form action="<{:U(ACTION_NAME)}>" method="post">
+											<input class="input-sm form-control input-s-xs inline" value="<{$nowPage}>" name="page" placeholder="第1页">
+											<button type="submit" class="btn btn-sm btn-default">GO</button>
+										</form>
+									</div>
+								</div>
+							</footer>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<!-- 批量删除 -->
+<div class="modal fade" id="modalsc">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">温馨提示</h4>
+			</div>
+			<div class="modal-body">
+				<h4 class="modal-title">请问您确定删除吗？</h4>
+			</div>
+			<div class="modal-footer">
+				<form method="post">
+					<button type="button" id="dodel" class="btn btn-info" value=" " name="Delete" data-dismiss="modal">确定</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end -->
+<!-- 置顶 -->
+<div class="modal fade" id="modal">
+  	<div class="modal-dialog">
+	    <div class="modal-content">
+	      	<div class="modal-header">
+	        	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        	<h4 class="modal-title" attr_id="">置顶:</h4>
+	      	</div>
+	      	<div class="modal-body">
+               	置顶排序：<select name="dotop" class="input-sm form-control input-s-sm inline">
+               	 	<option value="0">默认</option>
+					<php>
+						for($zd=1;$zd<=100;$zd++){
+							echo '<option value="'.$zd.'">'.$zd.'</option>';
+						}
+					</php>
+              	</select><span class="mark">(数值越大置顶级别越高)</span>
+	      	</div>
+	      	<div class="modal-body" style="padding-top:0px;">
+	      		置顶时间：<input type="text" name="dotopday" value="" class="input-sm form-control input-s-sm inline"/>天<span class="mark">(请填写数字)</span>
+	      	</div>
+			<div class="modal-footer">
+				<button type="button" onclick="saveDoTop();" class="btn btn-info" data-dismiss="modal">确定</button>
+
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+			</div>
+	    </div>
+    </div>
+</div>
+<!-- end -->
+
+<!-- end -->
+
+<link rel="stylesheet" href="__PUB__css/font.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__js/nestable/nestable.css" type="text/css" cache="false" />
+<script src="__PUB__js/app.v2.js"></script> <!-- Bootstrap --> <!-- App --> <script src="__PUB__js/sortable/jquery.sortable.js" cache="false"></script><script src="__PUB__js/nestable/jquery.nestable.js" cache="false"></script><script src="__PUB__js/nestable/demo.js" cache="false"></script>
+</body>
+<script>
+function changeStatus(a){
+    var $this=$(a);
+    var val=$this.attr('attVa');
+    if(val == 1){
+  		newvalue=0;
+    }else{
+      	newvalue=1;
+    }
+    var submitData = {
+		id:$this.attr('attId'),
+		value:newvalue,
+		field:$this.attr('attFe'),
+		table:$this.attr('attTa')
+    };
+    $.post("<{:U('editattr')}>",submitData,function(data) {
+        if (data.success == true) {
+			$this.attr('attVa',newvalue);
+			if(newvalue == 1)
+				$this.children().addClass('zd');
+			else
+				$this.children().removeClass('zd');
+			return;
+        }else {
+          	alert('修改失败！');
+        }
+      }
+    ,'json');
+  }
+//批量删除
+function dodel(){
+	$('#modalsc').modal('show').off('shown.bs.modal',function(){
+		clearInput('modalsc');
+	});
+	$('#modalsc').modal('show').on('shown.bs.modal',function(){
+		getCheckbox('doDel','<{:U("Float/form")}>','modalsc','dodel');
+	});
+}
+//置顶
+function dotop(tid){
+	// $('#modal').modal('show').on('shown.bs.modal',function(){
+	$('#modal').modal('show').off('shown.bs.modal');
+	$('#modal').modal('show').on('shown.bs.modal',function(){
+		//获取信息title
+		var vali={
+			'id':tid,
+			'rand':Math.random(),
+		};
+		$.get('<{:U('ajaxTitle')}>',vali,function(data){
+			if(data['suc'] == true){
+				$('#modal').find('h4.modal-title').html("置顶："+data['info']);
+				$('#modal').find('h4.modal-title').attr("attr_id",data['art_id']);
+				$('#modal :input[name="dotop"]').children('option[value="'+data['dotop']+'"]').prop("selected",true);
+				$('#modal :input[name="dotopday"]').val(data['dotopday']);
+			}else{
+				alert('信息有误！');
+				$('#modal').modal('hide');
+			}
+		},'json');
+	});
+}
+//ajax 修改置顶值
+function saveDoTop(){
+	var do_id=$('#modal').find('h4.modal-title').attr("attr_id")
+	var submitData = {
+		'id':do_id,
+		'dotop':$('#modal :input[name="dotop"]').children('option:selected').val(),
+		'dotopday':$('#modal :input[name="dotopday"]').val(),
+		'table':'Article',
+	};
+	$.post("<{:U('ajaxDoTop')}>",submitData,function(result) {
+        if (result.success == true) {
+			if(result['val'] > 0){
+				$('a[attr_val="'+do_id+'"] > i').addClass('zd');
+			}else{
+				$('a[attr_val="'+do_id+'"] > i').removeClass('zd');
+			}	
+        }else {
+          	alert('修改失败！');
+        }
+      }
+    ,'json');
+	clearChecked();	//消除置顶下拉checked
+}
+//置顶弹出框排序值清除selected；置顶文章标题清空
+function clearChecked(){
+	$('#modal :input[name="dotop"]').children('option').each(function(){
+		$(this).removeAttr('selected');
+	});
+	$('#modal').find('h4.modal-title').html("置顶：");	//title清空
+}
+//文章复制
+function artCopy(){
+	clearInput('modal_copy');
+	$('#modal_copy').modal('show').off('shown.bs.modal');
+	$('#modal_copy').modal('show').on('shown.bs.modal',function(){
+		getCheckbox('doCopy','<{:U("Article/artCopy")}>','modal_copy','docopy');
+	});
+}
+//文章移动
+function artMove(){
+	clearInput('modal_move');
+	$('#modal_move').modal('show').off('shown.bs.modal');
+	$('#modal_move').modal('show').on('shown.bs.modal',function(){
+		getCheckbox('doMove','<{:U("Article/artMove")}>','modal_move','domove');
+	});
+}
+/* 批量删除、复制、移动多选框插入到弹出框中
+ * doname 操作名称
+ * action form提交地址
+ * mod_name modal弹出框的id值
+ * but_name 提交按钮id值
+ * cate 0 不获取分类，1获取分类
+*/
+function getCheckbox(doname,action,mod_name,but_name){
+	var len = $(':input[name="check[]"]:checked').length;
+	if(len > 0){  //选中数不为0
+		if(doname == 'doCopy' || doname == 'doMove'){
+			var artcate=$('#art_cate option:selected').val();
+			var is=$('#art_cate option:selected').attr('is');
+			if(artcate && is != '1'){	//栏目不能添加文章
+				alert('该栏目类型为非内容列表，不能添加文章！');
+				$('#'+mod_name).modal('hide');
+				// $('#'.mod_name .modal-body h4).html();
+				return false;
+			}else if(typeof(artcate) == 'undefined' || !artcate){	//没有选择栏目
+				$('#'+but_name).attr('type','button').attr('data-dismiss','modal');
+				return false;
+			}
+			$('#'+mod_name).find('form').append('<input type="hidden" name="artcate" value="'+artcate+'" />');	//要移动或者复制到的分类id值
+		}
+		$(':input[name="check[]"]:checked').each(function(){
+			$('#'+mod_name).find('form').append('<input type="hidden" name="check[]" value="'+$(this).val()+'" />');
+		});
+		$('#'+mod_name).find('form').append('<input type="hidden" name="tid" value="<{:I('tid')}>" />');	//分类id
+		$('#'+mod_name).find('form').append('<input type="hidden" name="p" value="<{:I('p')}>" />');	//分页值
+		$('#'+mod_name).find('form').attr('action',action);
+		$('#'+but_name).attr('type','submit').removeAttr('data-dismiss');
+	}else{	//未选中删除项则点击“确定”后关闭弹出框
+		$('#'+but_name).attr('type','button').attr('data-dismiss','modal');
+	}
+}
+//清除modal中的input:hidden框
+function clearInput(mod_name){
+	$('#'+mod_name+ ':input[type="hidden"]').remove();
+
+}
+//清除bnp form中的input:hidden框
+function clearInputh(){
+	$('.bnp form :input[type="hidden"]').remove();
+
+}
+
+$(function(){
+	$("#art_cate").change(function(){
+		var val=$(this).children('option:selected').val();
+		var is=$(this).children('option:selected').attr('is');
+		if(val && is!=1){
+			alert('该栏目类型为非内容列表，不能添加文章！');
+		}
+	});
+});
+</script>
+</html>

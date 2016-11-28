@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-dark">
+<head>
+<meta charset="utf-8" /> 
+<meta http-equiv="X-UA-Compatible" content="IE=9">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+<title><{:C('title')}>后台管理系统</title>
+<meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" href="__PUB__css/app.v2.css" type="text/css" />
+<link rel="stylesheet" href="__PUB__css/font.css" type="text/css" cache="false" />
+<!--[if lt IE 9]> <script src="__PUB__js/ie/html5shiv.js" cache="false"></script> <script src="__PUB__js/ie/respond.min.js" cache="false"></script> <script src="__PUB__js/ie/excanvas.js" cache="false"></script> <![endif]-->
+</head>
+<body>
+<section id="content" class="m-t-lg wrapper-md animated fadeInUp">
+  <div class="container aside-xxl"> <div style="color: #FFFFFF" class="navbar-brand block" ><{:C('college')}>后台管理系统</div>
+    <section class="panel panel-default bg-white m-t-lg">
+      <header class="panel-heading text-center"> <strong>登录</strong> </header>
+      <form action="<{:U('Public/login')}>" method="post" class="panel-body wrapper-lg demoform" data-validate="parsley">
+        <div class="form-group">
+          <label class="control-label">用户名</label>
+          <input name="username" type="text" placeholder="" class="form-control parsley-validated input-lg" data-required="true" data-required-message="请输入用户名" />
+        </div>
+        <div class="form-group">
+          <label class="control-label">密码</label>
+          <input name="password" type="password" id="inputPassword" placeholder="" class="form-control parsley-validated input-lg" data-required="true" data-required-message="请输入密码"/>
+        </div>
+        <div class="form-group">
+          <label class="control-label">验证码</label>
+          <div style="clear:both"></div>
+          <span style="float:right"><img id="verifyImg" src="<{:U('verify',array(),'')}>"  alt="点击刷新验证码" onclick="fleshVerify()" style="float:left; width:100px;height:45px;"/>
+          <a style="color:#717171; font-weight: 600;margin-left:10px;line-height:45px ;" href="javascript:fleshVerify()" >换一张</a></span><input name="verify" type="text" placeholder="" class="form-control input-lg" style="width:120px;float:left" data-required="true" data-required-message="请输入验证码" />
+          
+        </div>
+        <div style="clear:both"></div>
+        <div class="line line-dashed"></div>
+        <button type="submit" class="btn btn-primary">登录</button>
+      </form>
+    </section>
+  </div>
+</section>
+<!-- footer --><!-- / footer -->
+<script src="__PUB__js/app.v2.js"></script>
+<!-- Bootstrap --> <!-- App --> <!-- parsley --><script src="__PUB__js/parsley/parsley.min.js" cache="false"></script><script src="__PUB__js/parsley/parsley.extend.js" cache="false"></script>
+</body>
+</html>
+<script language="JavaScript">
+<!--
+	function fleshVerify(){ 
+	    //重载验证码
+	    var time = new Date().getTime();
+	        document.getElementById("verifyImg").src="<{:U('verify',array(),'')}><{:C('URL_PATHINFO_DEPR')}>"+time;
+	}
+//-->
+</script>

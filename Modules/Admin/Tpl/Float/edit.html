@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<link rel="stylesheet" href="__PUB__js/datepicker/datepicker.css" type="text/css" cache="false" />
+<style>
+#img {
+	width:100%;
+	overflow:hidden;
+}
+#img p {
+	float:left;
+	padding-top:3px;
+	margin-right:5px;
+}
+#img p img {
+	max-width:80px;
+	max-height:80px;
+}
+</style>
+<link rel="stylesheet" href="__ROOTPUB__kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="__ROOTPUB__kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="__ROOTPUB__kindeditor/lang/zh_CN.js"></script>
+<script>
+KindEditor.ready(function(K) {
+	var editor = K.create('textarea[name="content"]', {
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true
+	});
+	
+	var editor1 = K.editor({
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true
+	});
+	K('#uploadid').click(function() {
+		editor1.loadPlugin('image', function() {
+			editor1.plugin.imageDialog({
+				showRemote : false,
+				imageUrl : K('#picid').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#picid').val(url);
+					//document.getElementById('picida').src=url;
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+	K('#uploadfid').click(function(){	//上传附件
+		editor1.loadPlugin('insertfile', function(){
+			editor1.plugin.fileDialog({
+				fileUrl : K('#fileid').val(),
+				clickFn : function(url, title) {
+					K('#fileid').val(url);
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+	K('#uploadvid').click(function(){	//上传视频
+		editor1.loadPlugin('insertfile', function(){
+			editor1.plugin.fileDialog({
+				fileUrl : K('#vedioid').val(),
+				clickFn : function(url, title) {
+					K('#vedioid').val(url);
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+	
+	K('#J_selectImage').click(function() {
+		editor1.loadPlugin('multiimage', function() {
+			editor1.plugin.multiImageDialog({
+				clickFn : function(urlList) {
+					var div = K('#img');
+					// div.html('');
+					K.each(urlList, function(i, data) {
+						div.append('<p><img src="' + data.url + '" /><input type="hidden" name="img[]" value="' + data.url + '" /></p>');
+					});
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+
+});
+</script>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="index.html"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">漂浮窗口管理</li>
+							
+							<li class="active">修改漂浮窗口</li>
+						</ul>
+						<div class="row">
+							<div class="col-sm-6"></div>
+							<div class="col-sm-6"></div>
+						</div>
+						<section class="panel panel-default">
+							<header class="panel-heading font-bold"> 修改漂浮窗口 </header>
+							<div class="panel-body">
+							<form action="<{:U(ACTION_NAME)}>" class="form-horizontal" method="post">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">漂浮类型</label>
+										<div class="col-sm-8">
+										<select name="type" class="input-sm form-control input-s-sm inline">
+											<option <?php if($row['type']=='0'){?> selected <?php }?> value="0">全屏浮动</option>
+											<option <?php if($row['type']=='1'){?> selected <?php }?> value="1">左侧浮动</option>
+											<option <?php if($row['type']=='2'){?> selected <?php }?> value="2">右侧浮动</option>
+										</select>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">是否开启</label>
+										<div class="col-sm-8" style="padding-top:6px;">
+											<label class="pull-left"><input  type="radio" <if condition="$row['isshow'] eq 1">checked </if>  name="isshow" value="1">是　</label>
+											<label class="pull-left"> <input type="radio"<if condition="$row['isshow'] eq 0">checked </if> name="isshow" value="0">否&nbsp;</label>
+						                    
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">发布日期</label>
+										<div class="col-sm-10">
+											<input name="addtime" class="input-sm input-s datepicker-input form-control" size="16" type="text" value="<{$row.addtime|date='Y-m-d',###}>" data-date-format="yyyy-mm-dd" >
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">漂浮窗口链接</label>
+										<div class="col-sm-6">
+											<input type="text" name="url" value="<{$row.url}>" class="form-control ">
+										</div>
+										<div style="line-height:34px">(例如：http://www.baidu.com)</div>
+									</div>
+									
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">漂浮窗宽度</label>
+										<div class="col-sm-8" style="width:200px">
+											<input type="text" name="img_wid"  value="<{$row.img_wid}>" class="form-control">
+										</div>
+										<label class="col-sm-2 control-label">漂浮窗高度</label>
+										<div class="col-sm-8" style="width:200px">
+											<input type="text" name="img_hei" value="<{$row.img_hei}>" class="form-control">
+										</div>
+									</div>
+									
+									
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">距离顶部高度</label>
+										<div class="col-sm-8" style="width:200px">
+											<input type="text" name="top" value="<{$row.top}>" class="form-control rounded">
+										</div>
+										<label class="col-sm-2 control-label">距离左侧宽度</label>
+										<div class="col-sm-8" style="width:200px">
+											<input type="text" name="left" value="<{$row.left}>" class="form-control">
+										</div>
+									</div>
+									
+									<div class="line line-dashed line-lg pull-in"></div>
+									
+										<div class="form-group picnum_1">
+											<label class="col-sm-2 control-label">缩略图片</label>
+											<div class="col-sm-8">
+												<input name="img_path" value="<{$row.img_path}>" class="input-s form-control" type="text"  id="picid" style=" display:inline-block" readonly>
+												<input name="oldimg_path" value="<{$row.img_path}>" type="hidden" >
+												<button type="button" class="btn btn-default" id="uploadid">上传图片</button>
+												<span>（尺寸:参考漂浮窗口的宽和高)</span> </div>
+										</div>
+										<!--<div class="line line-dashed line-lg pull-in picnum_1"></div>
+									
+									<div class="form-group">
+										<label class="col-sm-2 control-label">置顶</label>
+										<div class="col-sm-8">
+											<label>
+												<select name="dotop" class="form-control">
+													<option value="0">默认</option>
+													<for start="1" end="100" comparison="elt" step="1" name="i">
+														<option value="<{$i}>"><{$i}></option>
+													</for>
+												</select>
+											</label>
+											<span>　数值越大置顶级别越高</span> </div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">置顶时间</label>
+										<div class="col-sm-8">
+											<label class="pull-left">
+												<input type="text" name="dotopday" value="0" class="form-control">
+											</label>
+											<span class="pull-left" style="line-height:34px;">&nbsp;天</span><span class="pull-left mark" style="line-height:34px;">(0表示不限制)</span>
+										</div>
+									</div>-->
+									<input type="hidden" name="id" value="<{$row.id}>">
+									<div class="line line-dashed line-lg pull-in"></div>
+
+									<div class="form-group">
+										<div class="col-sm-8 col-sm-offset-2">
+
+											<button type="submit" class="btn btn-primary">保存</button>
+										</div>
+									</div>
+								
+								</form>
+							</div>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/app.v2.js"></script> 
+<!-- Bootstrap --> <!-- App --> 
+<!-- fuelux --> 
+<script src="js/fuelux/fuelux.js" cache="false"></script> 
+<!-- datepicker --> 
+<script src="__PUB__js/libs/moment.min.js" cache="false"></script> 
+<script src="__PUB__js/datepicker/bootstrap-datepicker.js" cache="false"></script> 
+<!-- slider --> 
+<script src="js/slider/bootstrap-slider.js" cache="false"></script> 
+<!-- file input --> 
+<script src="js/file-input/bootstrap-filestyle.min.js" cache="false"></script> 
+<!-- combodate --> 
+<script src="js/combodate/combodate.js" cache="false"></script> 
+<!-- select2 --> 
+<script src="__PUB__js/select2/select2.min.js" cache="false"></script> 
+<!-- wysiwyg --> 
+<script src="js/wysiwyg/jquery.hotkeys.js" cache="false"></script> 
+<script src="js/wysiwyg/bootstrap-wysiwyg.js" cache="false"></script> 
+<script src="js/wysiwyg/demo.js" cache="false"></script> 
+<!-- markdown --> 
+<script src="js/markdown/epiceditor.min.js" cache="false"></script> 
+<script src="js/markdown/demo.js" cache="false"></script> 
+<script>
+	$(document).ready(function(){
+		//删除图片
+		$("#img").delegate("p","click",function(){
+			if(window.confirm('你确定要删除此图片吗？')){
+				var p=$(this);
+				var f=p.children('img').attr('src');
+				var validate={
+					file:f
+				};
+				$.get("<{:U('delFile')}>", validate, function(data){
+					if(data == 'yes')
+					{
+						p.remove();
+					}
+					else
+					{
+						alert('删除失败');
+					}	
+				});
+			}
+		});
+	 });
+	function checkPicnum(data,num)
+	{
+		if(data.indexOf(num)!= -1)
+		{
+			$(".picnum_"+num).removeClass('display_none');
+		}
+		else
+		{
+			$(".picnum_"+num).addClass('display_none');
+		}	
+	}
+	//获取单图、多图尺寸
+	$(function(){
+		var val=$(':input[name="tid"]').val();
+		$.get('<{:U('getchicun','','')}>',{'tid':val},function(data){
+			$('#uploadid + span').text('(尺寸：'++')');	//单图
+			$('#J_selectImage + span').text('(尺寸：'+data.imgs_size+')');	//多图
+		},'json');
+	});
+</script>
+</body>
+</html>

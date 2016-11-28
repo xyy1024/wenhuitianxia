@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<link rel="stylesheet" href="__PUB__css/pp.css" />
+<script>
+function chang_status(id)
+{
+    var submitData = {
+      	id:id,
+    };
+    $.post("<{:U('Shenhe')}>",submitData,function(data){
+        if (data.success == true) {
+          // alert(data.msg);
+          // setTimeout('window.location.href=location.href',1000);
+			if(data.val == 1){
+				ppclass='fa fa-check';
+			}else{
+				ppclass='fa fa-times';
+			}
+          	$('i[var="'+id+'"]').attr('class',ppclass);
+          	return;
+        }else {
+          	alert('修改失败！');
+        }
+  	},'json');
+}
+</script>
+<style>
+.zd {
+	color:red;
+}
+</style>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder ">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">用户管理</li>
+							<li class="active">查看详情</li>
+							<li class="active">查看更多优惠券</li>
+						</ul>
+						<section class="panel panel-default">
+							<header class="panel-heading"> </header>
+							<div class="row text-sm wrapper">
+								<div class="col-sm-3 m-b-xs text-center-xs">	
+								</div>
+								<div class="col-sm-4 m-b-xs text-center">	
+									<div class="btn-group"><a href="<{:U('look',array('id'=>I('u_id')))}>" class="btn btn-sm btn-default active" > <i class="fa fa-undo"></i>返回</a></div>
+								</div>
+								<form action="<{:U('chitlist')}>" method="post">
+								<div class="col-sm-5 text-center-xs text-right">
+									<input name="name" class="input-sm form-control input-s-sm inline" value="<{$search.name}>" placeholder="优惠券名称">	
+									<select name="isuse" class="input-sm form-control input-s-sm inline" style="width:180px;">
+										<option value="">请选择优惠券使用状态</option>
+										<option value="1" <eq name="search.isuse" value="1"> selected </eq> >未使用</option>
+										<option value="2" <eq name="search.isuse" value="2"> selected </eq> >已使用</option>
+										<option value="3" <eq name="search.isuse" value="3"> selected </eq> >已过期</option>
+										<volist name="ins_arr" id="insv">
+											<option value="<{$insv.id}>" <eq name="search.ins" value="$insv.id"> selected </eq>><{$insv.name}></option>
+										</volist>
+									</select>
+									<input type="hidden" name="u_id" value="<{:I('u_id')}>">
+									<button class="btn btn-sm btn-default"><i class="fa fa-fw fa-search"></i></button>
+								</div>
+								<input type="hidden" name="cid" value="<{$search['cid']}>">
+								</form>
+							</div>
+								<div style="overflow:hidden">
+									<div class="col-sm-12 m-b-xs text-center-xs">
+										共领取优惠券：<{$carr.count}>张&nbsp;&nbsp;&nbsp;&nbsp;已使用优惠券：<{$carr.y_num}>张&nbsp;&nbsp;&nbsp;&nbsp;未使用优惠券：<{$carr.w_num}>张&nbsp;&nbsp;&nbsp;&nbsp;消费金额：<{$carr.use_price}>元
+									</div>
+									
+								</div>
+							</div>
+							
+							<div class="table-responsive">
+								<table class="table table-hover b-t b-light text-sm" style="margin-bottom:0;">
+									<thead>
+										<tr>
+											<th class="hidden-xs-1">序号</th>
+											<th class="hidden-xs-2">优惠券串码</th>
+											<th class="hidden-xs-4">优惠券名称</th>
+											<th class="hidden-xs-2">优惠金额</th>
+											<th class="hidden-xs-1">使用状态</th>
+											<th class="hidden-xs-2">使用时间</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php $empty = '<tr><td colspan="6">暂无相关信息！</td></tr>';?>
+										<volist name="c_arr" id="v" empty="$empty">
+											<tr>
+												<td><{$i}></td>
+												<td><{$v.number}></td>
+												<td><{$v.c_title}></td>
+												<td><{$v.price}></td>
+												<td>
+													<if condition="$v.end_time lt time()" >
+														已过期
+													<else />
+														<eq name="v.is_use" value="2"><font color="red">已使用</font><else />未使用</eq>
+													</if>
+												</td>
+												<td><neq name="v.use_time" value="0"><{$v.use_time|date="Y-m-d",###}></neq>
+												</td>
+											</tr>
+										</volist>
+									</tbody>
+								</table>
+							</div>
+							<footer class="panel-footer">
+								<div class="row">
+									<div class="col-sm-3 hidden-xs"> </div>
+									<div class="col-sm-6 text-center">
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$totalRows}> 条</a></li>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<{$page}>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$nowPage}>/<{$totalPages}> 页</a></li>
+										</ul>
+									</div>
+									<div class="col-sm-3 text-right text-center-xs">
+										<form action="<{:U(ACTION_NAME)}>" method="post">
+											<input class="input-sm form-control input-s-xs inline" value="<{$nowPage}>" name="page" placeholder="第1页">
+											<button type="submit" class="btn btn-sm btn-default">GO</button>
+										</form>
+									</div>
+								</div>
+							</footer>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<!-- 批量删除 -->
+<div class="modal fade" id="modalsc">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">温馨提示</h4>
+			</div>
+			<div class="modal-body">
+				<h4 class="modal-title">请问您确定删除吗？</h4>
+			</div>
+			<div class="modal-footer">
+				<form method="post">
+					<button type="button" id="dodel" class="btn btn-info" value=" " name="Delete" data-dismiss="modal">确定</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end -->
+
+
+<link rel="stylesheet" href="__PUB__css/font.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__js/nestable/nestable.css" type="text/css" cache="false" />
+<script src="__PUB__js/app.v2.js"></script> <!-- Bootstrap --> <!-- App --> <script src="__PUB__js/sortable/jquery.sortable.js" cache="false"></script><script src="__PUB__js/nestable/jquery.nestable.js" cache="false"></script><script src="__PUB__js/nestable/demo.js" cache="false"></script>
+</body>
+
+</html>

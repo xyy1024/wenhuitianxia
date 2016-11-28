@@ -1,0 +1,1 @@
+<?php	return array ( 'college' => '文汇天下', 'title' => '文汇天下', 'website' => 'http://pp.whtx.com', 'footer' => '文汇天下  京ICP备xxxxxxxx号', 'tel' => '010-62512434', 'fax' => '010-62512434', 'email' => 'info@langqiaosurface.com', 'address' => '北京市海淀区中关村大街59号', 'agree' => '文汇天下用户协议<br />', );?>

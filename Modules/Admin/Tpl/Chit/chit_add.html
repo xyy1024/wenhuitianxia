@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<link rel="stylesheet" href="__PUB__css/pp.css" />
+<link rel="stylesheet" type="text/css" href="__PUB__css/style.css">
+<script charset="utf-8" src="__PUB__js/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="index.html"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">优惠券管理</li>
+							<li class="active">优惠券管理</li>
+							<li class="active">添加优惠券</li>
+						</ul>
+						<div class="row">
+							<div class="col-sm-6"></div>
+							<div class="col-sm-6"></div>
+						</div>
+						<section class="panel panel-default">
+							<header class="panel-heading font-bold"> 添加优惠券 </header>
+							<div class="panel-body">
+								<form action="<{:U(ACTION_NAME)}>" class="form-horizontal" method="post">
+								<?php if(cookie('ADMIN_POWER')):?>
+									<div class="form-group">
+										<label class="col-sm-2 control-label pp_err">地区</label>
+										<div class="col-sm-10">
+											<label>
+												<select name="area" class="form-control" style="min-width:120px;" id="area" datatype="*" nullmsg="请选择地区">
+													<option value="">请选择</option>
+													<volist name="area" id="avo">
+													<option value="<{$avo.ar_id}>" <?php if(cookie('AREA') && cookie('AREA') == $avo['ar_id']):?>selected="selected"
+													<?php endif;?> ><{$avo.ar_name}></option>
+													</volist>
+												</select>
+											</label>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+								<?php else:?>
+									<input type="hidden" name="area" value="<{$Think.cookie.AREA}>" />
+								<?php endif;?>
+									<div class="form-group">
+										<label class="col-sm-2 control-label pp_err">优惠券名称</label>
+										<div class="col-sm-8">
+											<input type="text" name="title" class="form-control" datatype="*" nullmsg="请填写优惠券名称">
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label pp_err">优惠券类型</label>
+										<div class="col-sm-10">
+											<label>
+												<select name="cate" class="form-control" style="width:25%; min-width:120px;" datatype="*" nullmsg="请选择优惠券类型">
+													<volist name="cate" id="v" >
+													<option value="<{$v}>" <eq name="v" value="折扣券">selected="selected"</eq>><{$v}></option>
+													</volist>
+												</select>
+											</label>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label pp_err">优惠力度</label>
+										<div class="col-sm-10" id="price">
+											<input name="price" class="input-sm input-s form-control" style="display:inline-block" type="text" value="" datatype="*" nullmsg="请填写优惠力度"> 折
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label pp_err">优惠券数量</label>
+										<div class="col-sm-10">
+											<input name="num" class="input-sm input-s form-control" type="text" value="" style="display:inline-block" datatype="n" nullmsg="请填写优惠券数量">  张
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label pp_err">活动时间</label>
+										<div class="col-sm-6">
+											<label class="pull-left">
+												<input name="start_time"  class="form-control"  type="text" value="<{:date('Y-m-d')}>"  onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'endTime\')}'})" id="staTime" datatype="*" nullmsg="请填写活动开始时间">
+											</label>
+											<label class="control-label pull-left">&nbsp;至&nbsp;</label>
+											<label class="pull-left">
+												<input name="end_time"  class="form-control" style="display:inline-block" type="text" value="<{:date('Y-m-d',time()+86400)}>" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'staTime\')}'})" id="endTime"  datatype="*" nullmsg="请填写活动结束时间">
+											</label>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">使用规则</label>
+										<div class="col-sm-8">
+											<textarea name="rule" class="form-control" style="height:150px"></textarea>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label pp_err">行业</label>
+										<div class="col-sm-8" >
+											<volist name="industry" id="v" key="k">
+											<label class="checkbox-inline chit_1"><input type="checkbox" name="industry[]" value="<{$k}>"  <if condition="$k eq count($industry)"> datatype="*" nullmsg="请选择行业"</if>><{$v}></label>
+											</volist>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label pp_err">商户</label>
+										<div class="col-sm-1" ><label class="checkbox-inline chit_1" ><input type="checkbox" id="all" >全选</label></div>
+										<div class="col-sm-8" id="merchant">
+											<label class="checkbox-inline chit_1" style="padding-left:0px;">请先选择行业</label>
+										</div>
+										
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label pp_err">优惠券模版</label>
+										<div class="col-sm-10" id="links">
+											<label class="checkbox-inline chit_1" style="padding-left:0px; width: 200px;">请先选择地区</label>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<div class="col-sm-8 col-sm-offset-2">
+											<button type="submit" class="btn btn-primary" name="save">保存</button>
+                                            <button type="button" class="btn btn-default" onClick="javascript:history.go(-1);">返回</button>
+										</div>
+									</div>
+									<input type="hidden" name="tid" value="<{:I('tid','','intval')}>" />
+								</form>
+							</div>
+						</section>
+					</section>
+				</section>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/app.v2.js"></script> 
+<!-- Bootstrap --> <!-- App --> 
+<!-- fuelux --> 
+<script src="__PUB__js/fuelux/fuelux.js" cache="false"></script> 
+<!-- datepicker --> 
+<script src="__PUB__js/libs/moment.min.js" cache="false"></script> 
+<script src="__PUB__js/datepicker/bootstrap-datepicker.js" cache="false"></script> 
+<!-- slider --> 
+<script src="__PUB__js/slider/bootstrap-slider.js" cache="false"></script> 
+<!-- file input --> 
+<script src="__PUB__js/file-input/bootstrap-filestyle.min.js" cache="false"></script> 
+<!-- combodate --> 
+<script src="__PUB__js/combodate/combodate.js" cache="false"></script> 
+<!-- select2 --> 
+<script src="__PUB__js/select2/select2.min.js" cache="false"></script> 
+<!-- wysiwyg --> 
+<script src="__PUB__js/wysiwyg/jquery.hotkeys.js" cache="false"></script> 
+<script src="__PUB__js/wysiwyg/bootstrap-wysiwyg.js" cache="false"></script> 
+<script src="__PUB__js/wysiwyg/demo.js" cache="false"></script> 
+<!-- markdown --> 
+<script src="__PUB__js/markdown/epiceditor.min.js" cache="false"></script> 
+<script src="__PUB__js/markdown/demo.js" cache="false"></script>
+<script src="__PUB__weixin/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="__PUB__weixin/artDialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="__PUB__js/Validform_v5.3.2.js"></script>
+<script>
+	$(".form-horizontal").Validform({
+        tiptype:1,
+    });
+	//ajax商户信息
+	function getMerchant(){
+		var strSel = '';	//选择的行业
+		var a_rea = '';	//地区
+		$(":input[name='industry[]']:checked").each(function(index, element) {
+			strSel += $(this).val() + ",";
+		});
+		<notempty name="Think.cookie.ADMIN_POWER">
+			a_rea = $('#area option:selected').val();
+		<else />
+			a_rea = $(':input[name="area"]').val();
+		</notempty>
+		var valida = {
+			id:strSel,
+			area:a_rea,
+		};
+		$.ajax({
+			type:"POST",
+			url:"<{:U('chit_merchant')}>",
+			data:valida,
+			beforeSend:function(){
+				$('#merchant').html('<img src="__PUB__img/loading.gif" />');
+			},
+			success:function(data){
+				if(data['suc'] == true){
+					$('#merchant').html(data['data']);
+				}else{
+					$('#merchant').html('<label class="checkbox-inline chit_1" style="padding-left:0px;">'+data['msg']+'</label>');
+				}
+			},
+			dataType:'json',
+		});
+	}
+	//aiax获取优惠券模版
+	function getLinks(){
+		<notempty name="Think.cookie.ADMIN_POWER">
+			a_rea = $('#area option:selected').val();
+		<else />
+			a_rea = $(':input[name="area"]').val();
+		</notempty>
+		$.get("<{:U('linkslist')}>",{area:a_rea},function(data){
+			if(data['suc'] == true){
+				$('#links').html(data['data']);
+			}else{
+				$('#links').html('<label class="checkbox-inline chit_1" style="padding-left:0px;">'+data['msg']+'</label>');
+			}
+		},'json');
+	}
+	//优惠券类型
+	function cateChange(){
+		var v = $(':input[name="cate"] option:selected').val();
+		switch (v){
+			case '满减券':
+				$('#price').html('满 <input name="price2" class="input-sm input-s form-control" style="display:inline-block; width:100px;" type="text" value="" datatype="*" nullmsg="请填写优惠力度"> 元减 <input name="price" class="input-sm input-s form-control" style="display:inline-block; width:100px;" type="text" value="" datatype="n" nullmsg="请填写优惠力度"> 元');
+				break;
+			case '现金抵用券':
+				$('#price').html('抵现金 <input name="price" class="input-sm input-s form-control" style="display:inline-block; width:100px;" type="text" value="" datatype="n" nullmsg="请填写优惠力度"> 元');
+				break;
+			case '免费券':
+				$('#price').html('<input name="price" class="input-sm input-s form-control" style="display:inline-block; width:100px;" type="hidden" value="0" datatype="n" nullmsg="请填写优惠力度">免费券');
+				break;
+			case '折扣券':
+			default:
+				$('#price').html('<input name="price" class="input-sm input-s form-control" style="display:inline-block; width:100px;" type="text" value="" datatype="n" nullmsg="请填写优惠力度"> 折');
+		}
+	}
+	$(document).ready(function(){
+		//优惠券模版
+		getLinks();
+		$(':input[name="area"]').change(function(){
+			getLinks();
+		});
+		getMerchant();
+		$(":input[name='industry[]']").click(function(){
+			getMerchant();
+		});
+
+		//优惠券类型
+		cateChange();
+		$(':input[name="cate"]').change(function(){
+			cateChange();
+		});
+		//商户全选
+		$("#all").click(function(){ 	
+	        if(this.checked) { 
+	             $("[name='merchant[]']:checkbox").prop("checked",true);
+	        }else{  
+	            $("[name='merchant[]']:checkbox").prop("checked",false);  
+	        }  
+	    });  
+	});
+
+</script>
+<script src="__PUB__js/layer2/layer.js" cache="false"></script>
+<script src="__PUB__weixin/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="__PUB__weixin/artDialog/plugins/iframeTools.js"></script>
+<script>
+	function addImgMessage(id){
+		art.dialog.open('<{:U("imgLook",'','')}>/id/'+id+'.html',{lock:true,title:'查看优惠券模版',width:'86%',height:'80%',yesText:'关闭',background: '#000',opacity: 0.45});
+	}
+</script>
+</body>
+</html>

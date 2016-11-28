@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <include file="Common:header" />
+    <link href="__CSS__own.css" rel="stylesheet">
+    <link href="css/own.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+<include file="Common:navigationtwo" />
+<include file="Common:position" />
+<section>
+<div class="container mt60">
+   <include file="Common:left" />
+    <div class="slid_right fr wow fadeInRight animated">
+        <if condition="$topid eq 17">
+        <div class="show_name">
+            <div class="fl tiao"></div>
+            <p class="fl"><{$catename.catname}><span></span></p>
+        </div>
+    	</if>
+    	<if condition="$topid eq 17">
+        <div class="clear wenzan">
+            <img src="<{$page.thumb}>" alt="" class="fl pad_ri">
+            <div class="padf" style="margin-bottom: 60px;">
+                <div class="teach_name"><div class="px4"></div><{$page.title}></div>
+                <{$page.content}>
+            </div>   
+        </div>
+		<else/>
+           <div class="clear wenzan">
+            <div class="fl pad_ri" style="margin-right:20px;margin-bottom:10px;width: 190px;height: 250px;display: block;overflow: hidden;"><img src="<{$page.thumb}>" alt="<{$page.title}>" ></div>
+            <div class="padf" style="padding-top:0px;padding-bottom: 60px;margin-top: -12px; margin-bottom: 60px;">
+                <div class="teach_name"><div class="px4" style="display:inline-block; float:none;"></div><{$page.title}></div>
+                <{$page.content}>
+            </div>   
+        </div>
+   		</if>
+    </div>
+</div>
+</section>
+<include file="Common:footer" />
+<include file="Common:footer_js" />
+</body>
+<script>
+    
+ $(window).load(function() {             
+       $(".pad_ri").each(function(){
+        $img = $(this).find("img"); 
+         
+             $w = $img.width();
+             $h = $img.height();
+            
+            /*  sr = $img.attr("src")
+               alert(sr+","+$w+","+$h)*/
+              
+             $bw= $(this).width();
+             $bh= $(this).height();
+            
+             b1 = $w/$h;
+             b2 = $bw/$bh;
+                
+            if(b1>b2){
+                $img.css("height","100%")
+                $wed = $bh*b1;
+                $img.css("width",$wed+"px")
+                fz =($(".pad_ri").width()-$wed)/2;
+                $img.css("margin-left",fz+"px")
+            }else{
+                $img.css("width","100%")
+                $hed = $bw/b1;
+                $img.css("height",$hed+"px")
+                fs =($(".pad_ri").height()-$hed)/2;
+                $img.css("margin-top",fs+"px")
+            }              
+     });    
+});
+
+</script>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+</head>
+<body>
+<section class="vbox">
+ <section>
+    <section class="hbox stretch"> <!-- .aside -->
+     <!-- /.aside -->
+      <section id="content">
+        <section class="vbox">
+        
+          <section class="scrollable padder ">
+          <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+              <li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页 </a></li>
+              <li><a href="<{:U('Authc/fenpei')}>">权限管理</a></li>
+              <li class="active">规则管理</li>
+            </ul>
+            <section class="panel panel-default">
+             <div class="row text-sm wrapper">
+                <div class="col-sm-4 m-b-xs text-center-xs">
+                </div>
+             <div class="col-sm-4 m-b-xs text-center">
+                          <div class="btn-group" >                  
+                              <a href="<{:U('addrule')}>" class="btn btn-sm btn-default active" >
+                              <i class="fa fa-plus"></i>新增规则</a>
+                          </div>
+                </div>                   
+                    <div class="col-sm-4 pull-right text-center-xs text-right">                    
+                   
+                    <form action="<{:U('rules')}>" method='post' class="search">
+                        请选择所属分类：<select name="search"  class="input-sm form-control input-s-sm inline">
+                            <option value="">全部分类</option>
+                            <volist name="authcategory" id="v">
+                            <option <eq name="search" value="$key">selected="selected"</eq> value="<{$key}>"><{$v}></option>
+                            </volist>
+                        </select>
+                    </form>
+                    
+                </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+              <form name="form2" action="<{:U('form')}>" method="post">
+                <table class="table table-striped b-t b-light text-sm">
+                  <thead>
+                    <tr>
+                      <th class="col-sm-1" style="text-align:center">ID选择</th>
+                      <th class="col-sm-1" style="text-align:center">排序</th>
+                      <th class="col-sm-3" style="text-align:center">规则名称</th>
+                      <th class="col-sm-1" style="text-align:center">所属分类</th>
+                      <th class="col-sm-1" style="text-align:center">状态</th>
+                      <th class="col-sm-2" style="text-align:center">规则内容</th>
+                      <th class="col-sm-1" style="text-align:center">条件</th>
+                      <th class="col-sm-2" style="text-align:center">管理项</th>
+                    </tr>
+                  </thead>
+                  <tbody id="div1">
+                  <volist name="lists" id="list">
+                    <tr class="text_center">
+                        <td style="text-align:center"><input name="id" type="checkbox" id="check" value="<{$list.id}>" class="np"> <{$list['id']}></td>
+                        <td  style="text-align:center"><input name="sort" type="text" value="<{$list.sort}>" size="4" attrid="<{$list.id}>" />
+                        </td>
+                        <td class="hidden-xs" style="text-align:center">
+                            <span id="id">
+                                <{$list.title}>
+                            </span>	
+                        </td>
+                        <td class="hidden-xs" style="text-align:center"><{$authcategory[$list['catid']]}></td>
+                        <td class="hidden-xs" style="text-align:center"><a title="点击审核规则" href="javascript:chang_status(<{$list.id}>,<{$list.status}>,'Authrule');"><eq name="list.status" value="1"><i  class="fa fa-check" var="<{$list.id}>"></i><else /><i class="fa fa-times" var="<{$list.id}>"></i></eq></a></td>
+                        <td class="hidden-xs" style="text-align:center"><{$list.name}></td>
+                        <td class="hidden-xs" style="text-align:center"><{$list.condition}></td>
+                        <td class="hidden-xs" style="text-align:center">
+                         <a href="<{:U('editrule',array('id'=>$list['id'],'p'=>I('p'),'search'=>I('search')))}>"><i class="fa fa-pencil">修改</i></a>&nbsp;&nbsp;
+                        <a href="<{:U('delrule',array('id'=>$list['id'],'p'=>I('p'),'search'=>I('search')))}>" data-toggle="modal"> <i class="fa fa-trash-o">删除</i></a>
+                        </td>
+                    </tr>
+                    </volist>            
+                  </tbody>
+                </table>
+                 </form>
+              </div>
+              <footer class="panel-footer">
+                <div class="row">
+                  <div class="col-sm-3 hidden-xs">
+                   <input type="hidden" value="<{$_GET['p']}>" name="p">
+                    <button class="btn btn-sm btn-default" id="btn"><i class="fa fa-check-square-o"></i> 全选/反选</a></button>
+                    <div class="btn-group">                  
+                   		<button class="btn btn-sm btn-default" name="Delete" value=" " type="button" style="cursor:pointer;" onclick="javascript:delArc(0);"><i class="fa fa-trash-o"></i> 删除勾选</button>&nbsp;
+                    </div>
+                  </div>
+                  <div class="col-sm-6 text-center">
+                  <ul class="pagination pagination-sm m-t-none m-b-none">
+                                            <li><a href="javascript:void(0);">共 <{$totalRows}> 条</a></li>
+                  </ul>
+                  <ul class="pagination pagination-sm m-t-none m-b-none">
+                    <{$page}>
+                  </ul> 
+                     
+                   <ul class="pagination pagination-sm m-t-none m-b-none">
+                                            <li><a href="javascript:void(0);">共 <{$nowPage}>/<{$totalPages}> 页</a></li>
+                  </ul>  
+                      </div>
+                  <div class="col-sm-3 text-right text-center-xs">
+                    <form action="<{:U(ACTION_NAME)}>" method="post">
+                    <input class="input-sm form-control input-s-xs inline" value="<{$nowPage}>" name="page" placeholder="第1页">
+                                          <button type="submit" class="btn btn-sm btn-default">GO</button>
+                    </form>
+                  </div>
+                </div>
+              </footer>
+             
+            </section>
+          </section>
+        </section>
+        <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+      <aside class="bg-light lter b-l aside-md hide" id="notes">
+        <div class="wrapper">Notification</div>
+      </aside>
+    </section>
+  </section>
+</section>
+
+
+
+<div class="modal fade" id="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">置顶:中国人民大学2016年来华留学生本科招科招生简章</h4>
+      </div>
+      <div class="modal-body">
+                   <select class="input-sm form-control input-s-sm inline">
+                    <option value="0">1</option>
+                    <option value="1">2</option>
+                    <option value="2">3</option>
+                    <option value="3">4</option>
+                  </select>
+                  数值越大置顶级别越高
+         
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">确定</button>
+        
+         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+    <!-- /.modal-content --> </div>
+  <!-- /.modal-dialog --> </div>
+
+
+
+
+<div class="modal fade" id="modalsc">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">温馨提示</h4>
+      </div>
+      <div class="modal-body">
+        <h4 class="modal-title">请问您确定删除吗？</h4>
+         
+      </div>
+      <div class="modal-footer">
+       
+        <button type="button" class="btn btn-info" data-dismiss="modal">确定</button>
+        
+         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+    <!-- /.modal-content --> </div>
+  <!-- /.modal-dialog --> </div>
+
+
+
+
+
+
+<link rel="stylesheet" href="__PUB__css/font.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__js/nestable/nestable.css" type="text/css" cache="false" />
+
+<script src="__PUB__js/app.v2.js"></script> <!-- Bootstrap --> <!-- App --> <script src="__PUB__js/sortable/jquery.sortable.js" cache="false"></script><script src="js/nestable/jquery.nestable.js" cache="false"></script><script src="js/nestable/demo.js" cache="false"></script>
+<script type="text/javascript">
+  window.onload=function ()
+{
+  var oBtn1=document.getElementById('btn');
+
+  var oDiv=document.getElementById('div1');
+  var aCh=oDiv.getElementsByTagName('input');
+  oBtn1.onclick=function ()
+  {
+    for(var i=0;i<aCh.length;i++)
+    {
+      if(aCh[i].checked==false)
+      {
+        aCh[i].checked=true;
+      }
+      else
+      {
+        aCh[i].checked=false;
+      }
+    }
+  };
+};
+</script>
+</body>
+</html>
+<script>
+	$(function(){
+		$(':input[name="search"]').change(function(){
+			var v=$(this).children('option:selected').val();
+			$('.search').submit();
+		});
+	});
+</script>
+<script type="text/javascript" src="__PUB__js/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUB__js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUB__js/common.js"></script>
+<script>
+$(document).ready(function(){ 
+	$("#SelectAll").click(function(){ 
+		$("input[name='id']").checkCbx(); 
+	}); 
+	$(".YanZheng").click(function(event){
+		var a=$("input:checked").length;
+		if(a==0){
+			alert('您还没有请选择操作内容！');
+			event.preventDefault();
+		}
+	});	
+}); 
+$.fn.checkCbx = function(){ 
+	return this.each(function(){ 
+		this.checked = !this.checked; 
+	}); 
+} 
+
+/* 审核 */
+function checkArc(aid){
+	var qstr=getCheckboxItem();
+	if(aid==0) aid = getOneItem();
+	location="/admin.php?m=Authc&a=ischeck&id="+qstr;
+}
+/* 删除审核 */
+function checkArcd(aid){
+	var qstr=getCheckboxItem();
+	if(aid==0) aid = getOneItem();
+	location="/admin.php?m=Authc&a=ischeckd&id="+qstr;
+}
+/* 推荐 */
+function adArc(aid){
+	var qstr=getCheckboxItem();
+	if(aid==0) aid = getOneItem();
+	location="/admin.php?m=Authc&a=isbest&id="+qstr;
+}
+/* 删除推荐 */
+function adArcd(aid){
+	var qstr=getCheckboxItem();
+	if(aid==0) aid = getOneItem();
+	location="/admin.php?m=Authc&a=isbestd&id="+qstr;
+}
+/* 删除信息 */
+function delArc(aid){
+	if(window.confirm('您确定要删除吗？')){
+		var qstr=getCheckboxItem();
+		location="<{:U('delallrule','','')}>/id/"+qstr;
+	}
+	else
+	{
+		return false;
+	}
+}
+/* 修改信息属性 */
+function chang_status(id,value,table)
+{
+	
+	var newvalue=0;
+	if(value == 1)
+		newvalue=0;
+	else
+		newvalue=1;
+	var submitData = {
+		id:id,
+		status:newvalue,
+		table:table
+	};
+	$.post("<{:U('editattr')}>",submitData,
+		function(data) {
+			if (data.success == true) {
+				alert(data.msg);
+				setTimeout('window.location.href=location.href',1000);
+				return;
+			}
+			else {}
+		}
+	,'json');
+	
+}
+/* 获得选中文件的文件名 */
+function getCheckboxItem()
+{
+	var allSel="";
+	//if(document.form2.id.value) return document.form2.id.value;
+	if($('input[name="id"]').length == 1 && $('input[name="id"]:checked').length == 1)
+	{
+		return document.form2.id.value;
+	}
+	for(i=0;i<document.form2.id.length;i++)
+	{
+		if(document.form2.id[i].checked)
+		{
+			if(allSel=="")
+				allSel=document.form2.id[i].value;
+			else
+				allSel=allSel+","+document.form2.id[i].value;
+		}
+	}
+	return allSel;
+}
+$(function(){
+	/* $('.confirmdel').click(function(){
+		var url=$(this).attr('href');
+		if(window.confirm('你确定要删除吗？'))
+		{
+			window.location=url;
+		}
+		return false;
+	});
+	*/
+	/* 全选
+	$('#selAll').click(function(){
+		$('input[name="id"]').attr('checked',true);
+	}); */
+	/* 取消全选
+	$('#noselAll').click(function(){
+		$('input[name="id"]').each(function () {  
+			$(this).attr("checked", !$(this).attr("checked"));  
+		});
+	}); */
+	$('.auth_sort').blur(function(){
+
+		var validata={
+			id:$(this).attr('attrid'),
+			f:'sort',
+			val:$(this).val(),
+			table:'Authrule',
+			msg:'排序'
+		};
+		$.post("<{:U('changeSort')}>",validata,
+			function(data) {
+				if (data.success == true) {
+					//alert(data.msg);
+					setTimeout('window.location.href=location.href',10);
+					return;
+				}
+				else {
+					//alert(data.msg);
+					return;
+				}
+			}
+		,'json');
+	});
+});
+</script>

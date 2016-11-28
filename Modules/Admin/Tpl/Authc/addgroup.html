@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+    <head>
+    <meta charset="utf-8" />
+    <include file="Common:head" />
+    <script>
+        /**
+         *	实现全选
+         *	@param fm 包裹的form表单
+         */
+        function selectAll(fm){
+            if(fm.elements.length <= 0) {
+                return;
+            }else {
+                for(var i in fm.elements) {
+                    if(fm.elements[i].type == 'checkbox') {
+                        fm.elements[i].checked = true;
+                    }
+                }
+            }
+        }
+
+        /**
+         *	取消全选
+         */
+        function UnSelectAll(fm) {
+            if(fm.elements.length <= 0) {
+                return;
+            }else {
+                for(var i in fm.elements) {
+                    if(fm.elements[i].type == 'checkbox') {
+                        fm.elements[i].checked = false;
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+		.pp_button {
+			padding:0px 8px;
+			font-weight:bold;
+			line-height:180%;
+			font-size:13px;
+		}
+		#div1 span {
+			display:inline-block;
+			min-width:120px;
+		}
+		.title{
+			padding-left:5px;
+			margin-top:15px;
+			line-height:25px;
+			background-color:#eee;
+		}
+	</style>
+    </head>
+    <body>
+<section class="vbox">
+	<section class="scrollable padder">
+		<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+			<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页 </a></li>
+			<li><a href="<{:U('Authc/fenpei')}>">权限管理</a></li>
+			<li><a href="<{:U('Authc/group')}>"> 角色列表</a></li>
+			<li class="active">添加角色</li>
+		</ul>
+		<div class="row">
+			<div class="col-sm-6"></div>
+			<div class="col-sm-6"></div>
+		</div>
+		<form name="group" action="" method="post">
+			<section class="panel panel-default">
+				<div class="panel-body">
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">角色名称</label>
+							<div class="col-sm-4">
+								<input name="title" type="text" value="" onblur="input_check('title');" class="form-control rounded">
+							</div>
+						</div>
+						<div class="line line-dashed line-lg pull-in"></div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">是否启用</label>
+							<div class="col-sm-4">
+								<div class="radio inline">
+									<label >
+										<input type="radio" name="status" value="1" checked="checked" />
+										启用　 </label>
+								</div>
+								<div class="radio inline">
+									<label>
+										<input type="radio" name="status" value="0" />
+										关闭 </label>
+								</div>
+							</div>
+						</div>
+						<div class="line line-dashed line-lg pull-in"></div>
+						<table>
+							<tbody>
+								<tr>
+									<td class="text_right_wid_90 col-sm-2 control-label" style=" font-weight:bold; padding-right:30px;">规则</td>
+									<td class="group_rule"><button class='btn btn-primary pp_button' style="background-color:#41586E;border-color:#41586E;"  onclick="selectAll(this.form);return false;">全　选</button>
+										&nbsp;&nbsp;
+										<button class='btn btn-primary pp_button' style="background-color:#41586E;border-color:#41586E;" onclick="UnSelectAll(this.form);return false;">取消全选</button>
+										<div id="div1">
+											<php>$empty='<a href="'.U('addrule').'">无规则，请先添加规则</a>';</php>
+											<volist name="rules" id="v" empty="$empty">
+												<php> if($catid != $v['catid'])
+													{
+													$catid=$v['catid'];
+													$cat_true=true;
+													}
+													else
+													{
+													$cat_true=false;
+													}
+													if($cat_true) echo '
+													<div class="title">'.$authcategory[$catid].'</div>
+													'; </php>
+												<span>
+												<input name="rules[]" type="checkbox" value='<{$v.id}>' onclick="checkbox_check('rules[]');"/>
+												<{$v.title}></span> </volist>
+										</div></td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="line line-dashed line-lg pull-in"></div>
+						<div class="form-group">
+							<div class="col-sm-4 col-sm-offset-2">
+								<input type="submit" name="button" id="button" value="保存" class="btn btn-primary">
+								<a href="javascript:history.go(-1);">
+								<input type="button" value="返回" class="btn btn-default">
+								</a> </div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</form>
+	</section>
+</section>
+<script type="text/javascript">
+  window.onload=function ()
+{
+  var oBtn1=document.getElementById('btn1');
+  var oBtn2=document.getElementById('btn2');
+  var oDiv=document.getElementById('div1');
+  var aCh=oDiv.getElementsByTagName('input');
+
+  oBtn1.onclick=function ()
+  {
+    for(var i=0;i<aCh.length;i++)
+    {
+      aCh[i].checked=true;
+    }
+  };
+  
+  oBtn2.onclick=function ()
+  {
+    for(var i=0;i<aCh.length;i++)
+    {
+      aCh[i].checked=false;
+    }
+  };
+};
+</script>
+</body>
+</html>

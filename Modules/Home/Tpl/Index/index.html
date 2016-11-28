@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+<meta http-equiv="X-UA-Compatible" content="IE=9">
+<include file="Common:header" />
+</head>
+<body style="min-width:1200px;">
+<include file="Common:navigation" />
+<div class="banner">
+    <ul class="list">
+        <volist name="adver" id="vo">
+            <li style="<eq name="key" value="0">display: list-item;<else />display:none</eq> z-index: 1;"> <a href="javascritp:void(0);"> <img src="
+                <if condition="$vo['logo'] eq ''">
+                    __IMG__banner.jpg
+                <else/>
+                <{$vo.logo}>
+                </if>
+                " alt="<{$vo.name}>"> </a>
+                <div class="pore">
+                    <div class="carousel-caption">
+                        <h1 class="white"><{$vo.name}></h1>
+                        <div class="bor"></div>
+                        <p><{$vo.content}></p>
+                        <p> <a class="learnmore" href="<if condition ="strlen($vo['url']) elt 7">#<else/><{$vo.url}></if>" <if condition ="strlen($vo['url']) gt 7">target="_blank"</if> >Learn more</a> </p>
+                    </div>
+                </div>
+            </li>
+        </volist>
+    </ul>
+    <ul class="btn"></ul>
+</div>
+<section class="container features pad" id="news">
+    <div class="row features-block">
+       <div class="col780 features-text wow fadeInLeft">
+            <div class="col-lg-12 teaching">
+                <div class="row">
+                    <div class="col-lg-12 text-left">
+                        <a href="<{:U('news',array('cid'=>51))}>" class="red fr lh">more>></a>
+                        <h1>学院动态</h1>
+                        <div class="navy-line" style="margin: 11px 0 6px 0;"></div>
+                        <p class="title_P">News And Activities</p>
+                    </div>
+                </div>
+                <div id="demo" class="flexslider">
+                    <ul class="slides">
+                        <volist name="list.list" id="val">
+                        <li>
+                            <div class="img"><a <if condition="$val['blank'] eq 1">target="_blank"</if> href="<if condition="$val['articletype'] eq 1"><{$val.link}><else/><{:U('news_cont',array('id'=>$val['id']))}></if>"><img src="<{$val.thumb}>" alt="<{$val.title}>" /></a></div>
+                            <div class="yb">
+                                <div class="pads">
+                                    <h4><a <if condition="$val['blank'] eq 1">target="_blank"</if> href="<?php echo $url;?>" style="color:red;"><{$val.title}></a></h4>
+                                    <div class="time_yb"><img src="__IMG__shijian.png" alt=""><{$val.addtime|date='Y-m-d',###}></div>
+                                    <p><{$val.description|msubstr=0,60}></p>
+                                    <a href="<if condition="$val['articletype'] eq 1"><{$val.link}><else/><{:U('news_cont',array('id'=>$val['id']))}></if>">了解更多</a>
+                                </div>
+                            </div>
+                        </li>
+                        </volist>
+                    </ul>
+                </div>
+            </div>           
+        </div> 
+        <div class="col390  wow fadeInRight featurestext animated">
+            <div class="col-lg-12 teaching">
+                <div class="row">
+                    <div class="col-lg-12 text-left"> <a href="<{:U('news',array('cid'=>52))}>" class="red fr lh">more&gt;&gt;</a>
+                        <h1>活动公告</h1>
+                        <div class="navy-line" style="margin: 11px 0 6px 0;"></div>
+                        <p class="title_P">Upcoming Events</p>
+                    </div>
+                </div>
+                <div class="bxo">
+                    <volist name="news.list" id="vall">
+                    <div class="time_dingshi">
+                        <div><img src="__IMG__red-time.png" alt=""><i><{$vall.addtime|date='Y-m-d',###}></i></div>
+                        <a <if condition="$vall['blank'] eq 1">target="_blank"</if> href="<if condition="$vall['articletype'] eq 1"><{$vall.link}><else/><{:U('news_cont',array('id'=>$vall['id']))}></if>"><{$vall.title}></a> </div>
+                   </volist>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="features gray-section1 pad" id="contact">
+    <div class="container">
+        <div class="row mr">
+            <div class="col-lg-12 text-center">
+                <h1>创业教育</h1>
+                <div class="navy-line"></div>
+                <p>Entrepreneurship Education</p>
+            </div>
+        </div>
+        <div class="row m-t-lg"> 
+            <!--精品课程-->
+            <div style="visibility: visible; animation-name: fadeInLeft;" class="col480 features-text wow fadeInLeft animated fl animated"> <a href="<{:U('news',array('cid'=>31))}>" class="fl">
+                <div class="col440 features-text">
+                    <h2><{$cate.pp_31.catname}>&nbsp;&nbsp;<small><{$cate.pp_31.catename}></small></h2>
+                    <p class="mr18"><{$cate.pp_31.description}></p>
+                </div>
+                </a>
+                <div class="col60 features-text fr" style=""> <a href="javascript:void(0);"><i class="fa big-icon pull-right"><img src="__IMG__shengwu.png"></i></a> </div>
+            </div>
+            <div style="visibility: visible; animation-name: fadeInRight;" class="col480 features-text wow fadeInRight fr animated"> <a href="<{:U('teacher',array('cid'=>33))}>">
+                <div class="col480 features-text">
+                    <h2><{$cate.pp_33.catname}>&nbsp;&nbsp;<small><{$cate.pp_33.catename}></small></h2>
+                    <p class="mr18"><{$cate.pp_33.description}></p>
+                </div>
+                </a> 
+            </div>
+        </div>
+        <div class="row m-t-lg">
+            <div class="features-text wow fadeInLeft animated col480  animated" style="float: left; visibility: visible; animation-name: fadeInLeft;"> <a href="<{:U('teacher',array('cid'=>32))}>">
+                <div class="col440">
+                    <h2><{$cate.pp_32.catname}>&nbsp;&nbsp;<small><{$cate.pp_32.catename}></small></h2>
+                    <p class="mr18"><{$cate.pp_32.description}></p>
+                </div>
+                </a>
+                <div class="col60 features-text"> <a href="javascript:void(0);"><i class="fa big-icon pull-right"><img src="__IMG__ren.png"></i></a> </div>
+            </div>
+            <div style="visibility: visible; animation-name: fadeInRight;" class="features-text wow fadeInRight fr col480 animated">
+                <a href="<{:U('teacher',array('cid'=>34))}>">
+                <h2><{$cate.pp_34.catname}>&nbsp;&nbsp;<small><{$cate.pp_34.catename}></small></h2></a>
+                <div class="layout fl" style="margin-top:20px;">
+                    <div class="hotPic ten">
+                        <div class="JQ-slide">
+                            <div class="JQ-slide-nav"> 
+                                <a class="prev1 ned" href="javascript:void(0);"></a> 
+                                <a class="next1 xed" href="javascript:void(0);"></a> 
+                            </div>
+                            <div class="wrap">
+                                <ul style="width: 1000px;" class="JQ-slide-content imgList">
+                                   <volist name="muke.list" id='vo'>
+                                    <li> <a <if condition="$vo['blank'] eq 1">target="_blank"</if> href="<if condition="$vo['articletype'] eq 1"><{$vo.link}><else/><{:U('news_cont',array('id'=>$vo['id']))}></if>">
+                                        <div class="tea-box fl"> <img style="width:172px;height:100px;" src="<{$vo.thumb}>"> </div>
+                                        </a>
+                                    </li>                                    
+                                   </volist>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="prectice pad" id="tesm">
+    <div class="container">
+        <div class="row mr p36">
+            <div class="col-lg-12 text-center">
+                <h1>创业训练</h1>
+                <div class="navy-line"></div>
+                <p>Entrepreneurship Training</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col850 features-block">
+                <div style="visibility: visible; animation-name: fadeInLeft;" class="col378 wow fadeInLeft text-center features-text pr1 animated"> <a href="<{:U('luntan',array('cid'=>36))}>" class="img-link img1"><i><img src="__IMG__luntab.png"></i></a>
+                    <h3><{$train.pp_36.catname}></h3>
+                    <div class="navy-line1"></div>
+                    <p class="text-left"><{$train.pp_36.description}><a href="<{:U('luntan',array('cid'=>36))}>" class="red">MORE&gt;&gt;</a></p>
+                </div>
+                <div class="col378 wow fadeInRight text-center features-text pl1 animated" style="float: right; visibility: visible; animation-name: fadeInRight;"> <a href="<{:U('teacher',array('cid'=>38))}>" class="img-link img8"><i><img src="__IMG__jiangtang.png"></i></a>
+                    <h3><{$train.pp_38.catname}></h3>
+                    <div class="navy-line1"></div>
+                    <p class="text-left"><{$train.pp_38.description}><a href="<{:U('teacher',array('cid'=>38))}>" class="red">MORE&gt;&gt;</a></p>
+                </div>
+            </div>
+            <div class="col1200">
+                <div style="visibility: visible; animation-delay: 0.6s; animation-name: fadeInLeft;" class="col308  wow fadeInLeft animated" data-wow-delay="0.6s">
+                    <div class="col-lg-12 text-center features-text features-block"> <a href="<{:U('page',array('cid'=>39))}>" class="img-link img2"><i><img src="__IMG__luyan.png"></i></a>
+                        <h3><{$train.pp_39.catname}></h3>
+                        <div class="navy-line1"></div>
+                        <p class="text-left"><{$train.pp_39.description}><a href="<{:U('page',array('cid'=>39))}>" class="red">MORE&gt;&gt;</a></p>
+                    </div>
+                </div>
+                <div class="col582 wow zoomIn  animated" style="margin-top: 80px; visibility: visible; animation-name: zoomIn;"> 
+                    <!-- <img src="img/puter.png" class="img-responsive" alt=""  style=""> -->
+                    <div class="img-box text-center col-lg-12 ">
+                        <div style="display: none;" class="ing5"> <a href="javascript:void(0);"><i><img src="__IMG__pingshen1.png" class="p30"></i></a>
+                            <h3 class="f26">创业训练课程</h3>
+                            <div class="navyline"></div>
+                        </div>
+                        <div style="display: none;" class="ing4"> <a href="javascript:void(0);"><i><img src="__IMG__ril1.png" class="p30"></i></a>
+                            <h3 class="f26">创业训练课程</h3>
+                            <div class="navyline"></div>
+                        </div>
+                        <div style="display: none;" class="ing8"> <a href="javascript:void(0);"><i><img src="__IMG__jiangtang1.png" class="p30"></i></a>
+                            <h3 class="f26">创业大讲堂</h3>
+                            <div class="navyline"></div>
+                        </div>
+                        <div  style="display: none;" class="ing1"> <a href="javascript:void(0);"><i><img src="__IMG__luntab1.png" class="p30"></i></a>
+                            <h3 class="f26">创业论坛</h3>
+                            <div class="navyline"></div>
+                        </div>
+                        <div style="display: block;" class="ing2"> <a href="javascript:void(0);"><i><img src="__IMG__luyan1.png" class="p30"></i></a>
+                            <h3 class="f26">模拟路演</h3>
+                            <div class="navyline"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col308 features-block  wow fadeInRight animated" style="float: right; visibility: visible; animation-delay: 0.4s; animation-name: fadeInRight;" data-wow-delay="0.4s">
+                    <div class="col378 text-center features-text pr1 "> <a href="<{:U('train',array('cid'=>37))}>" class="img-link img4"><i><img src="__IMG__pingshen.png"></i></a>
+                        <h3><{$train.pp_37.catname}></h3>
+                        <div class="navy-line1"></div>
+                        <p class="text-left"><{$train.pp_37.description}><a href="<{:U('train',array('cid'=>37))}>" class="red">MORE&gt;&gt;</a></p>
+                    </div>
+                </div>
+            </div>
+            <div style="visibility: visible; animation-name: fadeInUpBig;" class="col850 features-block wow fadeInUpBig animated">
+                <div class="text-center features-text pl1"> <a href="<{:U('news',array('cid'=>35))}>" class="img-link img5"><i><img src="__IMG__ril.png"></i></a>
+                    <h3><{$train.pp_35.catname}></h3>
+                    <div class="navy-line1"></div>
+                    <p class="text-center"><{$train.pp_35.description}><a href="<{:U('teacher',array('cid'=>35))}>" class="red">MORE&gt;&gt;</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="navy-section testimonials">
+    <div class="banner_box">
+        <div class="index-banner" id="index-banner">
+            <div style="margin-left: -248.5px;" class="index-banner-scroll">
+                <ul style="left: -3840px;">
+
+                    <volist name="adverzh" id='vo'>
+                    <li> <a href="<if condition ="strlen($vo['url']) elt 7">#<else/><{$vo.url}></if>" <if condition ="strlen($vo['url']) gt 7">target="_blank"</if> class="bx"> <img src="__IMG__avatar_all.png">
+                        <div class="container">
+                            <div class="row poot text-center">
+                                <div class=" wow zoomIn animated animated" style="visibility: visible; animation-name: zoomIn;">
+                                    <h1 class="h1" style="color:#fff;"> <{$vo.name}> </h1>
+                                    <div class="font-line"></div>
+                                    <div class="testimonials-text">
+                                        <p><{$vo.content}></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </a> </li>
+                 
+                     </volist>
+                   
+                </ul>
+            </div>
+        </div>
+        <div class=""> <span class="left1"><img src="__IMG__left.png" alt=""></span> <span class="right1"><img src="__IMG__right.png" alt=""></span> </div>
+    </div>
+</section>
+<section id="fuh" class="container services">
+    <div class="container">
+        <div class="row m-b-lg">
+            <div class="col-lg-12 text-center mr">
+                <h1>创业孵化</h1>
+                <div class="navy-line"></div>
+                <p>Venture Star</p>
+            </div>
+        </div>
+        <div class="row">
+           <volist name='fuhua' id='val'>
+            <div  <if condition="$i eq 2"> class="col-sm-4 fot12 wow zoomIn mr200" animation-delay: 0.2s; <elseif condition="$i eq 3"/>class="col-sm-4 fot12 wow fadeInRight" data-wow-delay="0.4s"<else/> class="col-sm-4 fot12 wow fadeInLeft mr200" data-wow-delay="0.4s" </if>>
+                <div class="box"> <a href="<if condition="$val['linkurl'] neq ''"><{$val.linkurl}><else/><{:U('page',array('cid'=>$val['id']))}></if>"><img src="<{$val.banner}>" alt=""></a> </div>
+                <h5 class="e2"><{$val.catname}></h5>
+                <p><a class="navy-link red" href="<if condition="$val['linkurl'] neq ''"><{$val.linkurl}><else/><{:U('page',array('cid'=>$val['id']))}></if>" role="button">MORE&gt;&gt;</a></p>
+            </div>
+            </volist>
+        </div>
+    </div>
+</section>
+<section class="gray-section1 team" id="pricing">
+    <div class="container">
+        <div class="row m-b-lg">
+            <div class="col-lg-12 text-center mr">
+                <h1>创业团队</h1>
+                <div class="navy-line"></div>
+                <p>Business Incubator</p>
+            </div>
+        </div>
+        <div class="row">
+            <volist name="team" id="vo">
+            <div <if condition="$i eq 2"> class="col-sm-4 mio" <elseif condition="$i eq 1"/>class="col-sm-4 wow fadeInLeft mio" <else /> class="col-sm-4 wow fadeInRight mio"</if>>
+                <div  <if condition="$i eq 2">class="team-member wow zoomIn" <else/>class="team-member"</if> > <a href="<if condition="$vo['linkurl'] neq ''"><{$vo.linkurl}><elseif condition="$vo['id'] eq 46"/><{:U('teacher',array('cid'=>$vo['id']))}><else/><{:U('page',array('cid'=>$vo['id']))}></if>" target="_blank"><img src="<{$vo.banner}>" <if condition="$i eq 2">class="img-responsive img-circle img-big"<else/>  class="img-responsive img-circle img-small"</if>  alt=""></a>
+                    <h4 class="mad"><span class="navy"><{$vo.catname}></span></h4>
+                    <p><{$vo.description}></p>
+                    <ul class="list-inline social-icon">
+                        <li><a href="javascript:void(0);"><i class="fa"><img src="__IMG__weixin.png" alt=""></i></a> </li>
+                        <li><a href="javascript:void(0);"><i class="fa"><img src="__IMG__weibo.png" alt=""></i></a> </li>
+                        <li><a href="javascript:void(0);"><i class="fa"><img src="__IMG__koukou.png" alt=""></i></a> </li>
+                    </ul>
+                </div>
+            </div>
+             </volist>
+        </div>
+    </div>
+</section>
+<!-- asid start -->
+
+<div class="asid_share" id="asid_share">
+    <div class="asid_share_box relative"> <a href=""><img alt="返回首页" title="返回首页" class="adid_icon" src="__IMG__home.png"></a> </div>
+    <div class="asid_share_box relative go-top" style="display: block;"> <a href="#"><img alt="返回顶部" title="返回顶部" class="adid_icon" src="__IMG__icon_back.png"></a> </div>
+</div>
+<include file="Common:footer" />
+<script src="__JS__/jquery-2.1.1.js"></script>
+<script src="__JS__/bootstrap.min.js"></script>
+<script src="__JS__/classie.js"></script>
+<script src="__JS__/waypoints.min.js"></script>
+<script src="__JS__/navbar.js"></script>
+<script src="__JS__/wow.min.js"></script>
+<script src="__JS__/inspinia.js"></script>
+<script src="__JS__/slide.js"></script>
+<script src="__JS__/slider.js"></script>
+<script src="__JS__/slider-plugin.js"></script>
+<script src="__JS__/slider.js"></script>
+<script src="__JS__/jquery-finger-v0.1.0.min.js"></script>
+<script src="__JS__/focus.js"></script> 
+<script>
+        $(document).ready(function() {
+            // Show or hide the sticky footer button
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 200) {
+                    $('.go-top').fadeIn(200);
+                } else {
+                    $('.go-top').fadeOut(200);
+                }
+            });
+             
+            // Animate the scroll to top
+            $('.go-top').click(function(event) {
+                event.preventDefault();
+                 
+                $('html, body').animate({scrollTop: 0}, 300);
+            })
+        });
+</script>
+<script type="text/javascript">  
+$(function (){  
+    $(".hotPic .JQ-slide").Slide({  
+        effect:"scroolLoop",  
+        autoPlay:false,  
+        speed:"normal",  
+        timer:3000,  
+        steps:1  
+    });  
+      
+});  
+</script>
+<script>
+    $(function() {
+        $(".banner_box").slider({
+            containerEl: $(".index-banner-scroll"),
+            silderContainerEl: $("#index-banner ul"),
+            itemEl: $("#index-banner ul li"),
+            btnEl: $('.control span'),
+            btnContainerEl: $('.control'),
+            prev: $(".left1"),
+            next: $(".right1"),
+            index: 0,
+            resizeable: false,
+            showButton: true
+        });
+    });
+</script>
+<script>
+$(function(){
+            
+$(".mainlevel").each(function(){
+    h_ul =$(this).find("ul").width(); 
+    h_f = $(this).width();
+    if(h_ul>h_f){
+        h = (h_f-h_ul)/2+"px";
+        $(this).find("ul").css("margin-left",h)       
+        }else{
+        $(this).find("ul a").css("width",h_f-20+"px")     
+        }
+    }) 
+    $("li.mainlevel").mouseover(function(){
+        $(this).find("ul").show();
+    })
+    $("li.mainlevel").mouseout(function(){
+        $(this).find("ul").hide();
+    })
+}); 
+</script>
+<script>
+$(function(){
+    $('.img1').mouseover(function(){
+        $('.ing1').show().siblings().hide();
+    });
+    $('.img2').mouseover(function(){
+        $('.ing2').show().siblings().hide();
+    });
+    $('.img3').mouseover(function(){
+        $('.ing3').show().siblings().hide();
+    });
+    $('.img4').mouseover(function(){
+        $('.ing5').show().siblings().hide();
+    });
+    $('.img5').mouseover(function(){
+        $('.ing4').show().siblings().hide();
+    });
+    $('.img6').mouseover(function(){
+        $('.ing6').show().siblings().hide();
+    });
+    $('.img7').mouseover(function(){
+        $('.ing7').show().siblings().hide();
+    });
+    $('.img8').mouseover(function(){
+        $('.ing8').show().siblings().hide();
+    }); 
+})
+var i = 0;
+function tiem(){
+   i++;
+ // alert(i);
+  $('.ing'+i).show().siblings().hide(0);
+  if(i >= 8){
+    i = 0;
+  }
+}
+setInterval("tiem()",3000);
+</script>
+<script type="text/javascript">
+$(function(){
+    $('#demo').flexslider({
+        animation: "slide",
+        direction:"vertical",
+        easing:"swing"
+    });
+    
+});
+</script>
+<script>
+        $(document).ready(function() {
+            // Show or hide the sticky footer button
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 200) {
+                    $('.go-top').fadeIn(200);
+                } else {
+                    $('.go-top').fadeOut(200);
+                }
+            });
+             
+            // Animate the scroll to top
+            $('.go-top').click(function(event) {
+                event.preventDefault();
+                 
+                $('html, body').animate({scrollTop: 0}, 300);
+            })
+        });
+</script>
+</body>
+</html>

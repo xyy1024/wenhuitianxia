@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <include file="Common:header" />
+    <link href="__CSS__own.css" rel="stylesheet">
+</head>
+<body style="min-width:1200px;">
+<div class="navbar-wrapper" id="page-top">
+<include file="Common:navigationtwo" />
+<include file="Common:position" />
+<div class="container mt60">
+<include file="Common:left" />
+    <div class="slid_right fr wow fadeInRight animated">
+        <div class="lesson">
+            <volist name="train" id="v">
+            <a href="<{:U('train_cont',array('cid'=>$v['id'],'upid'=>$v['upid']))}>"  <if condition="($i eq 1) or ($i eq 4)"> class="liuc_box fl" <elseif condition="($i eq 2) or ($i eq 5)" />class="liuc_box fl mr0"<else />class="liuc_box fl" style="margin-left:235px;" </if> >
+                <div class="liuc_img<{$i}> fl"></div>
+                <div class="liuc_right fr">
+                    <h5><{$v.catname}></h5>
+                    <div class="nalk"></div>
+                    <p><{$v.description}></p>
+                </div>
+            </a>
+            </volist>
+        </div>
+    </div>
+</div>
+<include file="Common:footer" />
+<include file="Common:footer_js" />
+<script type="text/javascript" src="__JS__index.js"></script> 
+<script>
+$(function(){
+            
+$(".mainlevel").each(function(){
+    h_ul =$(this).find("ul").width(); 
+    h_f = $(this).width();
+    if(h_ul>h_f){
+        h = (h_f-h_ul)/2+"px";
+        $(this).find("ul").css("margin-left",h)       
+        }else{
+        $(this).find("ul a").css("width",h_f-20+"px")     
+        }
+    }) 
+    $("li.mainlevel").mouseover(function(){
+        $(this).find("ul").show();
+    })
+    $("li.mainlevel").mouseout(function(){
+        $(this).find("ul").hide();
+    })
+}); 
+$(function(){
+    $(".daoshi_ziliao").mouseover(function(){
+        $(this).addClass("checked_around");
+        $(this).find(".daoshi_name1").addClass("checked");
+        $(this).find(".daoshi_cover").css("display","block")
+    });
+    $(".daoshi_ziliao").mouseout(function(){
+        $(this).removeClass("checked_around");
+        $(this).find(".daoshi_name1").removeClass("checked");
+        $(this).find(".daoshi_cover").css("display","none")
+    })
+});
+$(function(){
+   $(".liuc_box").mouseover(function(){
+    $(this).addClass("red_br").find(".liuc_right>h5").addClass("red");
+    $(this).find(".liuc_img1,.liuc_img6").addClass("liuc_img1_muse");
+    $(this).find(".liuc_img2,.liuc_img7").addClass("liuc_img2_muse");
+    $(this).find(".liuc_img3,.liuc_img8").addClass("liuc_img3_muse");
+    $(this).find(".liuc_img4,.liuc_img9").addClass("liuc_img4_muse");
+    $(this).find(".liuc_img5,.liuc_img10").addClass("liuc_img5_muse");
+   });
+   $(".liuc_box").mouseout(function(){
+    $(this).removeClass("red_br").find(".liuc_right>h5").removeClass("red");
+    $(this).find(".liuc_img1,.liuc_img6").removeClass("liuc_img1_muse");
+    $(this).find(".liuc_img2,.liuc_img7").removeClass("liuc_img2_muse");
+    $(this).find(".liuc_img3,.liuc_img8").removeClass("liuc_img3_muse");
+    $(this).find(".liuc_img4,.liuc_img9").removeClass("liuc_img4_muse");
+    $(this).find(".liuc_img5,.liuc_img10").removeClass("liuc_img5_muse");
+   })
+});
+</script>
+</body>
+</html>

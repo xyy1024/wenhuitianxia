@@ -1,0 +1,29 @@
+    <include file="Common:top" />
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="net">
+            <div class="container">
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="mainlevel"><a class="page-scroll" href="<{:C('website')}>">首页</a></li>
+                       <volist name="navlist" id="vo">
+                        <li class="mainlevel">
+                            <a class="page-scroll" href="<{$vo.url}>"><{$vo.catname}></a>
+                            <notempty name="vo.child">
+                            <ul>
+                                <volist name="vo.child" id="val">
+                                <li><a href="<{$val.url}>"><{$val.catname}></a></li>
+                                </volist>
+                            </ul>
+                            </notempty>
+                        </li>
+                        </volist>
+                    </ul>
+                </div>
+            </div>
+        </div>   
+    </nav>
+
+
+
+
+

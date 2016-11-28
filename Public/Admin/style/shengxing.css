@@ -1,0 +1,12 @@
+@charset "utf-8";
+.head{height:90px; background:url(../images/wrwwr.jpg) no-repeat 15px top #267fb9; border-bottom:1px solid #c9c9c9;}
+.right{top:91px;}
+.left{top:91px;}
+.sx{ padding-left:50px; width:45%; float:left;}
+.sx2{float:right; width:50%; height:100%; background: url(../images/sx.jpg) no-repeat right top;}
+.sx3{ padding-top:27px; font-weight: bold; font-family:'宋体'; color:#E1F4FF; font-size:29px;}
+.sx4{ display:block;}
+.sx4 li{/*display:block; */float:left; padding:15px 20px 0 10px; font-weight:bold; color:#E1F4FF;}
+.sx4 li a{color:#E1F4FF;}
+.sx4 li a:hover{color:#fff;}
+.sx5{ padding-right:15px; margin-top:65px; text-align:right; color:#E1F4FF; font-size:13px;}

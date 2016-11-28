@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<title><{:C('title')}>|基本信息修改</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" href="__PUB__css/app.v2.css" type="text/css" />
+<link rel="stylesheet" href="__PUB__js/calendar/bootstrap_calendar.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__js/datepicker/datepicker.css" type="text/css" cache="false" />
+<style>
+.ts_span {	color: #FF0000;
+font-size: 13px;
+font-weight: bold;
+margin-left: 8px;
+}
+</style>
+<!--[if lt IE 9]> <script src="__PUB__js/ie/html5shiv.js" cache="false"></script> <script src="__PUB__js/ie/respond.min.js" cache="false"></script> <script src="__PUB__js/ie/excanvas.js" cache="false"></script> <![endif]-->
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页 </a></li>
+							<li class="active"><a href="<{:U('Index/system')}>">基本信息</a></li>
+							<li class="active">添加基本信息</li>
+						</ul>
+						<div class="row">
+							<div class="col-sm-6"></div>
+							<div class="col-sm-6"></div>
+						</div>
+						<section class="panel panel-default">
+							<header class="panel-heading font-bold"> 添加基本信息</header>
+							<div class="panel-body">
+								<form class="form-horizontal" action='' method="post">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">变量名<span class='mark' style="line-height:34px;">*</span></label>
+										<div class="col-sm-4">
+											<input type="text"  class="form-control " name="cfg">
+										</div>
+										<div class="col-sm-2 mark" style="line-height:34px;">例如：name</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">参数值<span class='mark' style="line-height:34px;">*</span></label>
+										<div class="col-sm-4">
+											<input type="text"  class="form-control " name="content">
+										</div>
+										<div class="col-sm-2 mark" style="line-height:34px;">例如：张三</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">参数说明<span class='mark' style="line-height:34px;">*</span></label>
+										<div class="col-sm-4">
+											<input type="text"  class="form-control " name="name">
+										</div>
+										<div class="col-sm-2 mark" style="line-height:34px;">例如：姓名</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">参数类型<span class='mark' style="line-height:34px;">*</span></label>
+										<div class="col-sm-10">
+											<div class="radio inline">
+												<label><input type="radio" name="type" value='string' checked>文本</label>
+											</div>　
+											<div class="radio inline">
+												<label><input type="radio" name="type" value='bstring'>多行文本</label>
+											</div>　
+											<div class="radio inline">
+												<label><input type="radio" name="type" value='bool'>布尔(Y/N)</label>
+											</div>　
+											<div class="radio inline">
+												<label><input type="radio" name="type" value='number'>数字</label>
+											</div>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<div class="col-sm-8 col-sm-offset-2">
+											<button type="submit" class="btn btn-primary">保存</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a>
+			</section>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/app.v2.js"></script>
+<!-- fuelux --><script src="__PUB__js/fuelux/fuelux.js" cache="false"></script>
+<!-- datepicker --><script src="__PUB__js/datepicker/bootstrap-datepicker.js" cache="false"></script>
+<!-- slider --><script src="__PUB__js/slider/bootstrap-slider.js" cache="false"></script>
+<!-- file input --> <script src="__PUB__js/file-input/bootstrap-filestyle.min.js" cache="false"></script>
+<!-- combodate --><script src="__PUB__js/libs/moment.min.js" cache="false"></script>
+<script src="__PUB__js/combodate/combodate.js" cache="false"></script>
+<!-- select2 --><script src="__PUB__js/select2/select2.min.js" cache="false"></script>
+<!-- wysiwyg --><script src="__PUB__js/wysiwyg/jquery.hotkeys.js" cache="false"></script>
+<script src="__PUB__js/wysiwyg/bootstrap-wysiwyg.js" cache="false"></script>
+<script src="__PUB__js/wysiwyg/demo.js" cache="false"></script>
+<!-- markd style="line-height:34px;"own --><script src="__PUB__js/markd style="line-height:34px;"own/epiceditor.min.js" cache="false"></script>
+<script src="__PUB__js/markd style="line-height:34px;"own/demo.js" cache="false"></script>
+</body>
+</html>

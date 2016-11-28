@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+  	<include file="Common:header" />
+    <link href="__CSS__own.css" rel="stylesheet">
+</head>
+<body >
+<include file="Common:navigationtwo" />
+<include file="Common:position" />
+<section>
+<div class="container mt60">
+   <include file="Common:left" />
+    <div class="slid_right fr wow fadeInRight animated">
+        <div class="footer_juli">
+            <div class="teach_team">
+
+				<volist name="leader" id="vo">
+                <div class="show_name">
+                    <div class="fl tiao"></div>
+                    <p class="fl"><{$vo.catname}><span></span></p>
+                </div>
+                <div class="teach_pic_box">
+                	<volist name="list[$vo['id']]" id="v">
+                	<if condition="($vo['id'] eq 53) or ($vo['id'] eq 54)">
+                    <div class="teach_pic fl">
+                    	<a <if condition="$v['blank'] eq 1">target="_blank"</if> href="<{:U('teacher_cont',array('id'=>$v['id']))}>"><div class="pic_box"><img src="<{$v.thumb}>" alt="<{$v.title}>"></div>
+                        <div class="name_box"><{$v.title}></div></a>
+                    </div>
+                    <else/>
+					<a <if condition="$v['blank'] eq 1">target="_blank"</if>  href="<{:U('teacher_cont',array('id'=>$v['id']))}>"><div class="name_box fl mrb"><{$v.title}></div></a>
+					</if>
+					</volist>
+				</div>
+				</volist>
+            </div>
+            
+        </div> 
+    </div>
+</div>
+</section>
+<include file="Common:footer" />
+<include file="Common:footer_js" />
+</body>
+</html>

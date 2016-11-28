@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>修改用户组</title>
+<load href="__PUBLIC__/Css/base.css" />
+<load href='__PUBLIC__/Js/jquery.js'/>
+<load href='__PUBLIC__/Js/pp_check.js'/>
+</head>
+<body background='__PUBLIC__/images/frame/allbg.gif' leftmargin='8' topmargin='8'>
+<table width="98%" border="0" align="center" cellpadding="3" cellspacing="1" bgcolor="#D6D6D6">
+<tr>
+	<td height="19" background="__PUBLIC__/images/frame/tbg.gif" bgcolor="#E7E7E7"> 
+	<table width="96%" border="0" cellspacing="1" cellpadding="1">
+	<tr> 
+		<td style="padding-left:10px;"><b><strong>修改用户组</strong></b> </td>
+		<td  align="right"><b><strong><a href="<{:U('group')}>">返回用户组列表</a></strong></b> </td>
+	</tr>
+	</table>
+	</td>
+</tr>
+<tr>
+	<td height="215" align="center" valign="top" bgcolor="#FFFFFF">
+		<form name="group" action="__ACTION__" method="post">
+		<table width="98%" border="0" cellspacing="1" cellpadding="1">
+		<tr> 
+			<td height="30" width="10%"><span class='red'>*</span>用户组名称：</td>
+			<td class="p_left">
+				<input name="title" type="text"  size="16" style="width:300px" value='<{$data.title}>' onblur="input_check('title');"/> &nbsp;
+			</td>
+		</tr>
+		<tr> 
+			<td height="30"><span class='red'>*</span>是否启用：</td>
+			<td class="p_left">
+				<input type="radio" name="status" value="1" <eq name="data.status" value="1">checked="checked"</eq> /> 启用 &nbsp; <input type="radio" name="status" value="0" <eq name="data.status" value="0">checked="checked"</eq> /> 关闭
+			</td>
+		</tr>
+		<tr> 
+			<td height="30"><span class='red'>*</span>规则：</td>
+			<td class="p_left">
+				<php>$empty='<a href="'.U('addrule').'">无规则，请先添加规则</a>';</php>
+				<volist name="rules" id="v" empty="$empty">
+				<input name="rules[]" type="checkbox" value='<{$v.id}>' <in name="v.id" value="$data.rules">checked="checked"</in> onclick="checkbox_check('rules[]');"/> <{$v.title}> &nbsp; 
+				</volist>
+			</td>
+		</tr>
+		<tr> 
+			<td height="60">&nbsp;</td>
+			<td>
+				<input type="submit" name="submit" value=" 保存信息 " class="coolbg np" />
+				<input type="hidden" name="id" value="<{$data.id}>" />
+			</td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+</table>
+</body>
+</html>

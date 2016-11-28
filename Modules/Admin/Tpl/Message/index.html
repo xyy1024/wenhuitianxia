@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+
+<style>
+.zd {
+	color:red;
+}
+</style>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder ">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">消息推送管理</li>
+						</ul>
+						<section class="panel panel-default">
+							<header class="panel-heading"> </header>
+							<div class="row text-sm wrapper">
+								<div class="col-sm-4 m-b-xs text-center-xs">
+									
+								</div>
+								<div class="col-sm-4 m-b-xs text-center">
+									<div class="btn-group"> <a href="<{:U('add',array('p'=>I('p')))}>" class="btn btn-sm btn-default active" > <i class="fa fa-plus"></i>发布消息推送</a> <a  class="btn btn-sm btn-default" href="<{:U('index',array('stp'=>'all'))}>" ><i class="fa fa-th"> 显示全部</i> </a> <a href="javascript:dodel();" class="btn btn-sm btn-default" > <i class="fa fa-trash-o"></i> 删除勾选 </a> </div>
+								</div>
+								<form action="<{:U('index')}>" method="post">
+								<div class="col-sm-4 text-center-xs text-right">
+										
+									<select name="contentt" class="input-sm form-control input-s-sm inline">
+										<option <?php if($contentt=='0'){?> selected <?php }?> value="0">推送标题</option>
+										<option <?php if($contentt=='1'){?> selected <?php }?> value="1">推送内容</option>
+									</select>
+									<input name="content" class="input-sm form-control input-s-sm inline" value="<{$search}>" placeholder="关键词">
+									<button class="btn btn-sm btn-default"><i class="fa fa-fw fa-search"></i></button>
+								</div>
+								</form>
+							</div>
+							
+							<div class="table-responsive">
+								<table class="table table-striped b-t b-light text-sm" style="margin-bottom:0;">
+									<thead>
+										<tr>
+											<th class="hidden-xs-1"><input type="checkbox"></th>
+											<th class="hidden-xs-4" >推送标题</th>
+											<!-- <th class="hidden-xs-5" >推送内容</th>
+											<th class="hidden-xs-2">接收者</th> -->
+											<th class="hidden-xs-1">推送地区</th>
+											<th class="hidden-xs-1">推送类型</th>
+											<th class="hidden-xs-2">推送日期</th>
+											<th class="hidden-xs-1">操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php $empty = '<tr><td colspan="6">暂无相关信息！</td></tr>';?>
+										<volist name="list" id="vo" empty="$empty">
+											<tr>
+												<td><input type="checkbox" name="check[]" value="<{$vo.id}>"></td>
+												<td><{$vo.title}></td>
+												<!-- <td><{$vo.content}></td>
+												<td><eq name="vo.user" value="all">全部<else/><{$vo.user}></eq></td> -->
+												<td><{$vo.ar_name}></td>
+												<td><{$vo.type}></td>
+												<td class="hidden-xs"><{$vo.addtime|date='Y-m-d',###}></td>
+												<td><a href="<{:U('look',array('id'=>$vo['id'],'p'=>I('p')))}>"><!--<i class="fa fa-pencil  fa-fw m-r-xs"></i>-->查看</a>　<a href="javascript:if(confirm('确定要删除该信息吗？')){window.location.href='<{:U('delete',array('id'=>$vo['id'],'p'=>I('p')))}>'}" data-toggle="modal"> <!--<i class="fa fa-trash-o"></i>-->删除</a></td>
+											</tr>
+										</volist>
+									</tbody>
+								</table>
+							</div>
+							<footer class="panel-footer">
+								<div class="row">
+									<div class="col-sm-3 hidden-xs"> </div>
+									<div class="col-sm-6 text-center">
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$totalRows}> 条</a></li>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<{$page}>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$nowPage}>/<{$totalPages}> 页</a></li>
+										</ul>
+									</div>
+									<div class="col-sm-3 text-right text-center-xs">
+										<form action="<{:U(ACTION_NAME)}>" method="post">
+											<input class="input-sm form-control input-s-xs inline" value="<{$nowPage}>" name="page" placeholder="第1页">
+											<button type="submit" class="btn btn-sm btn-default">GO</button>
+										</form>
+									</div>
+								</div>
+							</footer>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<!-- 批量删除 -->
+<div class="modal fade" id="modalsc">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">温馨提示</h4>
+			</div>
+			<div class="modal-body">
+				<h4 class="modal-title">请问您确定删除吗？</h4>
+			</div>
+			<div class="modal-footer">
+				<form method="post">
+					<button type="button" id="dodel" class="btn btn-info" value=" " name="Delete" data-dismiss="modal">确定</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end -->
+
+
+<link rel="stylesheet" href="__PUB__css/font.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__js/nestable/nestable.css" type="text/css" cache="false" />
+<script src="__PUB__js/app.v2.js"></script> <!-- Bootstrap --> <!-- App --> <script src="__PUB__js/sortable/jquery.sortable.js" cache="false"></script><script src="__PUB__js/nestable/jquery.nestable.js" cache="false"></script><script src="__PUB__js/nestable/demo.js" cache="false"></script>
+</body>
+<script>
+//批量删除
+function dodel(){
+	$('#modalsc').modal('show').off('shown.bs.modal',function(){
+		clearInput('modalsc');
+	});
+	$('#modalsc').modal('show').on('shown.bs.modal',function(){
+		getCheckbox('doDel','<{:U("Message/form")}>','modalsc','dodel');
+	});
+}
+
+
+/* 批量删除、复制、移动多选框插入到弹出框中
+ * doname 操作名称
+ * action form提交地址
+ * mod_name modal弹出框的id值
+ * but_name 提交按钮id值
+ * cate 0 不获取分类，1获取分类
+*/
+function getCheckbox(doname,action,mod_name,but_name){
+	var len = $(':input[name="check[]"]:checked').length;
+	if(len > 0){  //选中数不为0
+		if(doname == 'doCopy' || doname == 'doMove'){
+			var artcate=$('#art_cate option:selected').val();
+			var is=$('#art_cate option:selected').attr('is');
+			if(artcate && is != '1'){	//栏目不能添加文章
+				alert('该栏目类型为非内容列表，不能添加文章！');
+				$('#'+mod_name).modal('hide');
+				// $('#'.mod_name .modal-body h4).html();
+				return false;
+			}else if(typeof(artcate) == 'undefined' || !artcate){	//没有选择栏目
+				$('#'+but_name).attr('type','button').attr('data-dismiss','modal');
+				return false;
+			}
+			$('#'+mod_name).find('form').append('<input type="hidden" name="artcate" value="'+artcate+'" />');	//要移动或者复制到的分类id值
+		}
+		$(':input[name="check[]"]:checked').each(function(){
+			$('#'+mod_name).find('form').append('<input type="hidden" name="check[]" value="'+$(this).val()+'" />');
+		});
+		$('#'+mod_name).find('form').append('<input type="hidden" name="p" value="<{:I('p')}>" />');	//分页值
+		$('#'+mod_name).find('form').attr('action',action);
+		$('#'+but_name).attr('type','submit').removeAttr('data-dismiss');
+	}else{	//未选中删除项则点击“确定”后关闭弹出框
+		$('#'+but_name).attr('type','button').attr('data-dismiss','modal');
+	}
+}
+//清除modal中的input:hidden框
+function clearInput(mod_name){
+	$('#'+mod_name+ ':input[type="hidden"]').remove();
+
+}
+//清除bnp form中的input:hidden框
+function clearInputh(){
+	$('.bnp form :input[type="hidden"]').remove();
+
+}
+
+$(function(){
+	$("#art_cate").change(function(){
+		var val=$(this).children('option:selected').val();
+		var is=$(this).children('option:selected').attr('is');
+		if(val && is!=1){
+			alert('该栏目类型为非内容列表，不能添加文章！');
+		}
+	});
+});
+</script>
+</html>

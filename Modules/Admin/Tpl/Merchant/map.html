@@ -1,0 +1,65 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title></title>  
+<style type="text/css">  
+html{height:100%}  
+body{height:100%;margin:0px;padding:0px}  
+#allmap{height:95%}
+.ftip{margin:0; padding-top:1%; padding-right:20px; height:4%; text-align:right;}
+.ftip a{color:#ed2d2d;font-weight:bold;}
+</style> 
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.1&ak=<{:C('MAP_API')}>&services=true"></script>
+<script src="__PUB__js/jquery-1.9.1.min.js"></script> 
+<script src="__PUB__weixin/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="__PUB__weixin/artDialog/plugins/iframeTools.js"></script>
+
+<script src="__PUB__js/map.js"></script>
+</script>
+</head>  
+ 
+<body>
+<div>
+	<div style="padding-top:10px;padding-left:10px; float:left; width:300px;font-size:14px;">
+		地图标识：<input type="text" id="suggestId" class="input-xlarge" name="map_address" data-rule-required="true" value="" />
+		<button class="btn" type="button" id="positioning">搜索</button>
+	</div>
+	<div class="ftip" style="float:right; width:604px; margin-top:4px; margin-bottom:10px; font-size:14px;">拖动地图将红色图标移动到相应位置后点击右侧链接-> <a id="ok" href="###">已经设定好，关闭该页面</a>
+	</div>
+</div>
+<div style="clear:both;"></div>
+	<div id="r-result">
+		<input type="hidden" id="lng" name="longitude" class="px" />
+		<input type="hidden" id="lat" name="latitude" class="px" />
+	</div>
+	<div id="allmap">
+		<i class="icon-spinner icon-spin icon-large"></i>地图加载中...
+	</div>
+
+
+<script type="text/javascript">
+	var ppdata = new Array();
+	if (art.dialog.data('longitude')) {
+		// $('#lng').val(art.dialog.data('longitude'));// 获取由主页面传递过来的数据
+		// $('#lat').val(art.dialog.data('latitude'));
+		ppdata.lng = art.dialog.data('longitude');
+		ppdata.lat = art.dialog.data('latitude');
+		ppdata.adr = art.dialog.data('adr');
+	};
+	// 关闭并返回数据到主页面
+	$('#ok').click(function(){
+		var pporigin = artDialog.open.origin;
+		var longitudeinput = pporigin.document.getElementById('longitude');
+		var latitudeinput = pporigin.document.getElementById('latitude');
+		longitudeinput.value = $('#lng').val();
+		latitudeinput.value = $('#lat').val();
+		art.dialog.close();
+	});
+	$(function(){
+		baidu_map(ppdata);
+	});
+</script>  
+</body>  
+</html>

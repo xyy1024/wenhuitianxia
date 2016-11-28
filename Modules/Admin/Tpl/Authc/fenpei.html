@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<script>
+$.fn.checkCbx = function(){ 
+	return this.each(function(){ 
+		this.checked = !this.checked; 
+	}); 
+} 
+
+/* 审核 */
+function checkArc(aid){
+	var qstr=getCheckboxItem();
+	if(aid==0) aid = getOneItem();
+	location="/admin.php?m=Authc&a=ischeck&id="+qstr;
+}
+/* 删除审核 */
+function checkArcd(aid){
+	var qstr=getCheckboxItem();
+	if(aid==0) aid = getOneItem();
+	location="/admin.php?m=Authc&a=ischeckd&id="+qstr;
+}
+/* 推荐 */
+function adArc(aid){
+	var qstr=getCheckboxItem();
+	if(aid==0) aid = getOneItem();
+	location="/admin.php?m=Authc&a=isbest&id="+qstr;
+}
+/* 删除推荐 */
+function adArcd(aid){
+	var qstr=getCheckboxItem();
+	if(aid==0) aid = getOneItem();
+	location="/admin.php?m=Authc&a=isbestd&id="+qstr;
+}
+/* 删除信息 */
+function delArc(aid){
+	if(window.confirm('您确定要删除吗？')){
+		var qstr=getCheckboxItem();
+		location="<{:U('delallfenpei','','')}>/id/"+qstr;
+	}
+	else
+	{
+		return false;
+	}
+}
+/* 修改信息属性 */
+function chang_status(id,value,table)
+{
+	
+	var newvalue=0;
+	if(value == 1)
+		newvalue=0;
+	else
+		newvalue=1;
+	var submitData = {
+		id:id,
+		status:newvalue,
+		table:table
+	};
+	$.post("<{:U('editattr')}>",submitData,
+		function(data) {
+			if (data.success == true) {
+				alert(data.msg);
+				setTimeout('window.location.href=location.href',1000);
+				return;
+			}
+			else {}
+		}
+	,'json');
+	
+}
+/* 获得选中文件的文件名 */
+function getCheckboxItem()
+{
+	var allSel="";
+	//if(document.form2.id.value) return document.form2.id.value;
+	if($('input[name="id"]').length == 1 && $('input[name="id"]:checked').length == 1)
+	{
+		return document.form2.id.value;
+	}
+	for(i=0;i<document.form2.id.length;i++)
+	{
+		if(document.form2.id[i].checked)
+		{
+			if(allSel=="")
+				allSel=document.form2.id[i].value;
+			else
+				allSel=allSel+","+document.form2.id[i].value;
+		}
+	}
+	return allSel;
+}
+$(function(){
+	/* $('.confirmdel').click(function(){
+		var url=$(this).attr('href');
+		if(window.confirm('你确定要删除吗？'))
+		{
+			window.location=url;
+		}
+		return false;
+	});
+	*/
+	/* 全选
+	$('#selAll').click(function(){
+		$('input[name="id"]').attr('checked',true);
+	}); */
+	/* 取消全选
+	$('#noselAll').click(function(){
+		$('input[name="id"]').each(function () {  
+			$(this).attr("checked", !$(this).attr("checked"));  
+		});
+	}); */
+
+});
+</script>
+</head>
+<body>
+<section class="vbox">
+ <section>
+    <section class="hbox stretch"> <!-- .aside -->
+     <!-- /.aside -->
+      <section id="content">
+        <section class="vbox">
+        
+          <section class="scrollable padder ">
+          <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+              	<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页 </a></li>
+             	<li><a href="<{:U('Authc/fenpei')}>">权限管理</a></li>
+             	<li class="active">角色分配管理</li>
+            </ul>
+            <section class="panel panel-default">
+
+              <div class="row text-sm wrapper"> 
+                <div class="m-b-xs text-center">
+                  <div class="btn-group">
+                    <a href="<{:U('addfenpei')}>" class="btn btn-sm btn-default active" >
+                      <i class="fa fa-plus">&nbsp&nbsp</i>增加分配</a> 
+                  </div>
+                </div>
+              </div>   
+            
+              <div class="table-responsive">
+            <form name="form2" action="<{:U('form')}>" method="post">
+                <table class="table table-striped b-t b-light text-sm">
+                  <thead>
+                    <tr>
+                      <th width="80">ID</th>
+                      <th width="60" class="th-sortable" data-toggle="class">选择</th>
+                      <th width="193" class="hidden-xs">会员名称</th>
+                      <th width="198" class="hidden-xs">角色</th>
+                      <th width="92">管理项</th>
+                    </tr>
+                  </thead>
+                  <tbody id="div1">
+                    <volist name="lists" id="list">
+                        <tr class="text_center">
+                            <td nowrap="" class="text_center"><{$list['id']}></td>
+                            <td class="text_center"><input name="id" type="checkbox" id="check" value="<{$list.id}>" class="np"></td>
+                            <td class="text_center"><{$list['username']['username']}></td>
+                            <td class="text_center">
+                                <volist name="list.group_id" id="v">
+                                <{$groups.$v}>、
+                                </volist>
+                            </td>
+                            <td class="text_center">
+                                <a href='<{:U('editfenpei',array('id'=>$list['id']))}>' ><i class="fa fa-pencil "></i> 修改</a> 
+                                <a href='<{:U('delfenpei',array('id'=>$list['id']))}>' ><i class="fa fa-trash-o"></i> 删除</a>
+                            </td>
+                        </tr>
+                    </volist>	
+                                       
+                  </tbody>
+                </table>
+                </form>
+              </div>
+              <footer class="panel-footer">
+                <div class="row">
+                  <div class="col-sm-4 hidden-xs">
+                    <input type="hidden" value="<{$_GET['p']}>" name="p">
+                    <button class="btn btn-sm btn-default" id="btn"><i class="fa fa-check-square-o"></i> 全选/反选</a></button>
+                    <div class="btn-group">                  
+                   		<button class="btn btn-sm btn-default" name="Delete" value=" " type="button" style="cursor:pointer;" onclick="javascript:delArc(0);"><i class="fa fa-trash-o"></i> 删除勾选</button>&nbsp;
+                    </div>
+                </div>
+                  
+                  </div>
+                </div>
+              </footer>
+              
+            </section>
+          </section>
+        </section>
+        <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+      <aside class="bg-light lter b-l aside-md hide" id="notes"></aside>
+    </section>
+  </section>
+</section>
+<link rel="stylesheet" href="__PUB__css/font.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__js/nestable/nestable.css" type="text/css" cache="false" />
+
+<script src="__PUB__js/app.v2.js"></script> <!-- Bootstrap --> <!-- App --> <script src="__PUB__js/sortable/jquery.sortable.js" cache="false"></script><script src="__PUB__js/nestable/jquery.nestable.js" cache="false"></script><script src="__PUB__js/nestable/demo.js" cache="false"></script>
+<script type="text/javascript">
+  window.onload=function ()
+{
+  var oBtn1=document.getElementById('btn');
+
+  var oDiv=document.getElementById('div1');
+  var aCh=oDiv.getElementsByTagName('input');
+  oBtn1.onclick=function ()
+  {
+    for(var i=0;i<aCh.length;i++)
+    {
+      if(aCh[i].checked==false)
+      {
+        aCh[i].checked=true;
+      }
+      else
+      {
+        aCh[i].checked=false;
+      }
+    }
+  };
+};
+$(document).ready(function(){ 
+	$("#SelectAll").click(function(){ 
+		$("input[name='id']").checkCbx(); 
+	}); 
+	$(".YanZheng").click(function(event){
+		var a=$("input:checked").length;
+		if(a==0){
+			alert('您还没有请选择操作内容！');
+			event.preventDefault();
+		}
+	});	
+}); 
+</script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<link rel="stylesheet" href="__PUB__css/pp.css" />
+<script>
+function chang_status(id)
+{
+    var submitData = {
+      	id:id,
+    };
+    $.post("<{:U('Shenhe')}>",submitData,function(data){
+        if (data.success == true) {
+          // alert(data.msg);
+          // setTimeout('window.location.href=location.href',1000);
+			if(data.val == 1){
+				ppclass='fa fa-check';
+			}else{
+				ppclass='fa fa-times';
+			}
+          	$('i[var="'+id+'"]').attr('class',ppclass);
+          	return;
+        }else {
+          	alert('修改失败！');
+        }
+  	},'json');
+}
+</script>
+<style>
+.zd {
+	color:red;
+}
+</style>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder ">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">优惠券管理</li>
+							<li class="active">优惠券管理</li>
+							<li class="active">优惠券领取详情</li>
+						</ul>
+						<section class="panel panel-default">
+							<header class="panel-heading"> </header>
+							<div class="row text-sm wrapper">
+								<div class="col-sm-3 m-b-xs text-center-xs">	
+								</div>
+								<div class="col-sm-4 m-b-xs text-center">	
+									<div class="btn-group"><a onClick="javascript:history.go(-1);" class="btn btn-sm btn-default active" > <i class="fa fa-undo"></i>返回</a> <a  class="btn btn-sm btn-default" href="<{:U('chitlist',array('cid'=>I('cid'),'stp'=>'all'))}>" ><i class="fa fa-th"> 显示全部</i></a></div>
+								</div>
+								<form action="<{:U('chitlist')}>" method="post">
+								<div class="col-sm-5 text-center-xs text-right">
+									<input name="name" class="input-sm form-control input-s-sm inline" value="<{$search.name}>" placeholder="用户名称">	
+									<select name="isuse" class="input-sm form-control input-s-sm inline" style="width:180px;">
+										<option value="">请选择优惠券使用状态</option>
+										<option value="1" <eq name="search.isuse" value="1"> selected </eq> >未使用</option>
+										<option value="2" <eq name="search.isuse" value="2"> selected </eq> >已使用</option>
+										<volist name="ins_arr" id="insv">
+											<option value="<{$insv.id}>" <eq name="search.ins" value="$insv.id"> selected </eq>><{$insv.name}></option>
+										</volist>
+									</select>
+									<button class="btn btn-sm btn-default"><i class="fa fa-fw fa-search"></i></button>
+								</div>
+								<input type="hidden" name="cid" value="<{$search['cid']}>">
+								</form>
+							</div>
+								<div style="overflow:hidden">
+									<div class="col-sm-12 m-b-xs text-center-xs">
+										共领取优惠券：<{$carr.count}>张&nbsp;&nbsp;&nbsp;&nbsp;已使用优惠券：<{$carr.y_num}>张&nbsp;&nbsp;&nbsp;&nbsp;未使用优惠券：<{$carr.w_num}>张&nbsp;&nbsp;&nbsp;&nbsp;已过期优惠券：<{$carr.g_num}>张
+									</div>
+									<!-- <div class="col-sm-4 m-b-xs text-center">
+										
+									</div>
+									<div class="col-sm-4 text-center-xs text-right">
+									</div> -->
+								</div>
+							</div>
+							
+							<div class="table-responsive">
+								<table class="table table-hover b-t b-light text-sm" style="margin-bottom:0;">
+									<thead>
+										<tr>
+											<th class="col-xs-1">序号</th>
+											<th class="col-xs-2">串码</th>
+											<th class="col-xs-2">用户名称</th>
+											<th class="col-xs-2">手机号</th>
+											<th class="col-xs-1">消费金额</th>
+											<th class="col-xs-1">状态</th>
+											<th class="col-xs-3">使用时间/失效时间</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php $empty = '<tr><td colspan="7">暂无相关信息！</td></tr>';?>
+										<volist name="data" id="v" empty="$empty">
+											<tr>
+												<td><{$i}></td>
+												<td><{$v.number}></td>
+												<td><{$v.name}></td>
+												<td><{$v.mobile}></td>
+												<td><{$v.use_price}></td>
+												<td>
+													<eq name="v.is_use" value="2"><font color="red">已使用</font><else />未使用</eq>
+												</td>
+												<td>
+													<eq name="v.is_use" value="2"><{$v.use_time|date="Y-m-d",###}><else /><{$v.end_time|date="Y-m-d",###}></eq>
+												</td>
+											</tr>
+										</volist>
+									</tbody>
+								</table>
+							</div>
+							<footer class="panel-footer">
+								<div class="row">
+									<div class="col-sm-3 hidden-xs"> </div>
+									<div class="col-sm-6 text-center">
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$totalRows}> 条</a></li>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<{$page}>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$nowPage}>/<{$totalPages}> 页</a></li>
+										</ul>
+									</div>
+									<div class="col-sm-3 text-right text-center-xs">
+										<form action="<{:U(ACTION_NAME)}>" method="post">
+											<input type="hidden" name="cid" value="<{$search['cid']}>">
+											<input class="input-sm form-control input-s-xs inline" value="<{$nowPage}>" name="page" placeholder="第1页">
+											<button type="submit" class="btn btn-sm btn-default">GO</button>
+										</form>
+									</div>
+								</div>
+							</footer>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<!-- 批量删除 -->
+<div class="modal fade" id="modalsc">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">温馨提示</h4>
+			</div>
+			<div class="modal-body">
+				<h4 class="modal-title">请问您确定删除吗？</h4>
+			</div>
+			<div class="modal-footer">
+				<form method="post">
+					<button type="button" id="dodel" class="btn btn-info" value=" " name="Delete" data-dismiss="modal">确定</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end -->
+
+
+<link rel="stylesheet" href="__PUB__css/font.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__js/nestable/nestable.css" type="text/css" cache="false" />
+<script src="__PUB__js/app.v2.js"></script> <!-- Bootstrap --> <!-- App --> <script src="__PUB__js/sortable/jquery.sortable.js" cache="false"></script><script src="__PUB__js/nestable/jquery.nestable.js" cache="false"></script><script src="__PUB__js/nestable/demo.js" cache="false"></script>
+</body>
+<script>
+//批量删除
+function dodel(){
+	$('#modalsc').modal('show').off('shown.bs.modal',function(){
+		clearInput('modalsc');
+	});
+	$('#modalsc').modal('show').on('shown.bs.modal',function(){
+		getCheckbox('doDel','<{:U("batch")}>','modalsc','dodel');
+	});
+}
+//置顶
+function dotop(tid){
+	// $('#modal').modal('show').on('shown.bs.modal',function(){
+	$('#modal').modal('show').off('shown.bs.modal');
+	$('#modal').modal('show').on('shown.bs.modal',function(){
+		//获取信息title
+		var vali={
+			'id':tid,
+			'rand':Math.random(),
+		};
+		$.get('<{:U('ajaxTitle')}>',vali,function(data){
+			if(data['suc'] == true){
+				$('#modal').find('h4.modal-title').html("置顶："+data['info']);
+				$('#modal').find('h4.modal-title').attr("attr_id",data['art_id']);
+				$('#modal :input[name="dotop"]').children('option[value="'+data['dotop']+'"]').prop("selected",true);
+				$('#modal :input[name="dotopday"]').val(data['dotopday']);
+			}else{
+				alert('信息有误！');
+				$('#modal').modal('hide');
+			}
+		},'json');
+	});
+}
+
+/* 批量删除、复制、移动多选框插入到弹出框中
+ * doname 操作名称
+ * action form提交地址
+ * mod_name modal弹出框的id值
+ * but_name 提交按钮id值
+ * cate 0 不获取分类，1获取分类
+*/
+function getCheckbox(doname,action,mod_name,but_name){
+	var len = $(':input[name="check[]"]:checked').length;
+	if(len > 0){  //选中数不为0
+		if(doname == 'doCopy' || doname == 'doMove'){
+			var artcate=$('#art_cate option:selected').val();
+			var is=$('#art_cate option:selected').attr('is');
+			if(artcate && is != '1'){	//栏目不能添加文章
+				alert('该栏目类型为非内容列表，不能添加文章！');
+				$('#'+mod_name).modal('hide');
+				// $('#'.mod_name .modal-body h4).html();
+				return false;
+			}else if(typeof(artcate) == 'undefined' || !artcate){	//没有选择栏目
+				$('#'+but_name).attr('type','button').attr('data-dismiss','modal');
+				return false;
+			}
+			$('#'+mod_name).find('form').append('<input type="hidden" name="artcate" value="'+artcate+'" />');	//要移动或者复制到的分类id值
+		}
+		$(':input[name="check[]"]:checked').each(function(){
+			$('#'+mod_name).find('form').append('<input type="hidden" name="check[]" value="'+$(this).val()+'" />');
+		});
+		$('#'+mod_name).find('form').append('<input type="hidden" name="tid" value="<{:I('tid')}>" />');	//分类id
+		$('#'+mod_name).find('form').append('<input type="hidden" name="p" value="<{:I('p')}>" />');	//分页值
+		$('#'+mod_name).find('form').attr('action',action);
+		$('#'+but_name).attr('type','submit').removeAttr('data-dismiss');
+	}else{	//未选中删除项则点击“确定”后关闭弹出框
+		$('#'+but_name).attr('type','button').attr('data-dismiss','modal');
+	}
+}
+//清除modal中的input:hidden框
+function clearInput(mod_name){
+	$('#'+mod_name+ ':input[type="hidden"]').remove();
+
+}
+//清除bnp form中的input:hidden框
+function clearInputh(){
+	$('.bnp form :input[type="hidden"]').remove();
+
+}
+
+</script>
+</html>

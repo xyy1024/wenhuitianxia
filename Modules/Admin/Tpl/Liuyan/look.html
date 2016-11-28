@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>添加|后台管理系统</title>
+<link rel="stylesheet" type="text/css" href="__PUB__style/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="__PUB__style/bootstrap-responsive.min.css">
+<script type="text/javascript" src="__PUB__js/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUB__js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUB__js/common.js"></script>
+
+<link rel="stylesheet" href="__ROOTPUB__kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="__ROOTPUB__kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="__ROOTPUB__kindeditor/lang/zh_CN.js"></script>
+<script>
+KindEditor.ready(function(K) {
+	var editor = K.editor({
+		allowFileManager : true
+	});
+
+	K('#uploadid').click(function() {
+		editor.loadPlugin('image', function() {
+			editor.plugin.imageDialog({
+				imageUrl : K('#picid').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#picid').val(url);
+					K('#img_logo').html('<img src="'+url+'" style=" max-width:380px; max-height:180px;">');
+					editor.hideDialog();
+				}
+			});
+		});
+	});
+
+		
+});
+</script>
+</head>
+<body style="margin: 10px 0px;">
+<div style="margin: 0px auto; width: 98%;">
+<form name="form1" action="" method="post">
+<input type="hidden" name="id" value="<{$data.id}>">
+<table class="table table-condensed table-bordered table-hover" style="">
+  <tbody style=""><tr>
+  	<td colspan="3">
+	<div style="float:left">
+	<b>预览</b>
+    </div>
+    <div style="float:right">
+     [<a href="<{:U('index')}>"><u>返回列表</u></a>]
+    </div>
+    </td>
+  </tr>
+  <tr>
+    <td width="110" style="text-align:right"><font color="red">姓名</font></td>
+    <td>
+    <span id="typeidct">
+       <{$data.name}>
+	</span>
+	</td>
+  </tr>
+  <tr>
+    <td style="text-align:right"><font color="red">标题：</font></td>
+    <td><{$data.title}> </td>
+  </tr>
+  <tr>
+    <td style="text-align:right"><font color="red">电话：</font></td>
+    <td><{$data.tel}> </td>
+  </tr>
+  <tr>
+    <td style="text-align:right"><font color="red">时间：</font></td>
+    <td><{$data.addtime|date='Y-m-d H:i:s',###}> </td>
+  </tr>
+  <tr>
+    <td style="text-align:right"><font color="red">邮箱：</font></td>
+    <td><{$data.email}> </td>
+  </tr>
+  <tr>
+    <td style="text-align:right"><font color="red">内容：</font></td>
+    <td><{$data.content}> </td>
+  </tr>
+  <tr>
+    <td style="text-align:right">状态：</td>
+    <td>
+      已阅读
+      <input name="isshow" type="radio" value="1" checked>
+      待阅读
+      <input name="isshow" type="radio" value="0">
+    </td>
+    </tr>
+    
+
+  
+  <tr>
+  	<td></td>
+    <td colspan="2">
+
+    <input name="" style="cursor:pointer;" class="btn btn-large btn-info" type="button" onclick="window.location.href='<{:U('index')}>'" value="保存">
+    &nbsp;
+    </td>
+  </tr>
+</tbody></table></form>
+</div>
+</body></html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <include file="Common:header" />
+    <link href="__CSS__own.css" rel="stylesheet">
+	<style>
+		.pages {width:680px;margin:25px auto 0 auto;overflow: hidden;}
+#Pagination {float: left;overflow: hidden;}
+.pagination {height: 40px;text-align: right;}
+.pagination a,.pagination span {text-decoration: none;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 28px;
+    padding: 0;
+    background: #fff;
+    color: #666;
+    font-size: 14px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    color: #999;
+}}
+.current {background: #4165a1 !important;color: #fff !important;}
+.prev2,.next2 {float: left;padding: 6px 4px 4px 8px !important;border: 1px solid #e6e6e6 !important;background: #f5f7f8;cursor: pointer;}
+.prev2 i,.next2 i {display: inline-block;width: 4px;height: 11px;margin-right: 5px;}
+.prev2 {border-right: none;}
+.prev2 i {background-position: -144px -1px;*background-position: -144px -4px;}
+.next2 i {background-position: -156px -1px;*background-position: -156px -4px;}
+.pagination-break {padding: 11px 5px;border: none;border-left: 1px solid #d9d9d9;background: none;cursor: default;}
+.page-sum {padding: 26px 7px;color: #000;font-size: 14px;float: left;}
+.fol{font-size: 14px;padding: 26px 7px;margin-right: 12px;}
+.prev2>i,.next2>i{background: url(../img/prev-page.png);width: 7px;height: 13px;}
+.next2>i{background: url(../img/next-page.png);}
+	</style>
+</head>
+<body>
+<include file="Common:navigationtwo" />
+<include file="Common:position" />
+<section>
+<div class="container mt60">
+<include file="Common:left" />
+  <div class="slid_right fr wow fadeInRight animated">
+        <div class="search_big">
+			<volist name="news.list" id="vo"  empty="暂无数据">
+            <if condition="(I('cid') neq 31) and  (I('cid') neq 51)">
+            <div class="search_row">
+                <div class="fl search_time">
+                    <h4><?php
+                     echo substr(date('Y-m-d',"$vo[addtime]"),-2);?></h4>
+                    <span><?php echo substr(date('Y-m-d',"$vo[addtime]"),0,7);?></span>
+                </div>
+                <!-- <a <if condition="$vo['blank'] neq 0">target="_blank"</if>  href="<if condition="$vo['articletype'] eq 1"><{$vo.link}><else/><{:U('news_cont',array('id'=>$vo['id']))}></if>" class="fr search_content">
+                   <{$vo.title|msubstr=0,48}>
+                </a> -->
+                <?php $vo['file']=json_encode($vo['file']);?>
+                <a href="<if condition="$vo['articletype'] eq 0"><{:U('news_cont',array('id'=>$vo['id']))}><elseif condition="$vo['blank'] eq 2" /><{:U('doDownLoad',array('id'=>$vo['id']))}><else/><{$vo.link}></if>" <if condition="$vo['blank'] eq 1">target="_blank"</if> class="fr search_content">
+                   <{$vo.title|msubstr=0,48}>
+                </a>
+            </div>
+            <else />
+             <div class="s1_box fl"   <if condition="($i eq 3) or ($i eq 6) or ($i eq 9)">style="margin-right:0;" </if>>
+                <a href="<if condition="$vo['articletype'] eq 1"><{$vo.link}><else/><{:U('news_cont',array('id'=>$vo['id']))}></if>">
+                    <img src="<{$vo.thumb}>" style="width: 284px;height: 200px;" alt="">
+                    <div class="black_cover">
+                        
+                    </div>
+                </a>
+                <div class="s1_ex">
+                    <p><{$vo.addtime|date='Y-m-d',###}></p>
+                    <h5><a <eq name="vo.blank" value="1"> target="_blank" </eq>  href="<if condition="$vo['blank'] eq 2"><{$vo['file']}><else/><if condition="$vo['articletype'] eq 1"><{$vo.link}><else/><{:U('news_cont',array('id'=>$vo['id']))}></if></if>"><{$vo.title|msubstr=0,20}></a></h5>
+                    <div class="nink"></div>
+                    <p><{$vo.description|msubstr=0,40}></p>
+                    <a <eq name="vo.blank" value="1"> target="_blank" </eq> href="<if condition="$vo['blank'] eq 2"><{$vo['file']}><else/><if condition="$vo['articletype'] eq 1"><{$vo.link}><else/><{:U('news_cont',array('id'=>$vo['id']))}></if></if>" class="exo">了解更多</a>
+                </div>
+            </div>
+             </if>
+        </volist>
+
+        </div>
+    </div>
+</div>
+</section>
+<div class="pages" style="    margin: 26px 0 0 517px;">	<{$news.page}></div>
+</div>
+
+<include file="Common:footer" />
+<include file="Common:footer_js" />
+</body>
+</html>

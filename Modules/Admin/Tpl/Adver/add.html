@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<link rel="stylesheet" href="__PUB__js/datepicker/datepicker.css" type="text/css" cache="false" />
+<link rel="stylesheet" type="text/css" href="__PUB__css/style.css">
+<style>
+#img {
+	width:100%;
+	overflow:hidden;
+}
+#img p {
+	float:left;
+	padding-top:3px;
+	margin-right:5px;
+}
+#img p img {
+	max-width:80px;
+	max-height:80px;
+}
+#imgcut{
+	display:inline-block;
+}
+#imgcut img{
+	max-height:34px;
+	cursor:pointer;
+}
+</style>
+<link rel="stylesheet" href="__ROOTPUB__kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="__ROOTPUB__kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="__ROOTPUB__kindeditor/lang/zh_CN.js"></script>
+<script>
+KindEditor.ready(function(K) {
+	var editor = K.create('textarea[name="content"]', {
+		items : [ 'source', '|' ,'justifyleft', 'justifycenter', 'justifyright','justifyfull',  'subscript',' superscript', 'clearhtml', 'quickformat', 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline'],
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true
+	});
+	
+	var editor1 = K.editor({
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true
+	});
+	K('#uploadid').click(function() {
+		editor1.loadPlugin('image', function() {
+			editor1.plugin.imageDialog({
+				showRemote : false,
+				imageUrl : K('#picid').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#picid').val(url);
+					K('#imgcut').html('<img src="'+url+'" id="cut" /> 点击图片进行裁剪');
+					//document.getElementById('picida').src=url;
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+
+});
+function typeid_change()
+{
+	$('#chicun').remove();
+	var val=$('#cid').children('option:selected').val();
+	$.get('<{:U('getchicun','','')}>',{'pid':val},function(data){
+		$('input[name=logo]').after('<span style="padding-left:10px; color:#ccc;" id="chicun">尺寸：'+data+'</span>');
+	},'json');
+}
+$(function(){
+	typeid_change();
+	$('#cid').change(function(){
+		typeid_change();
+	});
+});	
+</script>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="index.html"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">焦点图管理</li>
+							<li class="active">新增焦点图</li>
+						</ul>
+						<div class="row">
+							<div class="col-sm-6"></div>
+							<div class="col-sm-6"></div>
+						</div>
+						<section class="panel panel-default">
+							<header class="panel-heading font-bold"> 新增焦点图 </header>
+							<div class="panel-body">
+								<form action="<{:U(ACTION_NAME)}>" class="form-horizontal" method="post">
+									<if condition="cookie('ADMIN_POWER') eq 1">
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><font color="red">所属地区</font></label>
+											<div class="col-sm-8">
+												<label>
+	                                                <select name="area" id="area" class="form-control"  datatype="*" nullmsg="请选择地区">
+	                                                	<option value="">请选择地区</option>
+	                                                    <volist name="arealist" id="avo">
+		                                                    <option value="<{$avo.ar_id}>">
+		                                                    	<{$avo.ar_name}>
+		                                                    </option>
+	                                                    </volist>
+	                                                </select>
+												</label>
+											</div>
+										</div>
+										<div class="line line-dashed line-lg pull-in"></div>
+									<else />
+										<input type="hidden" name="area" value="<?php echo cookie('AREA');?>">
+									</if>
+									<div class="form-group">
+										<label class="col-sm-2 control-label"><font color="red">标　　题</font></label>
+										<div class="col-sm-6">
+                                        	<input name="name" type="text" id="name" value="" class="form-control "  datatype="*" nullmsg="请填写标题">
+										</div>
+										<div style="line-height:34px;color: #ff0000;">注：红色字为必填项</div> 
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">链　　接</label>
+										<div class="col-sm-8" style="padding-top:6px;">
+											<label class="pull-left"> <input name="type" onclick="utype()" type="radio" value="2"  >链接到商户　</label>
+											<label class="pull-left"> <input name="type" onclick="utype()" type="radio" value="3">链接到活动　</label>
+											<label class="pull-left"> <input name="type" onclick="utype()" type="radio" value="4">链接到资讯　</label>
+											<label style="display:none;" class="pull-left"><input name="type" onclick="utype()" type="radio" value="1" checked> 自定义链接　</label>
+										</div>
+									</div>
+                                    <div class="line line-dashed line-lg pull-in"></div>
+                                    <div id='wurl' style="display:none;">
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><font color="red">链接地址</font></label>
+											<div class="col-sm-6">
+	                                        	<input type="text" name="url" id="url" value="" class="form-control">
+											</div>
+											<div style="line-height:34px;color: #ff0000;">例如：http://www.baidu.com</div>
+										</div>
+	                                    <div class="line line-dashed line-lg pull-in"></div>
+	                                </div>
+	                                <div id='nurl' style="display:none;">
+	                                    <div class="form-group">
+											<label class="col-sm-2 control-label"><font color="red">链接内容</font></label>
+											<div class="col-sm-8" id="linkt" style="min-height:130px;">	
+											</div>
+										</div>
+										<div class="form-group" id="pageclass" style="display:none;">
+												<label class="col-sm-2 control-label"></label>
+												<div class="col-sm-8">
+													<label class="pull-left"><input type="button" name="page" value="上一页" onclick="subpage()">&nbsp;&nbsp;&nbsp;&nbsp;
+													</label><label class="pull-left"> <input type="button" name="page" value="下一页" onclick="addpage()"></label>
+													<input type="hidden" name="page" id="page" value='1'>		
+												</div>
+											</div>
+										<div class="line line-dashed line-lg pull-in"></div>
+									</div>
+									<div class="form-group picnum_1">
+										<label class="col-sm-2 control-label"><font color="red">焦点图图片</font></label>
+										<div class="col-sm-8">
+											<input name="logo" class="input-s form-control" type="text" value="" id="picid" style=" display:inline-block" readonly datatype="*" nullmsg="请上传焦点图">
+											<button type="button" class="btn btn-default" id="uploadid">上传图片</button>
+											<div id="imgcut"></div>
+											</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">显示状态</label>
+										<div class="col-sm-2" style="padding-top:6px;">
+											<label class="pull-left"><input name="isshow" type="radio" value="1" checked> 是　</label>
+											<label class="pull-left"> <input name="isshow" type="radio" value="0">否&nbsp;</label>
+						                  
+										</div>
+										<div style="line-height:34px;color: #ff0000;">　注：是则显示，否则隐藏</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<!-- <div class="form-group">
+										<label class="col-sm-2 control-label">展示位置</label>
+										<div class="col-sm-8">
+											<label>
+                                                <select name="cid" id="cid" class="form-control">
+                                                    <volist name="cat" id="vo">
+                                                    <option value="<{$vo.id}>" <if condition="$vo.id eq $data['cid']">selected</if> >
+                                                    	<{$vo.catname}>
+                                                    </option>
+                                                    </volist>
+                                                </select>
+											</label>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div> -->
+									<div class="form-group">
+										<label class="col-sm-2 control-label">排　　序</label>
+										<div class="col-sm-2">
+                                        	<label class="pull-left">
+												<input type="text" name="sort" id="sort" value="<{$maxsort}>" class="form-control">
+											</label>
+										</div>
+										<div style="line-height:34px;color: #ff0000;">　注：数字越大越靠前</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<div class="col-sm-8 col-sm-offset-2">
+											<button type="submit" class="btn btn-primary">保存</button>
+                                            <button type="button" class="btn btn-default" onClick="javascript:history.go(-1);">返回</button>
+										</div>
+									</div>
+									<input type="hidden" name="tid" value="<{:I('tid','','intval')}>" />
+								</form>
+							</div>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/app.v2.js"></script> 
+<!-- Bootstrap --> <!-- App --> 
+<!-- fuelux --> 
+<script src="js/fuelux/fuelux.js" cache="false"></script> 
+<!-- datepicker --> 
+<script src="__PUB__js/libs/moment.min.js" cache="false"></script> 
+<script src="__PUB__js/datepicker/bootstrap-datepicker.js" cache="false"></script> 
+<!-- slider --> 
+<script src="js/slider/bootstrap-slider.js" cache="false"></script> 
+<!-- file input --> 
+<script src="js/file-input/bootstrap-filestyle.min.js" cache="false"></script> 
+<!-- combodate --> 
+<script src="js/combodate/combodate.js" cache="false"></script> 
+<!-- select2 --> 
+<script src="__PUB__js/select2/select2.min.js" cache="false"></script> 
+<!-- wysiwyg --> 
+<script src="js/wysiwyg/jquery.hotkeys.js" cache="false"></script> 
+<script src="js/wysiwyg/bootstrap-wysiwyg.js" cache="false"></script> 
+<script src="js/wysiwyg/demo.js" cache="false"></script> 
+<!-- markdown --> 
+<script src="js/markdown/epiceditor.min.js" cache="false"></script> 
+<script src="js/markdown/demo.js" cache="false"></script> 
+<script src="__PUB__weixin/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="__PUB__weixin/artDialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="__PUB__js/Validform_v5.3.2.js"></script>
+<script>
+	$(".form-horizontal").Validform({
+        tiptype:1,
+    });
+	function utype(){
+		var alt = $('input:radio[name="type"]:checked').val();
+		if(alt==1){//自定义链接
+			$("#wurl").css("display", "block");
+			$("#nurl").css("display", "none");
+		}else{
+			$("#wurl").css("display", "none");
+			$("#url").val('');
+			url_page();
+		}
+	}
+	//异步获取链接内容列表
+	function url_page(){
+		<notempty name="Think.cookie.ADMIN_POWER">
+			a_rea = $('#area option:selected').val();
+		<else />
+			a_rea = $(':input[name="area"]').val();
+		</notempty>
+		if(!a_rea){
+			alert('请先选择地区,再选择链接类型');
+			$('input:radio[name="type"]').attr('checked',false);
+			return false;
+		}
+		var alt = $('input:radio[name="type"]:checked').val(); 
+		var page = $('#page').val();
+		var valida = {
+			alt:alt,
+			page:page,
+			area:a_rea,
+		};
+		$('#linkt').empty();//清空链接内容
+		$.post("<{:U('linkcon')}>",valida,function(data){
+			$('#page').after('<input type="hidden" name="maxpage" id="maxpage" value="'+data['count']+'" />');
+			if(data['count']>1){ //是否显示上一页 下一页
+				$('#pageclass').css('display','block');
+			}else{
+				$('#pageclass').css('display','none');
+			}
+			$("#nurl").css("display", "block");
+			if(!data['arr']){
+				$('#linkt').append('<div  class="radio">暂无数据</div>');
+			}
+			$('#linkt').append(data['arr']);
+		},'json');
+	}
+	//下一页
+	function addpage(){
+		var page = $('#page').val();
+		var maxpage = parseInt($('#maxpage').val());
+		if(page>=maxpage){
+			$('#page').val(maxpage);
+		}else{
+			$('#page').val(parseInt($('#page').val())+1);
+		}
+		url_page();
+	}
+	//上一页
+	function subpage(){
+		var page = $('#page').val();
+		if(page<=1){
+			$('#page').val('1');
+		}else{
+			$('#page').val(parseInt($('#page').val())-1);
+		}
+		url_page();
+	}
+	$(document).ready(function(){
+		//删除图片
+		$("#img").delegate("p","click",function(){
+			if(window.confirm('你确定要删除此图片吗？')){
+				var p=$(this);
+				var f=p.children('img').attr('src');
+				var validate={
+					file:f
+				};
+				$.get("<{:U('delFile')}>", validate, function(data){
+					if(data == 'yes')
+					{
+						p.remove();
+					}
+					else
+					{
+						alert('删除失败');
+					}	
+				});
+			}
+		});
+	 });
+	function checkPicnum(data,num)
+	{
+		if(data.indexOf(num)!= -1)
+		{
+			$(".picnum_"+num).removeClass('display_none');
+		}
+		else
+		{
+			$(".picnum_"+num).addClass('display_none');
+		}	
+	}
+	//图片裁剪
+	$(function(){
+		$('#imgcut').delegate('img','click',function(){
+			var img = $(this).attr('src');
+			if(typeof(img) == 'string' && img.length > 10){
+				img = img.replace(/\//g,'$');
+				img = img.replace(/\./g,'@');
+				img = encodeURIComponent(img);
+				var size = "<{$imgsize}>".split('*');
+				var img_w = size[0];
+				var img_h = size[1];
+				art.dialog.open('<{:U('Index/imgCut','','')}>/img/'+img+'/img_w/'+img_w+'/img_h/'+img_h+'.html',{lock:true,title:'图片裁剪',width:"98%",height:"98%",yesText:'关闭',background: '#000',opacity: 0.45});
+			}
+		});
+	});
+	//获取单图、多图尺寸
+	$(function(){
+		$.get('<{:U('getchicun','','')}>',function(data){
+			$('#uploadid').after('<span>(尺寸：'+data+')</span>');	//单图
+			//$('#J_selectImage + span').text('(尺寸：'+data+')');	//多图
+		},'json');
+	});
+</script>
+</script>
+</body>
+</html>

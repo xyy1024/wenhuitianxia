@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<style>
+#img {
+	width:100%;
+	overflow:hidden;
+}
+#img p {
+	float:left;
+	padding-top:3px;
+	margin-right:5px;
+}
+#img p img {
+	max-width:80px;
+	max-height:80px;
+}
+#imgcut{
+	display:inline-block;
+}
+#imgcut img{
+	max-height:34px;
+	cursor:pointer;
+}
+</style>
+<script charset="utf-8" src="__PUB__js/My97DatePicker/WdatePicker.js"></script>
+<link rel="stylesheet" href="__ROOTPUB__kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="__ROOTPUB__kindeditor/kindeditor.js"></script>
+<script charset="utf-8" src="__ROOTPUB__kindeditor/lang/zh_CN.js"></script>
+<script>
+KindEditor.ready(function(K) {
+	var editor = K.create('textarea[name="content1"]', {
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true
+	});
+	
+	var editor1 = K.editor({
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true
+	});
+	K('#uploadid').click(function() {
+		editor1.loadPlugin('image', function() {
+			editor1.plugin.imageDialog({
+				showRemote : false,
+				imageUrl : K('#picid').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#picid').val(url);
+					K('#imgcut').html('<img src="'+url+'" id="cut" /> 点击图片进行裁剪');
+					//document.getElementById('picida').src=url;
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+	K('#uploadfid').click(function(){	//上传附件
+		editor1.loadPlugin('insertfile', function(){
+			editor1.plugin.fileDialog({
+				fileUrl : K('#fileid').val(),
+				clickFn : function(url, title) {
+					K('#fileid').val(url);
+					K('#fileid_name').val(title);
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+	K('#uploadvid').click(function(){	//上传视频
+		editor1.loadPlugin('insertfile', function(){
+			editor1.plugin.fileDialog({
+				fileUrl : K('#vedioid').val(),
+				clickFn : function(url, title) {
+					K('#vedioid').val(url);
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+	
+	K('#J_selectImage').click(function() {
+		editor1.loadPlugin('multiimage', function() {
+			editor1.plugin.multiImageDialog({
+				clickFn : function(urlList) {
+					var div = K('#img');
+					// div.html('');
+					K.each(urlList, function(i, data) {
+						div.append('<p><img src="' + data.url + '" /><input type="hidden" name="img[]" value="' + data.url + '" /></p>');
+					});
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+
+});
+</script>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="index.html"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">消息推送管理</li>
+							<li class="active">发布消息推送</li>
+						</ul>
+						<div class="row">
+							<div class="col-sm-6"></div>
+							<div class="col-sm-6"></div>
+						</div>
+						<section class="panel panel-default">
+							<header class="panel-heading font-bold"> 发布消息推送 </header>
+							<div class="panel-body">
+								<form action="<{:U(ACTION_NAME)}>" class="form-horizontal" method="post">
+									<if condition="cookie('ADMIN_POWER') eq 1">
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><font color="red">推送地区</font></label>
+											<div class="col-sm-8">
+												<label>
+	                                                <select name="area" class="form-control" style="min-width:120px;" id="area" >
+													<option value="">请选择</option>
+													<volist name="arealist" id="avo">
+													<option value="<{$avo.ar_id}>" <eq name="data['ar_id']" value="$avo['ar_id']">selected="selected"
+													</eq> ><{$avo.ar_name}></option>
+													</volist>
+												</select>
+												</label>
+											</div>
+										</div>
+										<div class="line line-dashed line-lg pull-in"></div>
+									<else />
+										<input type="hidden" name="area" value="<?php echo cookie('AREA');?>">
+									</if>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">推送标题</label>
+										<div class="col-sm-8">
+											<input type="text" name="title" id="title" value="<{$data.name}>" class="form-control "  >
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">推送内容</label>
+										<div class="col-sm-8">
+											<textarea name="content"  style="width: 100%; overflow:scroll; height:200px; " ><{$data.content}></textarea>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">接收对象</label>
+										<div class="col-sm-8">
+											<label class="radio-inline chit_1"><input type="radio" name="user_type"  value="2" onclick="utype()" >指定用户
+											</label>
+											<label class="radio-inline chit_1"><input type="radio" name="user_type"  value="1" checked="checked" onclick="utype()" > 本地区全部用户
+											</label>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div id='nurl' style="display:none;">
+	                                    <div class="form-group">
+											<label class="col-sm-2 control-label"><font color="red">指定用户</font></label>
+											<div class="col-sm-8" id="linkt">	
+											</div>
+										</div>
+										<div class="line line-dashed line-lg pull-in"></div>
+									</div>
+									<div class="form-group">
+										<div class="col-sm-8 col-sm-offset-2">
+											<input type="hidden" name="type" value="<neq name='data.type' value=''><{$data.type}><else/>自定义推送</neq>">
+											<button type="submit" class="btn btn-primary" name="save">保存并推送</button>
+                                            <button type="button" class="btn btn-default" onClick="javascript:history.go(-1);">返回</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/app.v2.js"></script> 
+<!-- Bootstrap --> <!-- App --> 
+<!-- fuelux --> 
+<script src="__PUB__js/fuelux/fuelux.js" cache="false"></script> 
+<!-- datepicker --> 
+<script src="__PUB__js/libs/moment.min.js" cache="false"></script> 
+<script src="__PUB__js/datepicker/bootstrap-datepicker.js" cache="false"></script> 
+<!-- slider --> 
+<script src="__PUB__js/slider/bootstrap-slider.js" cache="false"></script> 
+<!-- file input --> 
+<script src="__PUB__js/file-input/bootstrap-filestyle.min.js" cache="false"></script> 
+<!-- combodate --> 
+<script src="__PUB__js/combodate/combodate.js" cache="false"></script> 
+<!-- select2 --> 
+<script src="__PUB__js/select2/select2.min.js" cache="false"></script> 
+<!-- wysiwyg --> 
+<script src="__PUB__js/wysiwyg/jquery.hotkeys.js" cache="false"></script> 
+<script src="__PUB__js/wysiwyg/bootstrap-wysiwyg.js" cache="false"></script> 
+<script src="__PUB__js/wysiwyg/demo.js" cache="false"></script> 
+<!-- markdown --> 
+<script src="__PUB__js/markdown/epiceditor.min.js" cache="false"></script> 
+<script src="__PUB__js/markdown/demo.js" cache="false"></script>
+<script src="__PUB__weixin/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="__PUB__weixin/artDialog/plugins/iframeTools.js"></script>
+<script>
+    $(document).ready(function(){
+    	utype();
+		$(':input[name="area"]').change(function(){
+			user_list();
+		});
+	});
+    function utype(){
+		var alt = $('input:radio[name="user_type"]:checked').val();
+		if(alt==1){ //全部
+			$('#linkt')
+			$("#nurl").css("display", "none");
+		}else{
+			$("#nurl").css("display", "block");
+			user_list();
+		}
+	}
+	//异步获取用户列表
+	function user_list(){
+		<notempty name="Think.cookie.ADMIN_POWER">
+			a_rea = $('#area option:selected').val();
+		<else />
+			a_rea = $(':input[name="area"]').val();
+		</notempty>
+		$('#linkt').empty();//清空用户列表
+		$.post("<{:U('user_List')}>",{a_area:a_rea},function(data){
+			if(data['suc'] == true){
+				$('#linkt').html(data['data']);
+			}else{
+				$('#linkt').html('<label class="checkbox-inline chit_1" style="padding-left:0px;">'+data['msg']+'</label>');
+			}
+		},'json');
+	}
+</script> 
+</body>
+</html>

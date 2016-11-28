@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="A complete example of Cropper.">
+	<meta name="keywords" content="HTML, CSS, JS, JavaScript, jQuery plugin, image cropping, image crop, image move, image zoom, image rotate, image scale, front-end, frontend, web development">
+	<meta name="author" content="Fengyuan Chen">
+	<title>Cropper</title>
+	<link rel="stylesheet" href="__PUB__js/cut/assets/css/font-awesome.min.css">
+	<link rel="stylesheet" href="__PUB__js/cut/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="__PUB__js/cut/dist/cropper.css">
+	<link rel="stylesheet" href="__PUB__js/cut/css/main.css">
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body>
+<!--[if lt IE 8]>
+	<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]--> 
+
+<!-- Content -->
+<?php if($browser['type'] == 'ie'):?>
+<div class="container" style="line-height:30px; color:red; font-size:16px; font-weight:bold;">您正在使用IE浏览器，IE浏览器对截图功能存在兼容问题，特别是IE9以下的浏览器不支持此功能。建议您使用火狐或者谷歌浏览器进行此操作。</div>
+<?php endif;?>
+<div class="container" style="padding-top:5px;">
+	<div class="row">
+		<div class="col-md-9"> 
+			<!-- <h3 class="page-header">Demo:</h3> -->
+			<div class="img-container"> <img id="image" src="<{$img}>" alt="Picture"> </div>
+		</div>
+		<div class="col-md-3"> 
+			<!-- <h3 class="page-header">Preview:</h3> -->
+			<div class="docs-preview clearfix">
+				<div class="img-preview preview-lg"></div>
+				<div class="img-preview preview-md"></div>
+				<div class="img-preview preview-sm"></div>
+				<div class="img-preview preview-xs"></div>
+			</div>
+			
+			<!-- <h3 class="page-header">Data:</h3> -->
+			<div class="docs-data">
+				<div class="input-group input-group-sm" style="display:none;">
+					<label class="input-group-addon" for="dataX">X</label>
+					<input type="text" class="form-control" id="dataX" placeholder="x">
+					<span class="input-group-addon">px</span> </div>
+				<div class="input-group input-group-sm" style="display:none;">
+					<label class="input-group-addon" for="dataY">Y</label>
+					<input type="text" class="form-control" id="dataY" placeholder="y">
+					<span class="input-group-addon">px</span> </div>
+				<div class="input-group input-group-sm">
+					<label class="input-group-addon" for="dataWidth">Width</label>
+					<input type="text" class="form-control" readonly="readonly" id="dataWidth" placeholder="width">
+					<span class="input-group-addon">px</span> </div>
+				<div class="input-group input-group-sm">
+					<label class="input-group-addon" for="dataHeight">Height</label>
+					<input type="text" class="form-control" readonly="readonly" id="dataHeight" placeholder="height">
+					<span class="input-group-addon">px</span> </div>
+				<div class="input-group input-group-sm" style="display:none;">
+					<label class="input-group-addon" for="dataRotate">Rotate</label>
+					<input type="text" class="form-control" id="dataRotate" placeholder="rotate">
+					<span class="input-group-addon">deg</span> </div>
+				<div class="input-group input-group-sm" style="display:none">
+					<label class="input-group-addon" for="dataScaleX">ScaleX</label>
+					<input type="text" class="form-control" id="dataScaleX" placeholder="scaleX">
+				</div>
+				<div class="input-group input-group-sm" style="display:none">
+					<label class="input-group-addon" for="dataScaleY">ScaleY</label>
+					<input type="text" class="form-control" id="dataScaleY" placeholder="scaleY">
+				</div>
+				<div class="input-group input-group-sm">
+					<span style="color:red">滚动鼠标滑轮，可对图片进行放缩查看。<notempty name="src_data"><br/><b>图片尺寸</b>：<{$src_data}></notempty>
+				<?php
+					if($img_w && $img_h):
+				?>
+					<br/><b>建议剪切尺寸</b>：<{$img_w}>*<{$img_h}></span>
+				<?php endif; ?>
+				</div>
+				<div class="input-group input-group-sm">
+					<button type="button" class="btn btn-primary" id="ppcut"> <span class="docs-tooltip">确定剪切</span> </button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUB__js/cut/assets/js/jquery.min.js"></script>
+<script src="__PUB__js/cut/assets/js/bootstrap.min.js"></script>
+<script src="__PUB__js/cut/dist/cropper.js"></script>
+<!-- <script src="__PUB__js/cut/js/main.js"></script> -->
+<script src="__PUB__weixin/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="__PUB__weixin/artDialog/plugins/iframeTools.js"></script>
+<script>
+	$("#image").cropper({
+	<?php
+		if($img_w && $img_h):
+	?>
+		aspectRatio: <{$img_w}>/<{$img_h}>,
+	<?php
+		else:
+	?>
+		aspectRatio: NaN,
+	<?php
+		endif;
+	?>
+		// autoCropArea:1,
+		preview: '.img-preview',
+		crop: function (e) {
+			$('#dataX').val(Math.round(e.x));
+			$('#dataY').val(Math.round(e.y));
+			$('#dataHeight').val(Math.round(e.height));
+			$('#dataWidth').val(Math.round(e.width));
+			$('#dataRotate').val(e.rotate);
+			$('#dataScaleX').val(e.scaleX);
+			$('#dataScaleY').val(e.scaleY);
+		}
+	});
+</script>
+</body>
+<script>
+	$(function () {
+		$('#ppcut').click(function(){
+			var dataX=$('#dataX').val();
+			var dataY=$('#dataY').val();
+			var dataWidth=$('#dataWidth').val();
+			var dataHeight=$('#dataHeight').val();
+			var dataRotate=$('#dataRotate').val();
+			var dataScaleX=$('#dataScaleX').val();
+			var dataScaleY=$('#dataScaleY').val();
+			var img_data = '{"x":'+dataX+',"y":'+dataY+',"height":'+dataHeight+',"width":'+dataWidth+',"rotate":'+dataRotate+',"scalex":'+dataScaleX+',"scaley":'+dataScaleY+'}';
+			var vali={
+				'avatar_src':$('#image').attr('src'),
+				'avatar_data':img_data
+			};
+			var origin = artDialog.open.origin;
+			$.post("<{:U('doCut')}>",vali,function(data){
+				if(data['msg'] && data['msg'].length > 0){
+					alert(data['msg']);
+					setTimeout("art.dialog.close()", 100 );
+				}else{
+					origin.document.getElementById('cut').src=data['result'];
+					alert('处理完成，对话框将关闭');
+					setTimeout("art.dialog.close()", 100 );
+				}
+			}, "json");
+		});
+	});
+</script>
+</html>

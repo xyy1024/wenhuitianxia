@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<link rel="stylesheet" href="__PUB__css/pp.css" />
+<script>
+function chang_status(id)
+{
+    var submitData = {
+      	id:id,
+    };
+    $.post("<{:U('Shenhe')}>",submitData,function(data){
+        if (data.success == true) {
+          // alert(data.msg);
+          // setTimeout('window.location.href=location.href',1000);
+			if(data.val == 1){
+				ppclass='fa fa-check';
+			}else{
+				ppclass='fa fa-times';
+			}
+          	$('i[var="'+id+'"]').attr('class',ppclass);
+          	return;
+        }else {
+          	alert('修改失败！');
+        }
+  	},'json');
+}
+</script>
+<style>
+.zd {
+	color:red;
+}
+</style>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder ">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">商户管理</li>
+							<li class="active"><{$pp_title}></li>
+							<li class="active">查看优惠券</li>
+						</ul>
+						<section class="panel panel-default">
+							<header class="panel-heading"> </header>
+							<div class="row text-sm wrapper">
+								<div style="width:98%; margin:0 auto; overflow:hidden;">
+									<form action="<{:U('look')}>" method="post" class="form-horizontal">
+										<div class="form-group col-sm-4">
+											<label class="col-sm-5 control-label">优惠券名称：</label>
+											<div class="col-sm-7">
+												<input type="text" name="name" value="<{$s.name}>" class="form-control" />
+											</div>
+										</div>
+										<div class="form-group col-sm-4">
+											<label class="col-sm-5 control-label">优惠券类型：</label>
+											<div class="col-sm-7">
+												<select name="cate" class="form-control">
+													<option value="">请选择</option>
+													<volist name="cate" id="v">
+													<option value="<{$v}>" <eq name="s['cate']" value="$v">selected="selected"</eq>><{$v}></option>
+													</volist>
+												</select>
+											</div>
+										</div>
+										<div class="form-group col-sm-4">
+											<label class="col-sm-5 control-label">所属行业：</label>
+											<div class="col-sm-7">
+												<select name="industry" class="form-control">
+													<option value="">请选择</option>
+													<volist name="industry" id="v" key="k">
+													<option value="<{$k}>" <eq name="s['industry']" value="$k">selected="selected"</eq>><{$v}></option>
+													</volist>
+												</select>
+											</div>
+										</div>
+										<div class="form-group col-sm-4">
+											<label class="col-sm-5 control-label">优惠券是否过期：</label>
+											<div class="col-sm-7">
+												<select name="overdue" class="form-control">
+													<option value="">请选择</option>
+													<option value="1" <eq name="s['overdue']" value="1">selected="selected"</eq>>未过期</option>
+													<option value="2" <eq name="s['overdue']" value="2">selected="selected"</eq>>已过期</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group col-sm-4">
+											<label class="col-sm-5 control-label">每页显示条数：</label>
+											<div class="col-sm-7">
+												<select name="ye" class="form-control">
+													<option value="">请选择</option>
+													<option value="50" <eq name="s['ye']" value="50">selected="selected"</eq>>50条</option>
+													<option value="100" <eq name="s['ye']" value="100">selected="selected"</eq>>100条</option>
+													<option value="all" <eq name="s['ye']" value="all">selected="selected"</eq>>全部</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group col-sm-4">
+											<div class="col-sm-5" style="text-align:right">
+												<button type="submit" class="btn btn-default">查 询</button>
+												<button type="button" class="btn btn-default" onClick="javascript:history.go(-1);">返回</button>
+											</div>
+											
+										</div>
+										<input type="hidden" name="id" value="<{:I('id')}>">
+									</form>
+								</div>
+								<div style="overflow:hidden">
+									<div class="col-sm-4 m-b-xs text-center-xs">
+									</div>
+									<div class="col-sm-4 m-b-xs text-center">
+										</div>
+									</div>
+									<div class="col-sm-4 text-center-xs text-right">
+									</div>
+								</div>
+							</div>
+							
+							<div class="table-responsive">
+								<table class="table table-hover b-t b-light text-sm" style="margin-bottom:0;">
+									<thead>
+										<tr>
+											<th class="col-xs-1">序号</th>
+											<th class="col-xs-2">优惠券名称</th>
+											<th class="col-xs-1">优惠券数量</th>
+											<th class="col-xs-1">已领取数量</th>
+											<th class="col-xs-2">活动截止时间</th>
+											<th class="col-xs-2">优惠券类型</th>
+											
+											<th class="col-xs-2">所属行业</th>
+											<th class="col-xs-1">操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php $empty = '<tr><td colspan="11">暂无相关信息！</td></tr>';?>
+										<volist name="data" id="v" empty="$empty">
+											<tr>
+												<td><{$i}></td>
+												<td><{$v.title}></td>
+												<td><{$v.num}></td>
+												<td><{$v.r_num}></td>
+												<td><{$v.start_time|date="Y-m-d",###}>至<{$v.end_time|date="Y-m-d",###}></td>
+												<td><{$v.cate}></td>
+												<td>
+												<?php
+													if($v['industry']){
+														$ind = array_filter(explode(',',$v['industry']));
+														foreach($ind as $key => $val){
+															echo $industry[$val],'，';
+														}
+													}
+												?>
+												</td>
+												<td>
+													<a href="javascript:void(0);" onclick="addImgMessage(<{$v['id']}>)" class="btn btn-mini"><!--<i class="fa fa-eye"></i>-->查看</a>
+												</td>
+											</tr>
+										</volist>
+									</tbody>
+								</table>
+							</div>
+							<footer class="panel-footer">
+								<div class="row">
+									<div class="col-sm-3 hidden-xs"> </div>
+									<div class="col-sm-6 text-center">
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$totalRows}> 条</a></li>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<{$page}>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$nowPage}>/<{$totalPages}> 页</a></li>
+										</ul>
+									</div>
+									<div class="col-sm-3 text-right text-center-xs">
+										<form action="<{:U(ACTION_NAME)}>" method="post">
+											<input class="input-sm form-control input-s-xs inline" value="<{$nowPage}>" name="page" placeholder="第1页">
+											<button type="submit" class="btn btn-sm btn-default">GO</button>
+										</form>
+									</div>
+								</div>
+							</footer>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+
+
+
+<link rel="stylesheet" href="__PUB__css/font.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__js/nestable/nestable.css" type="text/css" cache="false" />
+<script src="__PUB__js/app.v2.js"></script> <!-- Bootstrap --> <!-- App --> <script src="__PUB__js/sortable/jquery.sortable.js" cache="false"></script><script src="__PUB__js/nestable/jquery.nestable.js" cache="false"></script><script src="__PUB__js/nestable/demo.js" cache="false"></script>
+</body>
+
+<script src="__PUB__js/layer2/layer.js" cache="false"></script>
+<script src="__PUB__weixin/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="__PUB__weixin/artDialog/plugins/iframeTools.js"></script>
+<script>
+	function addImgMessage(id){
+		art.dialog.open('<{:U("Chit/chitlist",'','')}>/cid/'+id+'.html',{lock:true,title:'优惠券领取详情',width:'86%',height:'80%',yesText:'关闭',background: '#000',opacity: 0.45});
+	}
+</script>
+</html>

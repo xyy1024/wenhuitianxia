@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<link rel="stylesheet" href="__PUB__js/datepicker/datepicker.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__css/pp.css" />
+<style>
+.zd {
+	color:red;
+}
+</style>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder ">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active"><{$pp_title}></li>
+						</ul>
+						<section class="panel panel-default">
+							<header class="panel-heading"> </header>
+							<div class="row text-sm wrapper">
+								<div style="width:98%; margin:0 auto; overflow:hidden;">
+									<form action="<{:U('index')}>" method="post" class="form-horizontal">
+										<div class="form-group col-sm-3">
+											<label class="col-sm-4 control-label">地区：</label>
+											<div class="col-sm-8">
+												<select name="area" class="form-control">
+													<option value="">请选择</option>
+													<volist name="area" id="v" key="k">
+													<option value="<{$k}>" <eq name="s['area']" value="$k">selected="selected"</eq>><{$v}></option>
+													</volist>
+
+												</select>
+											</div>
+										</div>
+										<div class="form-group col-sm-4">
+											<label class="col-sm-5 control-label">管理员：</label>
+											<div class="col-sm-7">
+												<select name="aid" class="form-control" id="aid">
+													<option value="">请选择</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group col-sm-4">
+											<label class="col-sm-5 control-label">操作日期：</label>
+											<div class="col-sm-7">
+												<input type="text" name="addtime" value="<{$s.addtime}>" class="form-control" onfocus="WdatePicker()"/>
+											</div>
+										</div>
+										<div class="form-group col-sm-1">
+											<div class="col-sm-7" style="text-align:right"><button type="submit" class="btn btn-default">查 询</button></div>
+										</div>
+									</form>
+								</div>
+								<div style="overflow:hidden">
+									<div class="col-sm-4 m-b-xs text-center-xs">
+									</div>
+									<div class="col-sm-4 m-b-xs text-center">
+										<?php if(cookie('ADMIN_POWER')==1): ?> <div class="btn-group"> <a  class="btn btn-sm btn-default" href="<{:U('index',array('stp'=>'all'))}>" ><i class="fa fa-th"> 显示全部</i> </a> <a href="javascript:dodel();" class="btn btn-sm btn-default" > <i class="fa fa-trash-o"></i> 删除勾选 </a> </div><?php endif;?>
+									</div>
+									<div class="col-sm-4 text-center-xs text-right">
+									</div>
+								</div>
+							</div>
+							
+							<div class="table-responsive">
+								<table class="table table-hover b-t b-light text-sm" style="margin-bottom:0;">
+									<thead>
+										<tr>
+											<th class="col-sm-1"><input type="checkbox"></th>
+											<th class="col-sm-2">管理员</th>
+											<th class="col-sm-2">地区</th>
+											<th class="col-sm-5">操作内容</th>
+											<th class="col-sm-2">操作时间</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php $empty = '<tr><td colspan="5">暂无相关信息！</td></tr>';?>
+										<volist name="data" id="v" empty="$empty">
+											<tr>
+												<td><input type="checkbox" name="check[]" value="<{$v.id}>"><{$i}></td>
+												<td><{$v.username}></td>
+												<td><?php echo $v['area']?$area[$v['area']]:'';?></td>
+												<td><{$v.done}></td>
+												<td><{$v.addtime|date="Y-m-d H:i:s",###}></td>
+											</tr>
+										</volist>
+									</tbody>
+								</table>
+							</div>
+							<footer class="panel-footer">
+								<div class="row">
+									<div class="col-sm-3 hidden-xs"> </div>
+									<div class="col-sm-6 text-center">
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$totalRows}> 条</a></li>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<{$page}>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$nowPage}>/<{$totalPages}> 页</a></li>
+										</ul>
+									</div>
+									<div class="col-sm-3 text-right text-center-xs">
+										<form action="<{:U(ACTION_NAME)}>" method="post">
+											<input class="input-sm form-control input-s-xs inline" value="<{$nowPage}>" name="page" placeholder="第1页">
+											<button type="submit" class="btn btn-sm btn-default">GO</button>
+										</form>
+									</div>
+								</div>
+							</footer>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+		</section>
+	</section>
+</section>
+<!-- 批量删除 -->
+<div class="modal fade" id="modalsc">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">温馨提示</h4>
+			</div>
+			<div class="modal-body">
+				<h4 class="modal-title">请问您确定删除吗？</h4>
+			</div>
+			<div class="modal-footer">
+				<form method="post">
+					<button type="button" id="dodel" class="btn btn-info" value=" " name="Delete" data-dismiss="modal">确定</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end -->
+
+
+<link rel="stylesheet" href="__PUB__css/font.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__js/nestable/nestable.css" type="text/css" cache="false" />
+<script src="__PUB__js/app.v2.js"></script> <!-- Bootstrap --> <!-- App --> <script src="__PUB__js/sortable/jquery.sortable.js" cache="false"></script><script src="__PUB__js/nestable/jquery.nestable.js" cache="false"></script><script src="__PUB__js/nestable/demo.js" cache="false"></script>
+<!-- datepicker -->
+<script charset="utf-8" src="__PUB__js/My97DatePicker/WdatePicker.js"></script>
+</body>
+<script>
+//批量删除
+function dodel(){
+	$('#modalsc').modal('show').off('shown.bs.modal',function(){
+		clearInput('modalsc');
+	});
+	$('#modalsc').modal('show').on('shown.bs.modal',function(){
+		getCheckbox('doDel','<{:U("batch")}>','modalsc','dodel');
+	});
+}
+
+/* 批量删除、复制、移动多选框插入到弹出框中
+ * doname 操作名称
+ * action form提交地址
+ * mod_name modal弹出框的id值
+ * but_name 提交按钮id值
+ * cate 0 不获取分类，1获取分类
+*/
+function getCheckbox(doname,action,mod_name,but_name){
+	var len = $(':input[name="check[]"]:checked').length;
+	if(len > 0){  //选中数不为0
+		if(doname == 'doCopy' || doname == 'doMove'){
+			var artcate=$('#art_cate option:selected').val();
+			var is=$('#art_cate option:selected').attr('is');
+			if(artcate && is != '1'){	//栏目不能添加文章
+				alert('该栏目类型为非内容列表，不能添加文章！');
+				$('#'+mod_name).modal('hide');
+				// $('#'.mod_name .modal-body h4).html();
+				return false;
+			}else if(typeof(artcate) == 'undefined' || !artcate){	//没有选择栏目
+				$('#'+but_name).attr('type','button').attr('data-dismiss','modal');
+				return false;
+			}
+			$('#'+mod_name).find('form').append('<input type="hidden" name="artcate" value="'+artcate+'" />');	//要移动或者复制到的分类id值
+		}
+		$(':input[name="check[]"]:checked').each(function(){
+			$('#'+mod_name).find('form').append('<input type="hidden" name="check[]" value="'+$(this).val()+'" />');
+		});
+		$('#'+mod_name).find('form').append('<input type="hidden" name="tid" value="<{:I('tid')}>" />');	//分类id
+		$('#'+mod_name).find('form').append('<input type="hidden" name="p" value="<{:I('p')}>" />');	//分页值
+		$('#'+mod_name).find('form').attr('action',action);
+		$('#'+but_name).attr('type','submit').removeAttr('data-dismiss');
+	}else{	//未选中删除项则点击“确定”后关闭弹出框
+		$('#'+but_name).attr('type','button').attr('data-dismiss','modal');
+	}
+}
+//清除modal中的input:hidden框
+function clearInput(mod_name){
+	$('#'+mod_name+ ':input[type="hidden"]').remove();
+
+}
+//清除bnp form中的input:hidden框
+function clearInputh(){
+	$('.bnp form :input[type="hidden"]').remove();
+
+}
+//获取地区管理员
+function getAdmin(aid){
+	var area_id = $(':input[name="area"] option:selected').val();
+	var validata = {
+		'area':area_id,
+	};
+	$.get("<{:U('getAdminuser')}>", validata,function(data){
+	  	if(data['suc']){
+			var option;
+			$('#aid').html('<option value="">请选择</option>');
+			for(var i in data['list']){
+				option = '<option value="'+i+'"';
+				if(typeof(aid)!='undefined' && aid == i) option += ' selected="selected"';
+				option += '>'+data['list'][i]+'</option>';
+				$('#aid').append(option);
+			}
+		}
+	},'json');
+}
+$(function(){
+	getAdmin('<{$s.aid}>');
+	$(':input[name="area"]').change(function(){
+		getAdmin('<{$s.aid}>');
+	});
+})
+</script>
+</html>

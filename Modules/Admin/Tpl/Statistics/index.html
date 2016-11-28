@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<script charset="utf-8" src="__PUB__js/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder ">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">数据统计分析</li>
+						</ul>
+						<section class="panel panel-default">
+							<header class="panel-heading"></header>
+							<div class="row text-sm wrapper">
+								<div style="width:98%; margin:0 auto; overflow:hidden;">
+									<form action="<{:U('index')}>" method="post" class="form-horizontal">
+										<div class="form-group col-sm-3">
+											<label class="col-sm-5 control-label">起始时间：</label>
+											<div class="col-sm-7">
+												<input type="text" name="staTime" value="<{$sea.staTime}>" class="form-control"  onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'endTime\')}'})" id="staTime"/>
+											</div>
+										</div>
+										<div class="form-group col-sm-3">
+											<label class="col-sm-5 control-label">截止时间：</label>
+											<div class="col-sm-7">
+												<input type="text" name="endTime" value="<{$sea.endTime}>" class="form-control"   onfocus="WdatePicker({minDate:'#F{$dp.$D(\'staTime\')}'})" id="endTime" />
+											</div>
+										</div>
+										<div class="form-group col-sm-4">
+											<label class="col-sm-5 control-label">所属行业：</label>
+											<div class="col-sm-7">
+												<select name="industry" class="form-control">
+													<option value="">请选择</option>
+													<volist name="industry" id="v" key="k">
+														<option value="<{$k}>" <eq name="sea['industry']" value="$k">selected="selected"</eq>><{$v}></option>
+													</volist>
+												</select>
+											</div>
+										</div>
+										
+										<div class="form-group col-sm-2">
+											<div class="col-sm-12" style="text-align:right"><button type="submit" class="btn btn-default">查 询</button></div>
+										</div>
+									</form>
+								</div>
+								<div class="col-sm-4 m-b-xs text-center-xs">
+									
+								</div>
+								<div class="col-sm-4 m-b-xs text-center">
+								</div>
+								<div class="col-sm-4 text-center-xs text-right">
+									
+								</div>
+							</div>
+							<div class="table-responsive">
+								<div style="text-align :center;font-weight:bold; font-size:22px;" >访问量</div>
+								<div class="table-responsive" id='main' style="height:400px;">
+									
+								</div>
+								<div style="text-align :center;font-weight:bold; font-size:22px;padding-top:30px;" >优惠券数量（张）</div>
+								<div class="table-responsive" id='main2' style="height:400px;">
+									
+								</div>
+							</div>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/echarts/build/dist/echarts.js"></script>
+<script type="text/javascript">
+	// 路径配置
+	require.config({
+		paths: {
+			echarts: '__PUB__js/echarts/build/dist'
+		}
+	});
+	require(
+		[
+			'echarts',
+			'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
+		],
+		function (ec) {
+			//网站访问量
+			var myChart1 = ec.init(document.getElementById('main')); 
+			option = {
+				backgroundColor: '#ffffff',//背景色
+				title : {
+					text: '',
+					subtext: ''
+				},
+				tooltip : {
+					trigger: 'axis',
+					formatter: "{b}：({c})",
+					axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+						type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+					}
+				},
+				calculable : true,
+				xAxis : [{
+					type : 'category',
+					show : true,
+					splitLine: {show: false},
+					textStyle:{
+						color:"#888",
+						fontWeight:'bold'
+					},
+
+					data:['用户访问量','用户注册量','商户数量','活动数量','优惠券数量']
+				}],
+				grid: { // 控制图的大小，调整下面这些值就可以，
+					x: 200,
+					x2: 200,
+					y: 30,
+					y2: 48,// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
+				},
+				yAxis : [{
+					type : 'value',
+					axisLabel: {
+						show: true,
+						interval: 'auto',
+						formatter: '{value}'
+					}
+				}],
+				series : [{
+					name:'',
+					type:'bar',
+					barWidth : 60,//柱图宽度
+					itemStyle: {
+						normal: { barBorderRadius: 0,
+							color: function(params) {
+							// '#ff804d','#aad023','#1dccdd','#399cf1','#90ceff'
+							var colorList = ['#399cf1','#399cf1','#399cf1','#399cf1','#399cf1'];
+							return colorList[params.dataIndex]
+							},
+							label: {
+								show: true,//是否上面的文字显示
+								position: 'top',
+								formatter: '{c}' //{a} <br/>{b} : {c} ({d}%)// a（系列名称），b（类目值），c（数值）, d（无）
+							}
+						}
+					},
+					data:[<{$data.f_num}>,<{$data.u_num}>,<{$data.m_num}>,<{$data.a_num}>,<{$data.c_num}>],
+				}]
+			};
+			myChart1.setOption(option); // 为echarts对象加载数据 
+
+			//优惠券数量
+			var myChart2 = ec.init(document.getElementById('main2')); 
+			option = {
+					backgroundColor: '#ffffff',//背景色
+					title : {
+					text: '',
+					subtext: ''
+				},
+				tooltip : {
+					trigger: 'axis',
+					formatter: "{b}：({c})",
+						axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+						type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+					}
+				},
+				calculable : true,
+				xAxis : [{
+					type : 'category',
+					show : true,
+					splitLine: {show: false},
+					textStyle:{
+						color:"#888",
+						fontWeight:'bold'
+					},
+					data:['发放数量','领取数量','使用数量','过期数量']
+				}],
+				grid: { // 控制图的大小，调整下面这些值就可以，
+					x: 200,
+					x2: 200,
+					y: 30,
+					y2: 48,// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
+				},
+				yAxis : [{
+					type : 'value',
+					axisLabel: {
+						show: true,
+						interval: 'auto',
+						formatter: '{value}'
+					}
+				}],
+				series : [{
+					name:'',
+					type:'bar',
+					barWidth : 60,//柱图宽度
+					itemStyle: {
+						normal: { barBorderRadius: 0,
+							color: function(params) {
+							var colorList = ['#ff804d','#ff804d','#ff804d','#ff804d'];
+							return colorList[params.dataIndex]
+							},
+							label: {
+								show: true,//是否上面的文字显示
+								position: 'top',
+								formatter: '{c}' //{a} <br/>{b} : {c} ({d}%)// a（系列名称），b（类目值），c（数值）, d（无）
+							}
+						}
+					},
+					data:[<{$data.c_num}>,<{$data.l_num}>,<{$data.y_num}>,<{$data.g_num}>],
+				}]
+			};
+			myChart2.setOption(option); // 为echarts对象加载数据 					
+		}
+	);
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<script>
+function chang_status(id)
+{
+    var submitData = {
+      	id:id,
+    };
+    $.post("<{:U('Merchant/Shenhe')}>",submitData,function(data){
+        if (data.success == true) {
+          // alert(data.msg);
+          // setTimeout('window.location.href=location.href',1000);
+			if(data.val == 1){
+				ppclass='fa fa-check';
+			}else{
+				ppclass='fa fa-times';
+			}
+          	$('i[var="'+id+'"]').attr('class',ppclass);
+          	return;
+        }else {
+          	alert('修改失败！');
+        }
+  	},'json');
+}
+</script>
+<style>
+.zd {
+	color:red;
+}
+</style>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder ">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">用户管理</li>
+							<li class="active">查看详情</li>
+							<li class="active">查看更多收藏</li>
+							
+						</ul>
+						<section class="panel panel-default">
+							<header class="panel-heading"> </header>
+							<div class="row text-sm wrapper">
+								<div class="col-sm-3 m-b-xs text-center-xs">
+									
+								</div>
+								
+								<div class="col-sm-4 m-b-xs text-center">
+									<div class="btn-group"><a href="<{:U('look',array('id'=>I('u_id')))}>" class="btn btn-sm btn-default active" > <i class="fa fa-undo"></i>返回</a> </div>
+								</div>
+								<form action="<{:U('merlist')}>" method="post">
+								<div class="col-sm-5 text-center-xs text-right">
+									<input name="title" class="input-sm form-control input-s-sm inline" value="<{$search.title}>" placeholder="商户名称">	
+									<select name="ins" class="input-sm form-control input-s-sm inline">
+										<option value="">选择所属行业</option>
+										<option value="all" <eq name="search" value="all"> selected </eq>>通用行业</option>
+										<volist name="ins_arr" id="v" key="k">
+											<option value="<{$k}>" <eq name="search.ins" value="$k"> selected </eq>><{$v}></option>
+										</volist>
+									</select>
+									<input type="hidden" name="u_id" value="<{:I('u_id')}>">
+									<button class="btn btn-sm btn-default"><i class="fa fa-fw fa-search"></i></button>
+								</div>
+								</form>
+							</div>
+						
+							<div class="table-responsive">
+								<table class="table table-striped b-t b-light text-sm" style="margin-bottom:0;">
+									<thead>
+										<tr>
+											<th class="hidden-xs-2">序号</th>
+											<th class="hidden-xs-4">收藏商户名称</th>
+											<th class="hidden-xs-6">商户所属行业</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php 
+											$empty = '<tr><td colspan="3">暂无相关信息！</td></tr>';
+											$num = 1;
+										?>
+									<volist name="m_arr" id="vo" key="k" empty="$empty">
+										<tr >
+											<td ><{$num}></td>
+											<td ><{$vo.name}></td>
+											<td >
+												<?php
+													$ind_arr = array_filter(explode(',',$vo['ins_id']));
+													$num++;
+												?>
+												<volist name="ins_arr" id="v" key="k">
+													<?php if(in_array($k, $ind_arr)){?><{$v}>，<?php }?>
+												</volist>
+											</td>
+										</tr>
+									</volist>
+									</tbody>
+								</table>
+							</div>
+							<footer class="panel-footer">
+								<div class="row">
+									<div class="col-sm-3 hidden-xs"> </div>
+									<div class="col-sm-6 text-center">
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$totalRows}> 条</a></li>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<{$page}>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$nowPage}>/<{$totalPages}> 页</a></li>
+										</ul>
+									</div>
+									<div class="col-sm-3 text-right text-center-xs">
+										<form action="<{:U(ACTION_NAME)}>" method="post">
+											<input class="input-sm form-control input-s-xs inline" value="<{$nowPage}>" name="page" placeholder="第1页">
+											<button type="submit" class="btn btn-sm btn-default">GO</button>
+										</form>
+									</div>
+								</div>
+							</footer>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<!-- 批量删除 -->
+<div class="modal fade" id="modalsc">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">温馨提示</h4>
+			</div>
+			<div class="modal-body">
+				<h4 class="modal-title">请问您确定删除吗？</h4>
+			</div>
+			<div class="modal-footer">
+				<form method="post">
+					<button type="button" id="dodel" class="btn btn-info" value=" " name="Delete" data-dismiss="modal">确定</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end -->
+
+
+
+<link rel="stylesheet" href="__PUB__css/font.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__js/nestable/nestable.css" type="text/css" cache="false" />
+<script src="__PUB__js/app.v2.js"></script> <!-- Bootstrap --> <!-- App --> <script src="__PUB__js/sortable/jquery.sortable.js" cache="false"></script><script src="__PUB__js/nestable/jquery.nestable.js" cache="false"></script><script src="__PUB__js/nestable/demo.js" cache="false"></script>
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<link rel="stylesheet" href="__PUB__js/datepicker/datepicker.css" type="text/css" cache="false" />
+<link rel="stylesheet" type="text/css" href="__PUB__css/style.css">
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="index.html"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">系统管理</li>
+							<li class="active">敏感词汇管理</li>
+							<li class="active">编辑敏感词汇</li>
+						</ul>
+						<div class="row">
+							<div class="col-sm-6"></div>
+							<div class="col-sm-6"></div>
+						</div>
+						<section class="panel panel-default">
+							<header class="panel-heading font-bold"> 编辑敏感词汇 </header>
+							<div class="panel-body">
+								<form action="<{:U(ACTION_NAME)}>" class="form-horizontal" method="post">
+									<div class="form-group">
+										<label class="col-sm-2 control-label"><font color="red">敏感词汇名称</font></label>
+										<div class="col-sm-6">
+                                        	<input name="name" type="text" id="name" value="<{$data.name}>" class="form-control " datatype="*" nullmsg="请填写敏感词汇名称">
+										</div>
+										<div style="line-height:34px;color: #ff0000;">注：红色字为必填项</div> 
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">排　　　　序</label>
+										<div class="col-sm-2">
+                                        	<label class="pull-left">
+												<input type="text" name="sort" id="sort" value="<{$data.sort}>" class="form-control">
+											</label>
+										</div>
+										<div style="line-height:34px;color: #ff0000;">　注：数字越大越靠前</div> 
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<div class="col-sm-8 col-sm-offset-2">
+											<input type="hidden" name="id" value="<{$data.id}>">
+											<button type="submit" class="btn btn-primary">保存</button>
+                                            <button type="button" class="btn btn-default" onClick="javascript:history.go(-1);">返回</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/app.v2.js"></script> 
+<!-- Bootstrap --> <!-- App --> 
+<!-- fuelux --> 
+<script src="js/fuelux/fuelux.js" cache="false"></script> 
+<!-- datepicker --> 
+<script src="__PUB__js/libs/moment.min.js" cache="false"></script> 
+<script src="__PUB__js/datepicker/bootstrap-datepicker.js" cache="false"></script> 
+<!-- slider --> 
+<script src="js/slider/bootstrap-slider.js" cache="false"></script> 
+<!-- file input --> 
+<script src="js/file-input/bootstrap-filestyle.min.js" cache="false"></script> 
+<!-- combodate --> 
+<script src="js/combodate/combodate.js" cache="false"></script> 
+<!-- select2 --> 
+<script src="__PUB__js/select2/select2.min.js" cache="false"></script> 
+<!-- wysiwyg --> 
+<script src="js/wysiwyg/jquery.hotkeys.js" cache="false"></script> 
+<script src="js/wysiwyg/bootstrap-wysiwyg.js" cache="false"></script> 
+<script src="js/wysiwyg/demo.js" cache="false"></script> 
+<!-- markdown --> 
+<script src="js/markdown/epiceditor.min.js" cache="false"></script> 
+<script src="js/markdown/demo.js" cache="false"></script> 
+<script type="text/javascript" src="__PUB__js/Validform_v5.3.2.js"></script>
+<script>
+	$(".form-horizontal").Validform({
+        tiptype:1,
+    });
+</script> 
+</body>
+</html>

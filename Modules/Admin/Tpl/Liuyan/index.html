@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>留言管理|后台管理系统</title>
+<link rel="stylesheet" type="text/css" href="__PUB__style/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="__PUB__style/bootstrap-responsive.min.css">
+<script type="text/javascript" src="__PUB__js/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUB__js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUB__js/common.js"></script>
+<script>
+$(document).ready(function(){
+  $("#selectidid").change(function(){
+		var val=$(this).children('option:selected').val();
+		window.location.href="<{:U('index',array(),'')}><{:C('URL_PATHINFO_DEPR')}>tid<{:C('URL_PATHINFO_DEPR')}>"+val;
+	});
+	
+	$("#SelectAll").click(function(){ 
+		$("input[name='check[]']").checkCbx(); 
+	});
+	
+	$(".YanZheng").click(function(event){
+		var a=$("input:checked").length;
+		if(a==0){
+			alert('您还没有请选择操作内容！');
+			event.preventDefault();
+		}
+	});
+});
+ 
+
+$.fn.checkCbx = function(){ 
+	return this.each(function(){ 
+		this.checked = !this.checked; 
+	}); 
+} 
+
+</script>
+
+</head>
+<body style="margin: 10px 0px;">
+<div style="margin:0 auto; width:98%;">
+<form action="<{:U('form')}>" method="post"  name="form">
+<table class="table table-condensed table-bordered table-hover">
+<tbody><tr>
+	<td colspan="9" style="padding-left:10px;">
+	<div style="float:left">
+    <b>留言管理</b>
+    </div>
+    <div style="float:right">
+    </div>
+	</td>
+</tr>
+<tr align="center">
+	<td width="4%" style="text-align:center;">选择</td>
+	<td width="10%" style="text-align:center;">姓名</td>
+	<td width="15%" style="text-align:center;">电话</td>
+	<td width="8%" style="text-align:center;">邮箱</td>
+	<td style="text-align:center;">留言内容</td>
+	<td width="15%" style="text-align:center;">留言时间</td>
+	<td width="10%" style="text-align:center;">操作</td>
+</tr>
+<volist name="list" id="vo">
+<tr style="text-align:center;">
+	<td style="text-align:center;"><input name="check[]" type="checkbox" id="check" value="<{$vo.id}>" class="np"></td>
+	<td style="text-align:center;">
+   		<span id="id">
+			<a>
+				<u><{$vo.name}></u>
+			</a>
+		</span>	
+	</td>
+	<td style="text-align:center;"><{$vo.tel}></td>
+	<td style="text-align:center;"><{$vo.email}></td>
+	<td style="text-align:center;"><{$vo.content}></td>
+	<td style="text-align:center;"><{$vo.addtime|date='Y-m-d H:i:s',###}></td>
+	<td style="text-align:center;">
+		<a href="<{:U('delete',array('id'=>$vo['id']))}>" class="btn btn-mini"><i class="icon-trash"></i> 删除</a>
+	</td>
+</tr>
+</volist>
+<tr>
+	<td colspan="9" align="right">
+		<input type="hidden" value="<{$_GET['p']}>" name="p">
+		<a href="javascript:void(0)" class="btn btn-mini" id="SelectAll"><i class="icon-check"></i> 全选/反选</a>&nbsp;  
+		<button class="btn btn-mini YanZheng" name="delete" value=" " type="submit" style="cursor:pointer;"><i class="icon-trash"></i> 删除</button>
+	</td>
+</tr>
+    
+    
+    
+
+<tr>
+	<td colspan="9">
+      <div class="pagination">
+    <ul><{$page}></ul>
+</div>
+	</td>
+</tr>
+</tbody></table>
+</form>
+</div>
+
+</body></html>

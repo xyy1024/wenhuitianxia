@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<script>
+/* 修改信息属性 */
+function chang_status(id,value,table)
+{
+	
+	var newvalue=0;
+	if(value == 1)
+		newvalue=0;
+	else
+		newvalue=1;
+	var submitData = {
+		id:id,
+		status:newvalue,
+		table:table
+	};
+	$.post("<{:U('editattr')}>",submitData,
+		function(data) {
+			if (data.success == true) {
+				alert(data.msg);
+				setTimeout('window.location.href=location.href',1000);
+				return;
+			}
+			else {}
+		}
+	,'json');
+	
+}
+</script>
+</head>
+<body>
+<section class="vbox">
+ <section>
+    <section class="hbox stretch"> <!-- .aside -->
+     <!-- /.aside -->
+      <section id="content">
+        <section class="vbox">
+        
+          <section class="scrollable padder ">
+          <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+          	 <li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页 </a></li>
+             <li><a href="<{:U('Authc/fenpei')}>">权限管理</a></li>
+              <li class="active">角色列表</li>
+            </ul>
+            <section class="panel panel-default">
+
+              <div class="row text-sm wrapper"> 
+                <div class="m-b-xs text-center">
+                  <div class="btn-group">
+                    <a href="<{:U('Authc/addgroup')}>" class="btn btn-sm btn-default active" >
+                      <i class="fa fa-plus">&nbsp&nbsp</i>增加角色</a> 
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-striped b-t b-light text-sm">
+                  <thead>
+                    <tr>
+                      <th width="80" style="text-align:center">ID</th>  
+                      <th width="135" class="hidden-xs" style="text-align:center">角色名称</th>
+                      <th width="76" class="hidden-xs" style="text-align:center">状态</th>
+                      <th width="373" class="hidden-xs" style="text-align:center">规则内容</th>
+                      <th width="180" style="text-align:center">操作项</th>
+                    </tr>
+                  </thead>
+                  <tbody id="div1">
+                  <volist name="lists" id="vo" key="k">
+                        <tr>
+                            <td style="text-align:center;"><{$vo.id}></td>
+                            <td style="text-align:center"><{$vo.title}></td>
+                            <td style="text-align:center">
+                                <a title="点击审核" href="javascript:chang_status(<{$vo.id}>,<{$vo.status}>,'Authgroup');"><eq name="vo.status" value="1"><i class="fa fa-check"></i><else /><span class="red"><i class="fa fa-times"></i></span></eq></a>
+                            </td>
+                            <td style="text-align:center">
+                               <volist name="vo.rules" id="v">
+                                <{$rules.$v}>、
+                                </volist>
+                            </td>
+                            <td style="text-align:center">
+                            <a href="<{:U('editgroup',array('id'=>$vo['id']))}>"><i class="fa fa-pencil"></i>修改</a>&nbsp;&nbsp;
+                       		<a href="<{:U('delgroup',array('id'=>$vo['id']))}>" data-toggle="modal"> <i class="fa fa-trash-o"></i>删除</a>  
+                            </td>
+                        </tr>
+                    </volist>
+                    
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+        </section>
+        <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+      <aside class="bg-light lter b-l aside-md hide" id="notes">
+        <div class="wrapper">Notification</div>
+      </aside>
+    </section>
+  </section>
+</section>
+
+
+
+<div class="modal fade" id="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">置顶:中国人民大学2016年来华留学生本科招科招生简章</h4>
+      </div>
+      <div class="modal-body">
+                   <select class="input-sm form-control input-s-sm inline">
+                    <option value="0">1</option>
+                    <option value="1">2</option>
+                    <option value="2">3</option>
+                    <option value="3">4</option>
+                  </select>
+                  数值越大置顶级别越高
+         
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">确定</button>
+        
+         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+    <!-- /.modal-content --> </div>
+  <!-- /.modal-dialog --> </div>
+
+
+
+
+<div class="modal fade" id="modalsc">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">温馨提示</h4>
+      </div>
+      <div class="modal-body">
+        <h4 class="modal-title">请问您确定删除吗？</h4>
+         
+      </div>
+      <div class="modal-footer">
+       
+        <button type="button" class="btn btn-info" data-dismiss="modal">确定</button>
+        
+         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+    <!-- /.modal-content --> </div>
+  <!-- /.modal-dialog --> </div>
+
+
+
+
+
+
+<link rel="stylesheet" href="__PUB__css/font.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__js/nestable/nestable.css" type="text/css" cache="false" />
+
+<script src="__PUB__js/app.v2.js"></script> <!-- Bootstrap --> <!-- App --> <script src="__PUB__js/sortable/jquery.sortable.js" cache="false"></script><script src="__PUB__js/nestable/jquery.nestable.js" cache="false"></script><script src="__PUB__js/nestable/demo.js" cache="false"></script>
+</body>
+</html>

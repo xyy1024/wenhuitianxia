@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <include file="Common:header" />
+    <!-- <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet"> -->
+    <link href="__CSS__own.css" rel="stylesheet">
+</head>
+<body style="min-width:1200px;">
+<div class="navbar-wrapper" id="page-top">
+    <include file="Common:navigationtwo" />
+</div>
+ <include file="Common:position" />
+<div class="container mt60">
+ <include file="Common:left" />
+    <div class="slid_right fr wow fadeInRight animated">
+         <div class="pub_c">
+           <div class="m_banner">
+            <volist name="adver" id="v">
+            <div class="banner b<{$i}>" style=" background-image:url(<{$v.logo}>);<?php echo $img_dis;?>" id="banner<{$i}>">
+                <div class="bg_banne"><{$v.name}></div>
+            </div>
+            </volist>
+            <div class="banner_ctrl"> <a href="javascript:" class="prev11" title=""></a> <a href="javascript:" class="next11" title=""></a> </div>
+            
+          </div>
+        </div> 
+       <a href="<{:U('news',array('cid'=>36))}>" class="look">论坛嘉宾观点请见详情</a>
+    
+    </div>
+</div>
+<include file="Common:footer" />
+<include file="Common:footer_js" />
+<script type="text/javascript" src="__JS__index.js"></script> 
+</body>
+</html>

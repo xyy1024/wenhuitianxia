@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<link rel="stylesheet" href="__PUB__js/datepicker/datepicker.css" type="text/css" cache="false" />
+<style>
+#img {
+	width:100%;
+	overflow:hidden;
+}
+#img p {
+	float:left;
+	padding-top:3px;
+	margin-right:5px;
+}
+#img p img {
+	max-width:80px;
+	max-height:80px;
+}#imgcut{
+	display:inline-block;
+}
+#imgcut img{
+	max-height:34px;
+	cursor:pointer;
+}
+</style>
+<script charset="utf-8" src="__ROOTPUB__kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="__ROOTPUB__kindeditor/lang/zh_CN.js"></script>
+<script>
+KindEditor.ready(function(K) {
+	var editor = K.create('textarea[name="content"]', {
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true
+	});
+	
+	var editor1 = K.editor({
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true
+	});
+	K('#uploadfid1').click(function(){
+		editor1.loadPlugin('insertfile', function(){
+			editor1.plugin.fileDialog({
+				fileUrl : K('#b_plan1').val(),
+				clickFn : function(url, title) {
+					K('#b_plan1').val(url);
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+	
+});
+
+</script>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="index.html"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">商户管理</li>
+							<li class="active">批量导入</li>
+						</ul>
+						<div class="row">
+							<div class="col-sm-6"></div>
+							<div class="col-sm-6"></div>
+						</div>
+						<section class="panel panel-default">
+							<header class="panel-heading font-bold"> 批量导入</header>
+							<div class="panel-body">
+								<form name="form1" action="<{:U(ACTION_NAME)}>" class="form-horizontal" method="post">
+									
+									<div class="form-group picnum_1">
+										<label class="col-sm-2 control-label">上传EXCEL文件</label>
+										<div class="col-sm-8">
+											<input name="file" class="input-s form-control" type="text" value="" id="b_plan1" style=" display:inline-block" readonly>
+											<button type="button" class="btn btn-default" id="uploadfid1">上传EXCEL</button>
+											<span></span>
+											</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in picnum_1"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label"></label>
+										<div class="col-sm-8">
+											<a style="color: #094490;text-decoration: none;" href="/Public/mer_emplate.xlsx" target="_blank">点击下载模版</a>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									
+									<div class="form-group">
+										<div class="col-sm-8 col-sm-offset-2">
+											<button type="submit" class="btn btn-primary" >保存</button>
+											<button type="button" class="btn btn-default" onClick="javascript:history.go(-1);">返回</button>
+										</div>
+									</div>
+								
+								</form>
+							</div>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/app.v2.js"></script> 
+<!-- Bootstrap --> <!-- App --> 
+<!-- fuelux --> 
+<script src="js/fuelux/fuelux.js" cache="false"></script> 
+<!-- datepicker --> 
+<script src="__PUB__js/libs/moment.min.js" cache="false"></script> 
+<script src="__PUB__js/datepicker/bootstrap-datepicker.js" cache="false"></script> 
+<!-- slider --> 
+<script src="js/slider/bootstrap-slider.js" cache="false"></script> 
+<!-- file input --> 
+<script src="js/file-input/bootstrap-filestyle.min.js" cache="false"></script> 
+<!-- combodate --> 
+<script src="js/combodate/combodate.js" cache="false"></script> 
+<!-- select2 --> 
+<script src="__PUB__js/select2/select2.min.js" cache="false"></script> 
+<!-- wysiwyg --> 
+<script src="js/wysiwyg/jquery.hotkeys.js" cache="false"></script> 
+<script src="js/wysiwyg/bootstrap-wysiwyg.js" cache="false"></script> 
+<script src="js/wysiwyg/demo.js" cache="false"></script> 
+<!-- markdown --> 
+<script src="js/markdown/epiceditor.min.js" cache="false"></script> 
+<script src="js/markdown/demo.js" cache="false"></script> 
+
+</body>
+</html>

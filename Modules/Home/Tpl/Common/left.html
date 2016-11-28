@@ -1,0 +1,14 @@
+   <div class="slid_left fl wow fadeInLeft animated">
+    
+        <div class="ges"><{$leftMenu.pp_$topid.catname}></div>
+        <div class="ol">
+            <ul>
+               <volist name="leftMenu.pp_$topid.child" id="val">
+                <?php $catname['upid'];?>
+                <li <if condition="(I('cid') eq $val['id']) || ($page[tid] eq $val['id']) || (I('upid') eq $val['id']) ||($catname['upid'] eq $val['id']) "> class="br"</if>>
+                    <a href="<{$val.url}>" <if condition="(I('cid') eq $val['id']) || ($page[tid] eq $val['id']) || (I('upid') eq $val['id']) ||($catname['upid'] eq $val['id'])"> class="cha"</if>><{$val.catname}></a>
+                </li>
+                </volist>
+            </ul>
+        </div>
+    </div>

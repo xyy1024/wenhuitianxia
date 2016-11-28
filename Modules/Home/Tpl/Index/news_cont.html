@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <include file="Common:header" />
+    <link href="__CSS__own.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<include file="Common:navigationtwo" />
+<include file="Common:position" />
+<section>
+	<div class="container mt60">
+	    <include file="Common:left" />
+	    <div class="slid_right fr wow fadeInRight animated">
+	        <h4 class="text-center mold" <{$style}>><{$page.title}></h4>
+	        <div class="text-center time" <{$style}>>
+	            <{$page.addtime|date="Y-m-d",###}>
+	        </div>
+	        <div class="bdsharebuttonbox fr" style="margin-top:-20px;margin-right:40px;">
+	            <a href="#" class="bds_more" data-cmd="more"></a>
+	            <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	            <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	            <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+	            <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+	            <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+	        </div>
+	        <div class="clear wenzan" <{$style}>>
+				<notempty name="page.vedio">
+					<script type="text/javascript" src="__JS__swfobject.js"></script>
+					<div style="text-align: center;" class="video" id="CuPlayer">
+					</div>
+					<script type="text/javascript">
+					var so = new SWFObject("__JS__CuPlayerMiniV4.swf","CuPlayerV4","670","430","9","#000000");
+					so.addParam("allowfullscreen","true");
+					so.addParam("allowscriptaccess","always");
+					so.addParam("wmode","opaque");
+					so.addParam("quality","high");
+					so.addParam("salign","lt");
+					so.addVariable("CuPlayerSetFile","<{:U('vedio')}>"); //播放器配置文件地址,例SetFile.xml、SetFile.asp、SetFile.php、SetFile.aspx
+					so.addVariable("CuPlayerFile","<{$page.vedio}>"); //视频文件地址
+					so.addVariable("CuPlayerImage","<{$page.thumb}>");//视频略缩图,本图片文件必须正确
+					so.addVariable("CuPlayerWidth","670"); //视频宽度
+					so.addVariable("CuPlayerHeight","430"); //视频高度
+					so.addVariable("CuPlayerAutoPlay","no"); //是否自动播放
+					so.addVariable("CuPlayerLogo","images/logos.png"); //Logo文件地址
+					so.addVariable("CuPlayerPosition","bottom-right"); //Logo显示的位置
+					so.write("CuPlayer");
+					</script>
+				</notempty>
+	            <{$page.content}>
+	            <notempty name="page.file">
+	            	<br>相关附件：<a href="<{$page.file}>"><{$page.file_name}></a>
+	            </notempty>
+                 <div class="nextArticle">
+	        	<notempty name="prev.id">
+		        <!-- 上一篇：<a href="<{:U('news_cont',array('id'=>$prev['id']))}>"><{$prev.title|msubstr=0,58}></a><br> -->
+		        上一篇： <a href="<if condition="$prev['articletype'] eq 0"><{:U('news_cont',array('id'=>$prev['id']))}><elseif condition="$prev['blank'] eq 2" /><{:U('doDownLoad',array('id'=>$prev['id']))}><else/><{$prev.link}></if>" <if condition="$prev['blank'] eq 1">target="_blank"</if> ><{$prev.title|msubstr=0,20}></a><br>
+		    	</notempty>
+		    	<notempty name="next.id">
+		        下一篇：<a href="<if condition="$next['articletype'] eq 0"><{:U('news_cont',array('id'=>$next['id']))}><elseif condition="$next['blank'] eq 2" /><{:U('doDownLoad',array('id'=>$next['id']))}><else/><{$next.link}></if>" <if condition="$next['blank'] eq 1">target="_blank"</if> ><{$next.title|msubstr=0,20}></a><br>
+		    	</notempty>
+	    	</div>
+	        </div>
+	       
+    	</div>
+
+
+	</div>
+</section>
+<include file="Common:footer" />
+<include file="Common:footer_js" />
+</body>
+</html>

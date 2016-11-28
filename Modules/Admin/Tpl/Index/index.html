@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+</head>
+<body>
+
+<section class="vbox">
+	<header class="bg-dark dk header navbar navbar-fixed-top-xs">
+		<div class="navbar-header aside-md"> <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen" data-target="#nav"> <i class="fa fa-bars"></i> </a> <a href="#" class="navbar-brand" data-toggle="fullscreen"><img src="__IMG__logo.png" class="m-r-sm">文汇天下</a> <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".nav-user"> <i class="fa fa-cog"></i> </a> </div>
+		<eq name="Think.cookie.ADMIN_POWER" value="1">
+	    	<div id="demo" class="nav navbar-nav"> 
+		        <a href="#" class="navbar-brand dropdown-toggle" data-toggle="dropdown" id="pp">全国<b class="caret"></b> </a>
+				<ul style="font-size:16px; min-width:inherit" class="dropdown-menu animated fadeInDown" id="pparea">
+					<li> <a href="javascript:void(0)" pp_id="0">全国</a></li>	
+					<volist name="arealist" id="v">
+						<li> <a href="javascript:void(0)" pp_id="<{$v.ar_id}>"><{$v.ar_name}></a></li>
+					</volist>
+				</ul>
+			</div>
+		<else />
+			<div class="nav navbar-brand"><{$Think.cookie.AREA_NAME}></div> 
+		</eq>
+		<ul class="nav navbar-nav navbar-right hidden-xs nav-user">
+			<!-- <li id="info"  class="hidden-xs"> <a href="#" class="dropdown-toggle dk" data-toggle="dropdown"> <i class="fa fa-bell"></i> <span class="badge badge-sm up bg-danger m-l-n-sm count"><{$rew}></span> </a>
+						
+                    <section class="dropdown-menu aside-xl">
+审核信息提醒 
+					<section class="panel bg-white">
+						<header class="panel-heading b-light bg-light"> <strong>您有 <span class="count"><{$rew}></span> 条数据需要审核</strong> </header>
+                        
+						<div class="list-group list-group-alt animated fadeInRight">
+
+							<volist name="row" id="vo">
+							<a class="media list-group-item"> <span class="pull-left thumb-sm"> <i class="fa fa-envelope-o fa-2x text-success"></i> </span> <span class="media-body block m-b-none"><{$vo.title}><br>
+							 </span> </a>
+							
+							</volist>
+
+						</div>
+						<footer class="panel-footer text-sm"> <a href="<{:U('Index/index')}>" class="pull-right"><i  class="fa fa-chevron-circle-right"></i></a> <a href="<{:U('Index/index')}>" >查看所有</a> </footer>
+					</section>
+				</section>
+			</li>-->
+
+			<li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="thumb-sm avatar pull-left"> <img src="__IMG__avatar_default.jpg"> </span> <{$Think.cookie.ADMIN_NAME}> <b class="caret"></b> </a>
+				<ul class="dropdown-menu animated fadeInRight">
+					<span class="arrow top"></span>
+					<li> <a target="if" href="<{:U('Index/edit',array('id'=>cookie('ADMIN_KEY')))}>">设置</a> </li>
+					<!-- <li> <a href="docs.html">帮助文档</a> </li> -->
+					<li> <a href="<{:U('Index/delcache')}>" target="if">消除缓存</a>
+					<li class="divider"></li>
+					<li> <a href="<{:U('Index/outlogin')}>">退出系统</a> </li>
+				</ul>
+			</li>
+		</ul>
+	</header>
+	<section>
+		<section class="hbox stretch"> <!-- .aside -->
+			<aside class="bg-dark lter aside-md hidden-print" id="nav">
+				<section class="vbox">
+					<header class="header bg-primary lter text-center clearfix">
+						<div class="btn-group">
+							<button type="button" class="btn btn-sm btn-dark btn-icon" title="New project"><i class="fa fa-plus"></i></button>
+							<div class="btn-group hidden-nav-xs">
+								<button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown"> 快捷访问 <span class="caret"></span> </button>
+								<ul class="dropdown-menu text-left">
+									<li><a href="<{:U('Article/index')}>" target="if">资讯管理</a></li>
+									<li><a href="<{:U('Adver/index')}>" target="if">焦点图管理</a></li>
+									<li><a href="<{:U('Chit/chit')}>" target="if">优惠券管理</a></li>
+									<li><a href="<{:U('Active/index')}>" target="if">活动管理</a></li>
+								</ul>
+							</div>
+						</div>
+					</header>
+					<section class="w-f scrollable">
+						<div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="5px" data-color="#333333"> <!-- nav -->
+							<nav class="nav-primary hidden-xs">
+								<ul class="nav">
+									<?php
+										if(in_array('index-system',$authlist)):
+									?>
+									<li class="active"> <a href="<{:U('Index/system')}>" target="if"  class="active"> <i class="fa fa-dashboard icon"> <b class="bg-danger"></b> </i> <span>基础信息</span> </a> </li>
+									<?php
+										endif;
+										if(in_array('servuser-index',$authlist)):
+									?>
+					                <li > <a href="<{:U('Servuser/index')}>" target="if"  class="active"> <i class="fa fa-users"> <b class="bg-info"></b> </i> <span>用户管理</span> </a> </li>
+					                <?php
+										endif;
+										if(in_array('merchant-index',$authlist)):
+									?>
+									 <li > <a href="<{:U('Merchant/index')}>" target="if"  class="active"> <i class="fa fa-shopping-cart"> <b class="bg-success"></b> </i> <span>商户管理</span> </a> </li>
+									 <?php
+										endif;
+										if(in_array('aboutus-index',$authlist) || in_array('aboutus-edit',$authlist)):
+									?>
+									 <li > <a href="<if condition="cookie('ADMIN_POWER') eq 1" ><{:U('Aboutus/index')}><else /><{:U('Aboutus/edit')}></if>"  target="if"  class="active"> <i class="fa fa-thumbs-up"> <b class="bg-warning"></b> </i> <span>关于我们</span> </a> </li>
+									 <?php
+										endif;
+										if(in_array('article-index',$authlist)):
+									?>
+									 <li > <a href="<{:U('Article/index')}>" target="if"  class="active"> <i class="fa fa-tasks"> <b class="bg-warning-bl"></b> </i> <span>资讯管理</span> </a> </li>
+									 <?php
+										endif;
+										if(in_array('adver-index',$authlist)):
+									?>
+									 <li > <a href="<{:U('Adver/index')}>" target="if"  class="active"> <i class="fa fa-file-image-o"> <b class="bg-success"></b> </i> <span>焦点图管理</span> </a> </li>
+									 <?php
+										endif;
+										if(in_array('evaluate-index',$authlist)):
+									?>
+									 <li > <a href="<{:U('Evaluate/index')}>" target="if"  class="active"> <i class="fa fa-edit (alias)"> <b class="bg-warning"></b> </i> <span>评论管理</span> </a> </li>
+									<?php	
+					                	endif;
+										if(in_array('chit-chit',$authlist) || in_array('active-index',$authlist) || in_array('chit-shenhe',$authlist) || in_array('links-index',$authlist)):
+									?>
+									<li > <a href="#table"  target="if"> <i class="fa fa-star-half-o"> <b class="bg-danger"></b> </i> <span class="pull-right"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> </span> <span>优惠券管理</span> </a>
+										<ul class="nav lt">
+											<?php
+													if(in_array('links-index',$authlist)):
+												?>
+													<li > <a target="if" href="<{:U('Links/index')}>" > <i class="fa fa-angle-right"></i> <span>优惠券背景模版管理</span> </a> </li>
+											<?php
+												endif;
+					                    		if(in_array('chit-chit',$authlist)):
+					                    	?>
+											<li > <a href="<{:U('Chit/chit')}>" target="if" > <i class="fa fa-angle-right"></i> <span>优惠券管理</span> </a> </li>
+											<?php
+												endif;
+												//if(in_array('chit-shenhe',$authlist)):
+											?>
+											<li > <a href="<{:U('Chit/Chitshenhe')}>" target="if" > <i class="fa fa-angle-right"></i> <span>优惠券审核</span> </a> </li>
+											<?php
+												//endif;
+											?>
+										</ul>
+									</li>
+									<?php
+										endif;
+										if(in_array('active-index',$authlist)):
+									?>
+									 <li > <a href="<{:U('Active/index')}>" target="if"  class="active"> <i class="fa fa-futbol-o"> <b class="bg-info"></b> </i> <span>活动管理</span> </a> </li>
+									 <?php
+										endif;
+										if(in_array('active-index',$authlist)):
+									?>
+									<li > <a href="<{:U('Message/index')}>"  target="if"> <i class="fa fa-comments-o"> <b class="bg-warning"></b> </i> <span>消息推送管理</span> </a>
+									</li>
+									<?php
+										endif;
+										if(in_array('statistics-index',$authlist)):
+									?>
+									 <li > <a href="<{:U('Statistics/index')}>" target="if"  class="active"> <i class="fa fa-bar-chart"> <b class="bg-warning-bl"></b> </i> <span>数据统计分析</span> </a> </li>
+									 <?php
+										endif;
+										if(in_array('opinion-index',$authlist)):
+									?>
+									 <li > <a href="<{:U('Opinion/index')}>" target="if"  class="active"> <i class="fa fa-twitch"> <b class="bg-danger"></b> </i> <span>意见反馈管理</span> </a> </li>
+									 <?php
+										endif;
+										//if(in_array('opinion-index',$authlist)):
+									?>
+									 <li > <a href="<{:U('Actlog/index')}>" target="if"  class="active"> <i class="fa fa-files-o"> <b class="bg-success"></b> </i> <span>日志管理</span> </a> </li>
+									<?php
+										//endif;
+										if(in_array('area-index',$authlist) || in_array('admin-index',$authlist) || in_array('industry-index',$authlist) || in_array('sensitive-index',$authlist) ):
+									?>
+									<li  > <a href="javascript:void(0);" > <i class="fa fa-puzzle-piece"> <b class="bg-warning"></b> </i><span class="pull-right"><i class="fa fa-angle-down text"></i><i class="fa fa-angle-up text-active"></i></span><span>系统管理</span> </a>
+										<ul class="nav lt">
+											<?php
+												if(in_array('area-index',$authlist)):
+											?>
+												<?php
+													if(cookie('ADMIN_POWER')==1):
+												?>
+													<li > <a target="if" href="<{:U('Area/index')}>" > <i class="fa fa-angle-right"></i> <span>地区设置</span> </a> </li>
+												<?php
+													endif;
+												endif;
+												?>
+											<?php
+												if(in_array('admin-index',$authlist)):
+													if(cookie('ADMIN_POWER')==1):
+												?>
+													<li > <a target="if" href="<{:U('Admin/index')}>" > <i class="fa fa-angle-right"></i> <span>管理员管理</span> </a> </li>
+												<?php
+													endif;
+												endif;
+												?>
+												<?php
+													if(in_array('industry-index',$authlist)):
+														if(cookie('ADMIN_POWER')==1):
+												?>
+													<li > <a target="if" href="<{:U('Industry/index')}>" > <i class="fa fa-angle-right"></i> <span>行业管理</span> </a> </li>
+													<?php
+															endif;
+														endif;
+														if(in_array('sensitive-index',$authlist)):
+															if(cookie('ADMIN_POWER')==1):
+													?>
+													<li > <a target="if" href="<{:U('Sensitive/index')}>" > <i class="fa fa-angle-right"></i> <span>敏感词汇管理</span> </a> </li>
+												<?php
+															endif;
+														endif;
+												?>
+											</ul>
+										</li>
+									
+									<?php	
+										endif;
+										if(in_array('authc-fenpei',$authlist) || in_array('authc-group',$authlist) || in_array('authc-rules',$authlist)):
+									?>
+									<li > <a href="#table"  target="if"> <i class="fa fa-cog"> <b class="bg-warning-bl"></b> </i> <span class="pull-right"> <i class="fa fa-angle-down text"></i> <i class="fa fa-angle-up text-active"></i> </span> <span>权限设置</span> </a>
+					                    <ul class="nav lt">
+					                    	<?php
+					                    		if(in_array('authc-fenpei',$authlist)):
+					                    	?>
+											<li > <a href="<{:U('Authc/fenpei')}>" target="if" > <i class="fa fa-angle-right"></i> <span>角色分配管理</span> </a> </li>
+											<?php
+												endif;
+												if(in_array('authc-group',$authlist)):
+											?>
+											<li > <a href="<{:U('Authc/group')}>" target="if"> <i class="fa fa-angle-right"></i> <span>角色列表</span> </a> </li>
+											<?php
+												endif;
+												if(in_array('authc-rules',$authlist)):
+											?>
+											<li > <a href="<{:U('Authc/rules')}>" target="if"> <i class="fa fa-angle-right"></i> <span>规则管理</span> </a> </li>
+											<?php
+												endif;
+											?>
+					                    </ul>
+					                </li>
+					                <?php
+					                	endif;
+					                ?>
+									
+								</ul>
+							</nav>
+							<!-- / nav --> </div>
+					</section>
+					<footer class="footer lt hidden-xs b-t b-dark">
+						<div id="chat" class="dropup">
+							<section class="dropdown-menu on aside-md m-l-n">
+								<section class="panel bg-white">
+									<header class="panel-heading b-b b-light">系统信息</header>
+									<div class="panel-body animated fadeInRight">
+										<p class="text-sm"><{:C('SHENGXING.VERSION')}></p>
+										<!--<p><a href="#" class="btn btn-sm btn-default">Start a chat</a></p>--> 
+									</div>
+								</section>
+							</section>
+						</div>
+						<div id="invite" class="dropup">
+							<section class="dropdown-menu on aside-md m-l-n">
+								<section class="panel bg-white">
+									<header class="panel-heading b-b b-light"> 技术支持 <i class="fa fa-circle text-success"></i> </header>
+									<div class="panel-body animated fadeInRight">
+										<p class="text-sm">联系电话</p>
+										<p><a href="#" class="btn btn-sm btn-facebook"><i class="fa fa-fw fa-phone"></i> <{:C('SHENGXING.HOTTEL')}></a></p>
+									</div>
+								</section>
+							</section>
+						</div>
+						<a href="#nav" data-toggle="class:nav-xs" class="pull-right btn btn-sm btn-dark btn-icon"> <i class="fa fa-angle-left text"></i> <i class="fa fa-angle-right text-active"></i> </a>
+						<div class="btn-group hidden-nav-xs">
+							<button type="button" title="Chats" class="btn btn-icon btn-sm btn-dark" data-toggle="dropdown" data-target="#chat"><i class="fa fa-clipboard"></i></button>
+							<button type="button" title="Contacts" class="btn btn-icon btn-sm btn-dark" data-toggle="dropdown" data-target="#invite"><i class="fa fa-phone"></i></button>
+						</div>
+					</footer>
+				</section>
+			</aside>
+			<!-- /.aside -->
+			
+			<iframe id="if"  name="if" width="100%" height="100%"  src="<{:U('Index/main')}>" frameborder="0" class="ifee"></iframe>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/app.v2.js"></script>
+<!-- Bootstrap --> <!-- App -->
+<script src="__PUB__js/charts/easypiechart/jquery.easy-pie-chart.js" cache="false"></script>
+<script src="__PUB__js/charts/sparkline/jquery.sparkline.min.js" cache="false"></script>
+<script src="__PUB__js/charts/flot/jquery.flot.min.js" cache="false"></script>
+<script src="__PUB__js/charts/flot/jquery.flot.tooltip.min.js" cache="false"></script>
+<script src="__PUB__js/charts/flot/jquery.flot.resize.js" cache="false"></script>
+<script src="__PUB__js/charts/flot/jquery.flot.grow.js" cache="false"></script>
+<script src="__PUB__js/charts/flot/demo.js" cache="false"></script>
+<script src="__PUB__js/calendar/bootstrap_calendar.js" cache="false"></script>
+<script src="__PUB__js/calendar/demo.js" cache="false"></script>
+<script src="__PUB__js/sortable/jquery.sortable.js" cache="false"></script>
+<script>
+//循环地区名称
+$(function(){
+	$('#pparea li').each(function(i){
+		$(this).click(function(){
+			$('#pp').html($(this).children('a').html()+'<b class="caret"></b>');
+			changeArea($(this).children('a').attr('pp_id'),$(this).children('a').html());
+		});
+	});
+});
+//更换地区cookie
+function changeArea(aid,aname){
+	$.get("<{:U('changarea')}>",{area_name:aname,area:aid},function(data){
+   		//刷新下当前iframe页面
+   		document.getElementById('if').contentWindow.location.reload(true);
+   });
+}
+</script>
+<script>
+$(function(){
+	hh =$(window).height()-42;
+	$(".ifee").css("height",hh+"px");
+})     
+window.onload=function(){  
+	window.onresize = adjust;  
+	adjust();  
+} 
+</script>
+
+</body>
+</html>

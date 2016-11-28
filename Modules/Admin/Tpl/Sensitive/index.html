@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<script>
+function chang_status(id,value,table)
+  {
+    var newvalue=0;
+    if(value == 1){
+      newvalue=0;
+      ppclass='fa fa-times';
+    }else{
+      newvalue=1;
+      ppclass='fa fa-check';
+    }
+    var submitData = {
+      id:id,
+      value:newvalue,
+      field:'isshow',
+      table:table
+    };
+    $.post("<{:U('Area/editattr')}>",submitData,
+      function(data) {
+        if (data.success == true) {
+          // alert(data.msg);
+          setTimeout('window.location.href=location.href',1000);
+          // $('i[var="'+id+'"]').attr('class',ppclass);
+          return;
+        }else {
+          alert('修改失败！');
+        }
+      }
+    ,'json');
+  }
+</script>
+<style>
+.zd {
+	color:red;
+}
+</style>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder ">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">系统管理</li>
+							<li class="active">敏感词汇管理</li>
+							
+						</ul>
+						<section class="panel panel-default">
+							<header class="panel-heading"> </header>
+							<div class="row text-sm wrapper">
+								<div class="col-sm-3 m-b-xs text-center-xs"></div>
+								<div class="col-sm-5 m-b-xs text-center">
+									<div class="btn-group"> <a href="<{:U('add')}>" class="btn btn-sm btn-default active" > <i class="fa fa-plus"></i>新增敏感词汇</a>
+										
+										<a  class="btn btn-sm btn-default" href="<{:U('index',array('tid'=>I('tid'),'stp'=>'all'))}>" ><i class="fa fa-th"> 显示全部</i> </a>  </div>
+								</div>
+								<form action="<{:U('index')}>" method="post">
+								<div class="col-sm-4 text-center-xs text-right">
+										
+									<select name="contentt" class="input-sm form-control input-s-sm inline">
+										<option <?php if($search['contentt']=='0'){?> selected <?php }?> value="0">敏感词汇名称</option>
+									</select>
+									<input name="tid" type="hidden" class="input-sm form-control input-s-sm inline" value="<{$tid}>" placeholder="关键词">
+									<input name="title" class="input-sm form-control input-s-sm inline" value="<{$search.title}>" placeholder="关键词">
+									<button class="btn btn-sm btn-default"><i class="fa fa-fw fa-search"></i></button>
+								</div>
+								</form>
+							</div>
+						
+							<div class="table-responsive">
+								<table class="table table-striped b-t b-light text-sm" style="margin-bottom:0;">
+									<thead>
+										<tr>
+											<th class="col-sm-1">序号</th>
+                                            <th class="col-sm-5" class="hidden-xs">敏感词汇名称</th>
+                                            <th class="col-sm-2" class="hidden-xs">添加时间</th>
+                                            <th class="col-sm-2" class="hidden-xs">排序</th>
+                                            <th class="col-sm-2" >操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php $empty = '<tr><td colspan="5">暂无相关信息！</td></tr>';?>
+										<volist name="lists" id="vo" empty="$empty">
+											<tr>
+                                                <td ><{$i}></td>
+                                                <td ><{$vo.name}></td>
+                                                <td class="hidden-xs"><{$vo.addtime|date='Y-m-d',###}></td>
+                                                <td class="hidden-xs"><{$vo.sort}></td>
+												<td><a href="<{:U('edit',array('id'=>$vo['id']))}>"><!--<i class="fa fa-pencil  fa-fw m-r-xs"></i>-->修改</a>　<a href="javascript:if(confirm('确定要删除该信息吗？')){window.location.href='<{:U('delete',array('id'=>$vo['id'],'p'=>I('p')))}>'}" data-toggle="modal"> <!--<i class="fa fa-trash-o"></i>-->删除</a></td>
+                                            
+											</tr>
+										</volist>
+									</tbody>
+								</table>
+							</div>
+							<footer class="panel-footer">
+								<div class="row">
+									<div class="col-sm-3 hidden-xs"> </div>
+									<div class="col-sm-6 text-center">
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$totalRows}> 条</a></li>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<{$page}>
+										</ul>
+										<ul class="pagination pagination-sm m-t-none m-b-none">
+											<li><a href="javascript:void(0);">共 <{$nowPage}>/<{$totalPages}> 页</a></li>
+										</ul>
+									</div>
+									<div class="col-sm-3 text-right text-center-xs">
+										<form action="<{:U(ACTION_NAME)}>" method="post">
+											<input class="input-sm form-control input-s-xs inline" value="<{$nowPage}>" name="page" placeholder="第1页">
+											<button type="submit" class="btn btn-sm btn-default">GO</button>
+										</form>
+									</div>
+								</div>
+							</footer>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+
+<link rel="stylesheet" href="__PUB__css/font.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="__PUB__js/nestable/nestable.css" type="text/css" cache="false" />
+<script src="__PUB__js/app.v2.js"></script> <!-- Bootstrap --> <!-- App --> <script src="__PUB__js/sortable/jquery.sortable.js" cache="false"></script><script src="__PUB__js/nestable/jquery.nestable.js" cache="false"></script><script src="__PUB__js/nestable/demo.js" cache="false"></script>
+</body>
+
+</html>

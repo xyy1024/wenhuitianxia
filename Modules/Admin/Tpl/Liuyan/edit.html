@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>添加|后台管理系统</title>
+<link rel="stylesheet" type="text/css" href="__PUB__style/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="__PUB__style/bootstrap-responsive.min.css">
+<script type="text/javascript" src="__PUB__js/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUB__js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUB__js/common.js"></script>
+
+<link rel="stylesheet" href="__ROOTPUB__kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="__ROOTPUB__kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="__ROOTPUB__kindeditor/lang/zh_CN.js"></script>
+<script>
+KindEditor.ready(function(K) {
+	var editor = K.editor({
+		allowFileManager : true
+	});
+
+	K('#uploadid').click(function() {
+		editor.loadPlugin('image', function() {
+			editor.plugin.imageDialog({
+        showRemote : false,
+				imageUrl : K('#picid').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#picid').val(url);
+					K('#img_logo').html('<img src="'+url+'" style=" max-width:380px; max-height:180px;">');
+					editor.hideDialog();
+				}
+			});
+		});
+	});
+
+		
+});
+</script>
+</head>
+<body style="margin: 10px 0px;">
+<div style="margin: 0px auto; width: 98%;">
+<form name="form1" action="" method="post">
+<input type="hidden" name="id" value="<{$data.id}>">
+<table class="table table-condensed table-bordered table-hover" style="">
+  <tbody style=""><tr>
+  	<td colspan="3">
+	<div style="float:left">
+	<b>添加</b>
+    </div>
+    <div style="float:right">
+     [<a href="<{:U('index',array('id'=>I('tid')))}>"><u>返回列表</u></a>]
+    </div>
+    </td>
+  </tr>
+  <tr>
+    <td width="110" style="text-align:right"><font color="red">所属分类：</font></td>
+    <td colspan="2">
+    <span id="typeidct">
+       <select name="cid" id="cid">
+<volist name="cat" id="vo">
+<option value="<{$vo.id}>" <if condition="$vo['id'] eq $data['cid']">selected</if> >
+			<{$vo.name}>
+		</option>
+ </volist>
+		</option>
+		</volist>
+		
+       </select>
+	</span>
+    (<font color="red">注：红色字为必填项</font>)
+	</td>
+  </tr>
+  <tr>
+    <td style="text-align:right"><font color="red">名称：</font></td>
+    <td width="380"><input name="name" type="text" id="name" value="<{$data.name}>"> (<font color="red">注：红色字为必填项</font>)</td>
+    <td rowspan="5" id="img_logo">
+<img src="<{$data.logo}>" style=" max-width:380px; max-height:180px;">
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align:right">状态：</td>
+    <td>
+      审核
+      <input name="isshow" type="radio" value="1" checked>
+      待审核
+      <input name="isshow" type="radio" value="0">
+    </td>
+    </tr>
+    
+  <tr>
+    <td style="text-align:right">Logo：</td>
+    <td><input name="logo" type="text" id="picid" value="<{$data.logo}>"><input type="button" value="上传图片" style="cursor:pointer;" id="uploadid">
+    </td>
+    </tr>
+  <tr>
+    <td style="text-align:right">URL：</td>
+    <td><input type="text" name="url" id="url" value="<{$data.url}>"></td>
+    </tr>
+  <tr>
+    <td style="text-align:right">排序：</td>
+    <td><input name="sort" id="sort" value="<{$data.sort}>" style="width:25px" type="text"></td>
+    </tr>
+
+  
+  <tr>
+  	<td></td>
+    <td colspan="2">
+
+    <input name="" style="cursor:pointer;" class="btn btn-large btn-info" type="submit" value="保存">
+    &nbsp;
+    <input name="" style="cursor:pointer;" class="btn btn-large btn-info" type="reset" value="重置">
+    </td>
+  </tr>
+</tbody></table></form>
+</div>
+</body></html>

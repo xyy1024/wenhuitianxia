@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<include file="Common:head" />
+<link rel="stylesheet" href="__PUB__js/datepicker/datepicker.css" type="text/css" cache="false" />
+<script type="text/javascript" src="__PUB__js/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUB__js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUB__js/common.js"></script>
+<load href='__PUB__js/pp_check.js'/>
+<style>
+	.pp_1 span{display:inline-block;width:15px;}
+	.pp_1 span img{padding:0; margin:0; cursor:pointer;}
+	.pp_2{display: none}
+	.pp_3{display: block;}
+</style>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页 </a></li>
+							<li><a href="<{:U('Admin/index')}>">用户信息</a></li>
+							<li class="active">编辑用户</li>
+						</ul>
+						<form name="form" action="" method="post">
+							<div class="row">
+								<div class="col-sm-6"></div>
+								<div class="col-sm-6"></div>
+							</div>
+							<section class="panel panel-default">
+							<div class="panel-body">
+							<div class="form-horizontal" method="get">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">登陆账号</label>
+								<div class="col-sm-8">
+									<?php echo cookie('ADMIN_NAME');?>
+								</div>
+							</div>
+							<div class="line line-dashed line-lg pull-in"></div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">姓名</label>
+								<div class="col-sm-8">
+
+									<input name="name" type="text" value='<{$data.name}>'  class="form-control rounded">
+								</div>
+							</div>
+							<div class="line line-dashed line-lg pull-in"></div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">密码</label>
+								<div class="col-sm-8">
+									<input name="password" type="password" value='' class="form-control rounded"  />
+								</div>
+							</div>
+							<div class="line line-dashed line-lg pull-in"></div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">确认密码</label>
+								<div class="col-sm-8">
+									<input name="password2" type="password" value='' class="form-control rounded" />
+								</div>
+							</div>
+							<div class="line line-dashed line-lg pull-in"></div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">电话</label>
+								<div class="col-sm-8">
+									<input name="tel" type="text" value='<{$data.tel}>' class="form-control rounded"/>
+								</div>
+							</div>
+							<div class="line line-dashed line-lg pull-in"></div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">邮箱</label>
+								<div class="col-sm-8">
+									<input name="email" type="email" value='<{$data.email}>' class="form-control rounded"/>
+								</div>
+							</div>
+							<div class="line line-dashed line-lg pull-in"></div>
+							
+							
+							<div class="line line-dashed line-lg pull-in"></div>
+							<div class="form-group">
+								<div class="form-group">
+									<div class="col-sm-8 col-sm-offset-2">
+										<input type="submit" name="button" id="button" value="保存" class="btn btn-primary">
+										<a href="javascript:history.go(-1);">
+										<input type="button" value="返回" class="btn btn-default">
+										</a> </div>
+								</div>
+							</div>
+							</section>
+							<input name="id" type="hidden" id="id" size="30"  class="iptxt" value="<{$data.id}>">
+						</form>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes"></aside>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/app.v2.js"></script> <!-- Bootstrap --> <!-- App -->
+<div class="modal fade" id="modal-form">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="row"> </div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal-content --> </div>
+<!-- /.modal-dialog -->
+</div>
+<!-- fuelux --><script src="__PUB__js/fuelux/fuelux.js" cache="false"></script><!-- datepicker --><script src="__PUB__js/datepicker/bootstrap-datepicker.js" cache="false"></script><!-- slider --><script src="__PUB__js/slider/bootstrap-slider.js" cache="false"></script><!-- file input --> <script src="__PUB__js/file-input/bootstrap-filestyle.min.js" cache="false"></script><!-- combodate --><script src="__PUB__js/libs/moment.min.js" cache="false"></script><script src="__PUB__js/combodate/combodate.js" cache="false"></script><!-- select2 --><script src="__PUB__js/select2/select2.min.js" cache="false"></script><!-- wysiwyg --><script src="__PUB__js/wysiwyg/jquery.hotkeys.js" cache="false"></script><script src="__PUB__js/wysiwyg/bootstrap-wysiwyg.js" cache="false"></script><script src="__PUB__js/wysiwyg/demo.js" cache="false"></script><!-- markdown --><script src="__PUB__js/markdown/epiceditor.min.js" cache="false"></script><script src="__PUB__js/markdown/demo.js" cache="false"></script>
+</body>
+</html>
+<script>
+    $(function(){
+    	$(':input[name="wenzhang"]').click(function(){
+    		$(':input[name="cates[]"]').prop('checked',$(this).prop('checked'));
+    	});
+        $('.pp_1 span').click(function(){
+            var s_class=$(this).attr('class');
+            var s_img=$(this).children('img').attr('prop1');
+            if(s_img == 1){
+                $(this).children('img').attr('prop1','0');
+                $(this).children('img').attr('src','__PUB__img/0.gif');
+                $('#'+s_class).addClass('pp_3');
+            }else{
+                $(this).children('img').attr('prop1','1');
+                $(this).children('img').attr('src','__PUB__img/1.gif');
+                $('#'+s_class).removeClass('pp_3');
+            }
+        });
+        $('.pp_1 span').next(':input[name="cates[]"]').click(function(){
+            var result=$(this).prop('checked');
+            var s_class=$(this).prev('span').prop('class');
+            if($(':input[name="cates[]"]').length == $(':input[name="cates[]"]:checked').length){
+            	$(':input[name="wenzhang"]').prop('checked',true);
+            }else{
+            	$(':input[name="wenzhang"]').prop('checked',false);
+            }
+            if(typeof(s_class) != 'undefined'){
+                $('#'+s_class+' :input[name="cates[]"]').prop('checked',result);
+            }
+        });
+    });
+</script>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<include file="Common:head" />
+<link rel="stylesheet" href="__PUB__js/datepicker/datepicker.css" type="text/css" cache="false" />
+<link rel="stylesheet" type="text/css" href="__PUB__css/style.css">
+<script type="text/javascript" src="__PUB__js/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUB__js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUB__js/common.js"></script>
+<load href='__PUB__js/pp_check.js'/>
+<link rel="stylesheet" href="__PUB__js/datepicker/datepicker.css" type="text/css" cache="false" />
+<style>
+#img {
+	width:100%;
+	overflow:hidden;
+}
+#img p {
+	float:left;
+	padding-top:3px;
+	margin-right:5px;
+}
+#img p img {
+	max-width:80px;
+	max-height:80px;
+}
+#imgcut{
+	display:inline-block;
+}
+#imgcut img{
+	max-height:34px;
+	cursor:pointer;
+}
+</style>
+<link rel="stylesheet" href="__ROOTPUB__kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="__ROOTPUB__kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="__ROOTPUB__kindeditor/lang/zh_CN.js"></script>
+<script>
+KindEditor.ready(function(K) {
+	var editor = K.create('textarea[name="content"]', {
+		items : [ 'source', '|' ,'justifyleft', 'justifycenter', 'justifyright','justifyfull',  'subscript',' superscript', 'clearhtml', 'quickformat', 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline'],
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true
+	});
+	
+	var editor1 = K.editor({
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true
+	});
+	K('#uploadid').click(function() {
+		editor1.loadPlugin('image', function() {
+			editor1.plugin.imageDialog({
+				showRemote : false,
+				imageUrl : K('#picid').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#picid').val(url);
+					K('#imgcut').html('<img src="'+url+'" id="cut" /> 点击图片进行裁剪');
+					// document.getElementById('imgcut').innerHTML="<img src='"+url+"' />";
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+
+});
+</script>
+<style>
+	.pp_1 span{display:inline-block;width:15px;}
+	.pp_1 span img{padding:0; margin:0; cursor:pointer;}
+	.pp_2{display: none}
+	.pp_3{display: block;}
+</style>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="<{:U('Index/main')}>"><i class="fa fa-home"></i> 首页 </a></li>
+							<li class="active">用户管理</li>
+							<li class="active">编辑用户</li>
+						</ul>
+						<form name="form" action="" method="post" class="form-horizontal" >
+							<div class="row">
+								<div class="col-sm-6"></div>
+								<div class="col-sm-6"></div>
+							</div>
+							<section class="panel panel-default">
+							<div class="panel-body">
+							<div class="form-horizontal" method="get">
+							<if condition="cookie('ADMIN_POWER') eq 1">
+								<div class="form-group">
+									<label class="col-sm-2 control-label"><font color="red">所属地区</font></label>
+									<div class="col-sm-8">
+										<label>
+                                            <select name="area" id="area" class="form-control" datatype="*" nullmsg="请选择地区">
+                                            	<option value="">请选择地区</option>
+                                                <volist name="arealist" id="avo">
+                                                    <option value="<{$avo.ar_id}>" <eq name="data.area" value="$avo.ar_id">selected="selected"</eq>><{$avo.ar_name}></option>
+                                                </volist>
+                                            </select>
+										</label>
+									</div>
+								</div>
+								<div class="line line-dashed line-lg pull-in"></div>
+							<else />
+								<input type="hidden" name="area" value="<?php echo cookie('AREA');?>">
+							</if>
+							<div class="form-group">
+								<label class="col-sm-2 control-label"><font color="red">手机号</font></label>
+								<div class="col-sm-6">
+									<input name="mobile" type="text" value="<{$data.mobile}>"  class="form-control" placeholder="此选项为必填项"  datatype="m" nullmsg="请填写手机号">
+								</div>
+							</div>
+							<div class="line line-dashed line-lg pull-in"></div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">用户昵称</label>
+								<div class="col-sm-8">
+									<input name="name" type="text" value='<{$data.name}>'  class="form-control">
+								</div>
+							</div>
+							<div class="line line-dashed line-lg pull-in"></div>
+							<div class="form-group picnum_1">
+								<label class="col-sm-2 control-label">用户头像</label>
+								<div class="col-sm-8">
+									<input name="Img" class="input-s form-control" type="text" value="<{$data.Img}>" id="picid" style=" display:inline-block" readonly>
+									<button type="button" class="btn btn-default" id="uploadid">上传图片</button>
+									<span></span>
+									<!-- <div id="imgcut"><notempty name="data.Img"><img src="<{$data.Img}>" id="cut" /> 点击图片进行裁剪</notempty></div> -->
+									<input type="hidden" name="Img" value="<{$data.Img}>">
+
+								</div>
+							</div>
+							<div class="line line-dashed line-lg pull-in"></div>
+							<div class="form-group" style="display:none;">
+								<label class="col-sm-2 control-label">密　　码</label>
+								<div class="col-sm-8">
+									<input name="password" type="password" value='' class="form-control" placeholder="此选项为必填项" />
+								</div>
+							</div>
+							<div style="display:none;" class="line line-dashed line-lg pull-in"></div>
+							<div style="display:none;" class="form-group">
+								<label class="col-sm-2 control-label">确认密码</label>
+								<div class="col-sm-8">
+									<input name="password2" type="password" value='' class="form-control" placeholder="此选项为必填项" />
+								</div>
+							</div>
+							<div style="display:none;" class="line line-dashed line-lg pull-in"></div>
+							<div style="display:none;" class="form-group">
+								<label class="col-sm-2 control-label"><font color="red">具体位置</font></label>
+								<div class="col-sm-8">
+									<input name="addr" type="text" value='<{$data.addr}>' class="form-control"/>
+								</div>
+							</div>
+							<div style="display:none;" class="line line-dashed line-lg pull-in"></div>
+							<div class="form-group">
+										<label class="col-sm-2 control-label">状　　态</label>
+										<div class="col-sm-8" style="padding-top:6px;">
+											<label class="pull-left"><input name="isshow" type="radio" value="1" <eq name="data.isshow" value="1"> checked </eq>> 开启　</label>
+											<label class="pull-left"> <input name="isshow" type="radio" value="0" <eq name="data.isshow" value="0"> checked </eq>>关闭&nbsp;</label>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+							
+							<div class="form-group">
+								<div class="form-group">
+									<div class="col-sm-8 col-sm-offset-2">
+										<input type="hidden" name="id" value="<{$data.id}>">
+										<input type="submit" name="button" id="button" value="保存" class="btn btn-primary">
+										<a href="javascript:history.go(-1);">
+										<input type="button" value="返回" class="btn btn-default">
+										</a> </div>
+								</div>
+							</div>
+							</section>
+							<input name="id" type="hidden" id="id" size="30"  class="iptxt" value="<{$data.id}>">
+						</form>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes"></aside>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/app.v2.js"></script> <!-- Bootstrap --> <!-- App -->
+<div class="modal fade" id="modal-form">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="row"> </div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal-content --> </div>
+<!-- /.modal-dialog -->
+</div>
+<script src="__PUB__js/fuelux/fuelux.js" cache="false"></script>
+<script src="__PUB__js/datepicker/bootstrap-datepicker.js" cache="false"></script>
+<script src="__PUB__js/slider/bootstrap-slider.js" cache="false"></script>
+<script src="__PUB__js/file-input/bootstrap-filestyle.min.js" cache="false"></script>
+<script src="__PUB__js/libs/moment.min.js" cache="false"></script>
+<script src="__PUB__js/combodate/combodate.js" cache="false"></script>
+<script src="__PUB__js/select2/select2.min.js" cache="false"></script>
+<script src="__PUB__js/wysiwyg/jquery.hotkeys.js" cache="false"></script>
+<script src="__PUB__js/wysiwyg/bootstrap-wysiwyg.js" cache="false"></script>
+<script src="__PUB__js/wysiwyg/demo.js" cache="false"></script><!-- markdown -->
+<script src="__PUB__js/markdown/epiceditor.min.js" cache="false"></script>
+<script src="__PUB__js/markdown/demo.js" cache="false"></script>
+<script src="__PUB__weixin/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="__PUB__weixin/artDialog/plugins/iframeTools.js"></script>
+</body>
+</html>
+<script type="text/javascript" src="__PUB__js/Validform_v5.3.2.js"></script>
+<script>
+	$(".form-horizontal").Validform({
+        tiptype:1,
+    });
+$(function(){
+		$('#imgcut').delegate('img','click',function(){
+			var img = $(this).attr('src');
+			if(typeof(img) == 'string' && img.length > 10){
+				img = img.replace(/\//g,'$');
+				img = img.replace(/\./g,'@');
+				img = encodeURIComponent(img);
+				var img_w = <{$imgsize[0]|default=0}>;
+				var img_h = <{$imgsize[1]|default=0}>;
+				art.dialog.open('<{:U('Index/imgCut','','')}>/img/'+img+'/img_w/'+img_w+'/img_h/'+img_h+'.html',{lock:true,title:'图片裁剪',width:"98%",height:"98%",yesText:'关闭',background: '#000',opacity: 0.45});
+			}
+		});
+	});
+</script>

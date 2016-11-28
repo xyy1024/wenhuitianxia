@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<link rel="stylesheet" href="__PUB__js/datepicker/datepicker.css" type="text/css" cache="false" />
+<link rel="stylesheet" type="text/css" href="__PUB__css/style.css">
+<style>
+#img {
+	width:100%;
+	overflow:hidden;
+}
+#img p {
+	float:left;
+	padding-top:3px;
+	margin-right:5px;
+}
+#img p img {
+	max-width:80px;
+	max-height:80px;
+}
+#imgcut{
+	display:inline-block;
+}
+#imgcut img{
+	max-height:34px;
+	
+}
+</style>
+<link rel="stylesheet" href="__ROOTPUB__kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="__ROOTPUB__kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="__ROOTPUB__kindeditor/lang/zh_CN.js"></script>
+<script>
+KindEditor.ready(function(K) {
+	var editor = K.create('textarea[name="content"]', {
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true
+	});
+	
+	var editor1 = K.editor({
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true
+	});
+	K('#uploadid').click(function() {
+		editor1.loadPlugin('image', function() {
+			editor1.plugin.imageDialog({
+				showRemote : false,
+				imageUrl : K('#picid').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#picid').val(url);
+					K('#imgcut').html('<img src="'+url+'" id="cut" /> ');
+					//document.getElementById('picida').src=url;
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+	K('#uploadfid').click(function(){	//上传附件
+		editor1.loadPlugin('insertfile', function(){
+			editor1.plugin.fileDialog({
+				fileUrl : K('#fileid').val(),
+				clickFn : function(url, title) {
+					K('#fileid').val(url);
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+	K('#uploadvid').click(function(){	//上传视频
+		editor1.loadPlugin('insertfile', function(){
+			editor1.plugin.fileDialog({
+				fileUrl : K('#vedioid').val(),
+				clickFn : function(url, title) {
+					K('#vedioid').val(url);
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+	
+	K('#J_selectImage').click(function() {
+		editor1.loadPlugin('multiimage', function() {
+			editor1.plugin.multiImageDialog({
+				clickFn : function(urlList) {
+					var div = K('#img');
+					// div.html('');
+					K.each(urlList, function(i, data) {
+						div.append('<p><img src="' + data.url + '" /><input type="hidden" name="img[]" value="' + data.url + '" /></p>');
+					});
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+
+});
+</script>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="index.html"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">优惠券管理</li>
+							<li class="active">优惠券背景模版管理</li>
+							<li class="active">新增优惠券背景模版</li>
+						</ul>
+						<div class="row">
+							<div class="col-sm-6"></div>
+							<div class="col-sm-6"></div>
+						</div>
+						<section class="panel panel-default">
+							<header class="panel-heading font-bold"> 新增优惠券背景模版</header>
+							<div class="panel-body">
+								<form name="form1" action="<{:U(ACTION_NAME)}>" class="form-horizontal" method="post">
+									<div class="line line-dashed line-lg pull-in"></div>
+									<if condition="cookie('ADMIN_POWER') eq 1">
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><font color="red">所属地区</font></label>
+											<div class="col-sm-8">
+												<label>
+	                                                <select name="area" id="area" class="form-control" datatype="*" nullmsg="请选择地区">
+	                                                	<option value="">请选择地区</option>
+	                                                    <volist name="arealist" id="avo">
+		                                                    <option value="<{$avo.ar_id}>">
+		                                                    	<{$avo.ar_name}>
+		                                                    </option>
+	                                                    </volist>
+	                                                </select>
+												</label>
+											</div>
+										</div>
+										<div class="line line-dashed line-lg pull-in"></div>
+									<else />
+										<input type="hidden" name="area" value="<?php echo cookie('AREA');?>">
+									</if>
+									<div class="form-group">
+										<label class="col-sm-2 control-label"><font color="red">所属行业</font></label>
+										<div class="col-sm-8">
+											<volist name="ins_arr" id="insv">
+												<label class="pull-left" style="width:150px;"><input type="radio" name="ins_id"  value="<{$insv.id}>" >&nbsp;<{$insv.name}>&nbsp;&nbsp;</label>
+											</volist>
+										
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label"></label>
+										<div class="col-sm-6">
+											<label class="pull-left" ><input type="radio" name="ins_id"  value="all" datatype="*" nullmsg="请选择行业">&nbsp;通用模版&nbsp;&nbsp;</label>
+										</div>
+										<!-- <div style="line-height:34px;color: #ff0000;">注：当全站管理员选择全行业时可选择使用通用模版</div> -->
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group picnum_1" >
+										<label class="col-sm-2 control-label"><font color="red">模版图片</font></label>
+										<div class="col-sm-8">
+											<input name="logo" class="input-s form-control" type="text" value="" id="picid" style=" display:inline-block" readonly datatype="*" nullmsg="请上传模版图片">
+											<button type="button" class="btn btn-default" id="uploadid">上传图片</button>
+											<span></span> 
+											<div id="imgcut"></div>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<!-- <div class="form-group">
+										<label class="col-sm-2 control-label">是否开启</label>
+										<div class="col-sm-8" style="padding-top:6px;">
+											<label class="pull-left"><input checked   type="radio" name="isshow" value="1">开启　</label>
+											<label class="pull-left"> <input type="radio" name="isshow" value="0">关闭&nbsp;</label>
+											
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div> -->
+									<div class="form-group">
+										<label class="col-sm-2 control-label">排　　序</label>
+										<div class="col-sm-2">
+                                        	<label class="pull-left">
+												<input type="text" name="sort" id="sort" value="<{$maxsort}>" class="form-control">
+											</label>
+										</div>
+										<div style="line-height:34px;color: #ff0000;">注：数字越大越靠前</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<div class="col-sm-8 col-sm-offset-2">
+											<button type="submit" class="btn btn-primary" >保存</button>
+											<button type="button" class="btn btn-default" onClick="javascript:history.go(-1);">返回</button>
+										</div>
+									</div>
+								
+								</form>
+							</div>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/app.v2.js"></script> 
+<!-- Bootstrap --> <!-- App --> 
+<!-- fuelux --> 
+<script src="js/fuelux/fuelux.js" cache="false"></script> 
+<!-- datepicker --> 
+<script src="__PUB__js/libs/moment.min.js" cache="false"></script> 
+<script src="__PUB__js/datepicker/bootstrap-datepicker.js" cache="false"></script> 
+<!-- slider --> 
+<script src="js/slider/bootstrap-slider.js" cache="false"></script> 
+<!-- file input --> 
+<script src="js/file-input/bootstrap-filestyle.min.js" cache="false"></script> 
+<!-- combodate --> 
+<script src="js/combodate/combodate.js" cache="false"></script> 
+<!-- select2 --> 
+<script src="__PUB__js/select2/select2.min.js" cache="false"></script> 
+<!-- wysiwyg --> 
+<script src="js/wysiwyg/jquery.hotkeys.js" cache="false"></script> 
+<script src="js/wysiwyg/bootstrap-wysiwyg.js" cache="false"></script> 
+<script src="js/wysiwyg/demo.js" cache="false"></script> 
+<!-- markdown --> 
+<script src="js/markdown/epiceditor.min.js" cache="false"></script> 
+<script src="js/markdown/demo.js" cache="false"></script> 
+<script src="__PUB__weixin/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="__PUB__weixin/artDialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="__PUB__js/Validform_v5.3.2.js"></script>
+<script>
+	$(".form-horizontal").Validform({
+        tiptype:1,
+    });
+function  YZ(noteCnt)
+{
+	//复选框验证
+	var m=0;
+	var ids=document.getElementsByName("ins_id[]");
+	//var nm=x.length;
+	for(var i=0;i<ids.length;i++){ 
+		if(ids[i].checked){ 
+		  m++;
+		} 
+	} 
+	if(m<=0){ 
+		alert("请最少选择一个行业模版！"); 
+		return false;
+	}
+	if(document.getElementById("picid").value=="")
+	{
+		alert("请上传模版图片");
+		document.form1.logo.focus();
+		return false;
+	}
+	return true;
+}
+</script>
+<script>
+	$(document).ready(function(){
+		//删除图片
+		$("#img").delegate("p","click",function(){
+			if(window.confirm('你确定要删除此图片吗？')){
+				var p=$(this);
+				var f=p.children('img').attr('src');
+				var validate={
+					file:f
+				};
+				$.get("<{:U('delFile')}>", validate, function(data){
+					if(data == 'yes')
+					{
+						p.remove();
+					}
+					else
+					{
+						alert('删除失败');
+					}	
+				});
+			}
+		});
+		upLogo();
+		$(':input[name="isimg"]').click(function(){
+			upLogo();
+		});
+	 });
+	function checkPicnum(data,num)
+	{
+		if(data.indexOf(num)!= -1)
+		{
+			$(".picnum_"+num).removeClass('display_none');
+		}
+		else
+		{
+			$(".picnum_"+num).addClass('display_none');
+		}	
+	}
+	//是否上传Logo
+	function upLogo(){
+		var type=$(':input[name="isimg"]:checked').val();
+		if(type == 1){
+			$('div[attr="show"]').css('display','block');
+		}else{
+			$('div[attr="show"]').css('display','none');
+		}
+	}
+	
+	//获取单图、多图尺寸
+	$(function(){
+		$.get('<{:U('getchicun','','')}>',function(data){
+			$('#uploadid').after('<span>(尺寸：'+data+')</span>');	//单图
+			//$('#J_selectImage + span').text('(尺寸：'+data+')');	//多图
+		},'json');
+	});
+</script>
+</body>
+</html>

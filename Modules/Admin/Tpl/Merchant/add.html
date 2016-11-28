@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+<meta charset="utf-8" />
+<include file="Common:head" />
+<link rel="stylesheet" href="__PUB__js/datepicker/datepicker.css" type="text/css" cache="false" />
+<link rel="stylesheet" type="text/css" href="__PUB__css/style.css">
+<script type="text/javascript" src="__PUB__js/startScore.js"></script>
+<script type="text/javascript" src="__PUB__js/jquery-1.9.1.min.js"></script>
+
+<style>
+#img {
+	width:100%;
+	overflow:hidden;
+}
+#img p {
+	float:left;
+	padding-top:3px;
+	margin-right:5px;
+}
+#img p img {
+	max-width:80px;
+	max-height:80px;
+}#imgcut{
+	display:inline-block;
+}
+#imgcut img{
+	max-height:34px;
+	cursor:pointer;
+}
+</style>
+<style>
+body,li,p,ul { 
+    margin: 0;
+    padding: 0;
+    font: 12px/1 Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+}
+ul, li, ol { list-style: none; }
+/* 重置文本格式元素 */
+a { text-decoration: none; cursor: pointer; color:#333333; font-size:14px;}
+a:hover { text-decoration: none; }
+.clearfix::after{ display:block; content:''; height:0; overflow:hidden; clear:both;} 
+/*星星样式*/
+.content{ width:600px; margin:0 auto; padding-top:20px;}
+.title{ font-size:14px; background:#dfdfdf; padding:10px; margin-bottom:10px;}
+.block{ width:100%;  line-height:34px;}
+.block .star_score{ float:left;}
+.star_list{height:21px;margin:50px; line-height:34px;}
+.block p,.block .attitude{ padding-left:20px; line-height:34px; display:inline-block;}
+.block p span{ color:#C00; font-size:16px; font-family:Georgia, "Times New Roman", Times, serif;}
+.star_score { background:url(__IMG__stark2.png); width:160px; height:21px;  position:relative; }
+.star_score a{ height:21px; display:block; text-indent:-999em; position:absolute;left:0;}
+.star_score a:hover{ background:url(__IMG__stars2.png);left:0;}
+.star_score a.clibg{ background:url(__IMG__stars2.png);left:0;}
+#starttwo .star_score { background:url(__IMG__starky.png);}
+#starttwo .star_score a:hover{ background:url(__IMG__starsy.png);left:0;}
+#starttwo .star_score a.clibg{ background:url(__IMG__starsy.png);left:0;}
+/*星星样式*/
+</style>	
+<script charset="utf-8" src="__ROOTPUB__kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="__ROOTPUB__kindeditor/lang/zh_CN.js"></script>
+<script>
+KindEditor.ready(function(K) {
+	var editor = K.create('textarea[name="content1"]', {
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true
+	});
+	
+	var editor1 = K.editor({
+		uploadJson : "<{:U('Kind/upload_json')}>",
+		fileManagerJson : "<{:U('Kind/file_manager_json')}>",
+		allowFileManager : true
+	});
+	K('#uploadid').click(function() {
+		editor1.loadPlugin('image', function() {
+			editor1.plugin.imageDialog({
+				showRemote : false,
+				imageUrl : K('#picid').val(),
+				clickFn : function(url, title, width, height, border, align) {
+					K('#picid').val(url);
+					K('#imgcut').html('<img src="'+url+'" id="cut" /> 点击图片进行裁剪');
+					//document.getElementById('picida').src=url;
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+
+});
+</script>
+</head>
+<body>
+<section class="vbox">
+	<section>
+		<section class="hbox stretch"> <!-- .aside --> 
+			
+			<!-- /.aside -->
+			<section id="content">
+				<section class="vbox">
+					<section class="scrollable padder">
+						<ul class="breadcrumb no-border no-radius b-b b-light pull-in">
+							<li><a href="index.html"><i class="fa fa-home"></i> 首页</a></li>
+							<li class="active">商户管理</li>
+							<li class="active">新增商户</li>
+						</ul>
+						<div class="row">
+							<div class="col-sm-6"></div>
+							<div class="col-sm-6"></div>
+						</div>
+						<section class="panel panel-default">
+							<header class="panel-heading font-bold"> 新增商户</header>
+							<div class="panel-body">
+								<form name="form1" action="<{:U(ACTION_NAME)}>" class="form-horizontal" method="post">
+									<if condition="cookie('ADMIN_POWER') eq 1">
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><font color="red">所属地区</font></label>
+											<div class="col-sm-8">
+												<label>
+		                                            <select name="area" id="area" class="form-control" datatype="*" nullmsg="请选择地区">
+		                                            	<option value="">请选择地区</option>
+		                                                <volist name="arealist" id="avo">
+		                                                    <option value="<{$avo.ar_id}>">
+		                                                    	<{$avo.ar_name}>
+		                                                    </option>
+		                                                </volist>
+		                                            </select>
+												</label>
+											</div>
+										</div>
+										<div class="line line-dashed line-lg pull-in"></div>
+									<else />
+										<input type="hidden" name="area" value="<?php echo cookie('AREA');?>">
+									</if>
+									<div class="form-group">
+										<label class="col-sm-2 control-label"><font color="red">商户名称</font></label>
+										<div class="col-sm-8">
+											<input type="text" name="name" id="name" value="" class="form-control " datatype="*" nullmsg="请填写商户名称">
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>									<div class="form-group">
+										<label class="col-sm-2 control-label"><font color="red">所属行业</font></label>
+										<div class="col-sm-10">
+											<volist name="ins_arr" id="insv">
+												<label class="pull-left" style="width:150px;"><input type="checkbox" name="ins_id[]"  value="<{$insv.id}>" <if condition="$i eq count($ins_arr)">datatype="*" nullmsg="请选择行业"</if> >&nbsp;<{$insv.name}>&nbsp;&nbsp;</label>
+											</volist>
+										
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label"><font color="red">营业时间</font></label>
+										<div class="col-sm-8">
+                                        	<label class="pull-left">
+												<select name="shop_sta" id="shop_sta" class="form-control" datatype="*" nullmsg="请选择营业开始时间">
+                                                	<option value="">开始时间</option>
+                                                    <?php
+                                                    	for($i=5;$i<=24;$i++){
+                                                    ?>
+	                                                   		<option value="<?php echo $i.':00';?>" ><?php echo $i.':00';?></option>
+	                                                <?php
+	                                                	}
+	                                                ?>
+                                                    </volist>
+                                                </select>
+											</label>
+											<label class="control-label pull-left">&nbsp;至&nbsp;</label>
+											<label class="pull-left">
+												<select name="shop_end" id="shop_end" class="form-control" datatype="*" nullmsg="请选择营业结束时间">
+                                                	<option value="">结束时间</option>
+                                                    <?php
+                                                    	for($i=5;$i<=24;$i++){
+                                                    ?>
+	                                                   		<option value="<?php echo $i.':00';?>" ><?php echo $i.':00';?></option>
+	                                                <?php
+	                                                	}
+	                                                ?>
+                                                </select>
+											</label>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label"><font color="red">商户详细地址</font></label>
+										<div class="col-sm-8">
+											<input type="text" name="address" id="address" value="" class="form-control" datatype="*" nullmsg="请填写商户详细地址">
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label"><font color="red">具体地理位置</font></label>
+										<div class="col-sm-8">
+											<label class="control-label pull-left">经度&nbsp;</label>
+											<label class="pull-left">
+												<input type="text" name="postlong" id="longitude" value="" class="form-control" size="8" datatype="*" nullmsg="请点击地图确认经纬度">
+											</label>
+											<label class="control-label pull-left">&nbsp;&nbsp;纬度&nbsp;</label>
+											<label class="pull-left">
+												<input type="text" name="postlat" id="latitude" value="" class="form-control" size="8"  datatype="*" nullmsg="请点击地图确认经纬度">
+											</label>
+											<p style="margin-top:10px; margin-left:5px; display:inline-block;"><a href="###" onclick="setlatlng($('#longitude').val(),$('#latitude').val())" style=" font-size:12px; color:#ff0000;">点击在地图中查看/设置</a></p>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">客服电话</label>
+										<div class="col-sm-3">
+                                        	<label class="pull-left">
+												<input type="text" name="cus_tel" id="cus_tel" value="" class="form-control">
+											</label>
+										</div>
+										<label class="col-sm-2 control-label">人均消费</label>
+										<div class="col-sm-3">
+											<input name="per_money" class="input-sm input-s form-control" type="text" value="" style="display:inline-block; width:100px;" >  元/人
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									
+									<div class="form-group">
+										<label class="col-sm-2 control-label"><font color="red">商户联系人</font></label>
+										<div class="col-sm-3">
+                                        	<label class="pull-left">
+												<input type="text" name="contacts" id="contacts" value="" class="form-control" datatype="*" nullmsg="请填写商户联系人">
+											</label>
+										</div>
+										<label class="col-sm-2 control-label"><font color="red">联系电话</font></label>
+										<div class="col-sm-2">
+                                        	<label class="pull-left">
+												<input type="text" name="son_tel" id="son_tel" value="" class="form-control" datatype="m" nullmsg="请填写联系电话">
+											</label>
+										</div>
+										<div style="line-height:34px;color: #ff0000;">注：请写手机号</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">商户评分</label>
+										<div class="col-sm-8 " id="startone">
+											<div   class="block clearfix" >
+												<div class="star_score"></div>
+												<p style="float:left; "><input type="hidden" name="score" value="" class="fenshu" /></p>
+												<div class="attitude"></div>
+											</div>
+											<script>
+												//scoreFun($("#startone"))
+												scoreFun($("#startone"),{
+													fen_d:32,//每一个a的宽度
+													ScoreGrade:5//a的个数 10或者
+												})
+											</script>
+										</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group picnum_1">
+										<label class="col-sm-2 control-label">商户图片</label>
+										<div class="col-sm-8">
+											<input name="img" class="input-s form-control" type="text" value="" id="picid" style=" display:inline-block" readonly>
+											<button type="button" class="btn btn-default" id="uploadid">上传图片</button>
+											<span></span>
+											<div id="imgcut"></div>
+											</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in picnum_1"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">商户经营简介</label>
+										<div class="col-sm-8">
+											<input type="text" name="description" id="description" value="" class="form-control" datatype="*0-30" nullmsg="商户经营简介应在三十字以内">
+										</div>
+										<div style="line-height:34px;color: #ff0000;">注：三十字以内</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">商户详细信息</label>
+										<div class="col-sm-8">
+											<textarea name="content" id="content" class="form-control" style="overflow:scroll;height:260px;min-height:260px"></textarea>
+										</div>
+
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<!-- <label class="col-sm-2 control-label">是否开启</label>
+										<div class="col-sm-3" style="padding-top:6px;">
+											<label class="pull-left"><input checked   type="radio" name="isshow" value="1">开启　</label>
+											<label class="pull-left"> <input type="radio" name="isshow" value="0">关闭&nbsp;</label>	
+										</div> -->
+										<label class="col-sm-2 control-label">排　　序</label>
+										<div class="col-sm-2">
+                                        	<label class="pull-left">
+												<input type="text" name="sort" id="sort" value="0" class="form-control">
+											</label>
+										</div>
+										<div style="line-height:34px;color: #ff0000;">注：数字越大越靠前</div>
+									</div>
+									<div class="line line-dashed line-lg pull-in"></div>
+									<div class="form-group">
+										<div class="col-sm-8 col-sm-offset-2">
+											<button type="submit" class="btn btn-primary" >保存</button>
+											<button type="button" class="btn btn-default" onClick="javascript:history.go(-1);">返回</button>
+										</div>
+									</div>
+								
+								</form>
+							</div>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a> </section>
+			<aside class="bg-light lter b-l aside-md hide" id="notes">
+				<div class="wrapper">Notification</div>
+			</aside>
+		</section>
+	</section>
+</section>
+<script src="__PUB__js/app.v2.js"></script> 
+<!-- Bootstrap --> <!-- App --> 
+<!-- fuelux --> 
+<script src="js/fuelux/fuelux.js" cache="false"></script> 
+<!-- datepicker --> 
+<script src="__PUB__js/libs/moment.min.js" cache="false"></script> 
+<script src="__PUB__js/datepicker/bootstrap-datepicker.js" cache="false"></script> 
+<!-- slider --> 
+<script src="js/slider/bootstrap-slider.js" cache="false"></script> 
+<!-- file input --> 
+<script src="js/file-input/bootstrap-filestyle.min.js" cache="false"></script> 
+<!-- combodate --> 
+<script src="js/combodate/combodate.js" cache="false"></script> 
+<!-- select2 --> 
+<script src="__PUB__js/select2/select2.min.js" cache="false"></script> 
+<!-- wysiwyg --> 
+<script src="js/wysiwyg/jquery.hotkeys.js" cache="false"></script> 
+<script src="js/wysiwyg/bootstrap-wysiwyg.js" cache="false"></script> 
+<script src="js/wysiwyg/demo.js" cache="false"></script> 
+<!-- markdown --> 
+<script src="js/markdown/epiceditor.min.js" cache="false"></script> 
+<script src="js/markdown/demo.js" cache="false"></script> 
+<script src="__PUB__weixin/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="__PUB__weixin/artDialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="__PUB__js/Validform_v5.3.2.js"></script>
+<script>
+	$(".form-horizontal").Validform({
+        tiptype:1,
+    });
+	$(document).ready(function(){
+		//删除图片
+		$("#img").delegate("p","click",function(){
+			if(window.confirm('你确定要删除此图片吗？')){
+				var p=$(this);
+				var f=p.children('img').attr('src');
+				var validate={
+					file:f
+				};
+				$.get("<{:U('delFile')}>", validate, function(data){
+					if(data == 'yes')
+					{
+						p.remove();
+					}
+					else
+					{
+						alert('删除失败');
+					}	
+				});
+			}
+		});
+		upLogo();
+		$(':input[name="isimg"]').click(function(){
+			upLogo();
+		});
+	 });
+	function checkPicnum(data,num)
+	{
+		if(data.indexOf(num)!= -1)
+		{
+			$(".picnum_"+num).removeClass('display_none');
+		}
+		else
+		{
+			$(".picnum_"+num).addClass('display_none');
+		}	
+	}
+	//是否上传Logo
+	function upLogo(){
+		var type=$(':input[name="isimg"]:checked').val();
+		if(type == 1){
+			$('div[attr="show"]').css('display','block');
+		}else{
+			$('div[attr="show"]').css('display','none');
+		}
+	}
+	//图片裁剪
+	$(function(){
+		$('#imgcut').delegate('img','click',function(){
+			var img = $(this).attr('src');
+			if(typeof(img) == 'string' && img.length > 10){
+				img = img.replace(/\//g,'$');
+				img = img.replace(/\./g,'@');
+				img = encodeURIComponent(img);
+				var size = "<{$imgsize}>".split('*');
+				var img_w = size[0];
+				var img_h = size[1];
+				art.dialog.open('<{:U('Index/imgCut','','')}>/img/'+img+'/img_w/'+img_w+'/img_h/'+img_h+'.html',{lock:true,title:'图片裁剪',width:"98%",height:"98%",yesText:'关闭',background: '#000',opacity: 0.45});
+			}
+		});
+	});
+	//获取单图、多图尺寸
+	$(function(){
+
+		$.get('<{:U('getchicun','','')}>',function(data){
+			$('#uploadid').after('<span>(尺寸：'+data+')</span>');	//单图
+			//$('#J_selectImage + span').text('(尺寸：'+data+')');	//多图
+		},'json');
+	});
+	//获取经纬度
+	function setlatlng(longitude,latitude){
+		art.dialog.data('longitude', longitude);
+		art.dialog.data('latitude', latitude);
+		// 此时 iframeA.html 页面可以使用 art.dialog.data('test') 获取到数据，如：
+		// document.getElementById('aInput').value = art.dialog.data('test');
+		art.dialog.open('<{:U('map')}>',{lock:false,title:'设置经纬度',width:'80%',height:'80%',yesText:'关闭',background: '#000',opacity: 0.87});
+	}
+</script>
+</body>
+</html>
